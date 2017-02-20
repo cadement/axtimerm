@@ -1,0 +1,16 @@
+extend layout_1_3
+block head
+block content
+	#page-dbupgrade(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 DB Upgrade
+		div(data-role="content")
+			if message
+				p=message
+			if (!done)
+				form(action="/admin/#{club.name}/dbupgrade", method="POST")
+					p Use this screen to upgrade your database.
+					input(type="submit", value="Do It!")

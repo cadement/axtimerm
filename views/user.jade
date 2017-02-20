@@ -1,0 +1,42 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var club = '';
+block content
+	#page-users(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			
+			h1 Club Admin #{user.username}
+			a(href="/club/#{club.name}/users", data-icon="arrow-l") Users
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			
+			if (message)
+				div.ui-body.ui-body-a(style="color:red;")=message
+
+			form(action="/club/#{club.name}/user", method="POST")
+				p(style="color:red;font-weight:bold;") ALL FIELDS ARE REQUIRED
+				input(type="hidden",name="userid",value="#{userId}")
+				div(data-role="fieldcontain")
+					label(for="firstName") First Name:
+					input(id="firstName", name="firstName", value="#{user.firstName}")
+				div(data-role="fieldcontain")
+					label(for="lastName") Last Name:
+					input(id="lastName", name="lastName", value="#{user.lastName}")
+				div(data-role="fieldcontain")
+					label(for="email") Email:
+					input(id="email",type="email", name="email", value="#{user.email}")
+				div(data-role="fieldcontain")
+					label(for="firstName") Username:
+					input(id="username", name="username", value="#{user.username}")
+				div(data-role="fieldcontain")
+					label(for="password") Password:
+					input(id="password", name="password", value="#{user.dpassword}")
+				p
+					input(type="submit",value="Save User",data-theme="b",data-icon="check")
+					a(href="/club/#{club.name}/users",data-role="button", data-icon="arrow-l",data-theme="a") Cancel
+				p
+					input(type="submit",name="btnDelete",value="Delete User",data-theme="a",data-icon="delete")

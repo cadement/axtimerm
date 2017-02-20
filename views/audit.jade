@@ -1,0 +1,17 @@
+doctype 5
+html
+	head
+		title= title
+	body
+		table(width="100%")
+			tr
+				th date/time
+				th source
+				th description
+				th eventid
+			each a in audits
+				tr
+					td #{a.date}
+					td #{a.source}
+					td #{a.description}
+					td #{a.eventId}

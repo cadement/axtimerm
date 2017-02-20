@@ -1,0 +1,1 @@
+$.ajax({url:"/api/checkLatestVersion",type:"GET",dataType:"json",success:function(e){e.success&&e.upgrade&&($("#newversion > p").text("There is a new version of AXti.me RM available. Your Version: "+e.current+", Latest Version: "+e.latest),$("#newversion").show())}});

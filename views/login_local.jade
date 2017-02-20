@@ -1,0 +1,30 @@
+extends layout_1_3
+block content
+	div#page-clubchooser(data-role="page")
+		div(data-role="header")
+			a(href="/event/#{eventid}", data-icon="arrow-l") Event
+			h1 Login
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			p Fun, you're at the event and now you need to login to one of the system roles.
+			p <strong>This is for Live Events only.</strong>
+			if message != null
+				p(style="color:red") #{message}
+			div(class="ui-body-a ui-content")
+				div Are you a Club Admin?  Use the <a href="/club/#{event.club.name}/login">Club Admin Login</a> instead.
+			form(class="login-form", method="POST")
+				fieldset
+					div(data-role="fieldcontain")
+						label(for="e-role") Role:
+						select(id="e-role", name="role")
+							each role in event.workerRoles
+								option(value="#{role.role}") #{role.role}
+					div(data-role="fieldcontain")
+						label(for="password") Password:
+						input(type="password", name="password", id="password")
+					
+					p
+						input(type="submit",data-theme="b", value="Login")  
+
+							

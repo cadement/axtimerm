@@ -1,0 +1,43 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/event/#{event.id}", data-icon="arrow-l") Back
+			h1 MotorsportReg Import
+		div(data-role="content")
+			if (message != null)
+				p(style="color:red;") #{message}
+			div(data-role="collapsible-set", data-theme="e",id="set")
+				div#box-login(data-role="collapsible",data-collapsed="false")
+					h1 Step 1: MotorsportReg Login
+					p Enter your MSR Username, Password, Organization Id.  The account must be an MSR Event Organizer.  
+					p.ui-body.ui-body-e To find your Organization Id, log into MSR.  Then in the top menu click "Club Profile" > "Developer API".
+
+					div(data-role="fieldcontain")
+						label(for="msrusername") MSR Username:
+						input(type="text", id="msrusername",value="#{club.msrUsername == null ? '' : club.msrUsername}")
+
+					div(data-role="fieldcontain")
+						label(for="msrpassword") MSR Password:
+						input(type="password", id="msrpassword")
+
+					div#box-orgid(data-role="fieldcontain")
+						label(for="msrorgid") MSR Organization ID
+						input(type="text", id="msrorgid",placeholder="XXXXXXXX-XXXX-XXXX-XXXXXXXXXXXXXXXX", value="#{club.msrOrganizationId == null ? '' : club.msrOrganizationId}")
+
+					p
+						a#btn-start( data-role="button",data-theme="b") Begin Import from MotorsportReg
+				div#box-events(data-role="collapsible",data-collapsed="true")
+					h1 Step 2: Select An Event to Import
+					ul#ul-events(data-role="listview")
+						li None Yet
+
+				div#box-participants(data-role="collapsible",data-collapsed="true")
+					h1 Done: Imported Participants
+					ul#ul-participants(data-role="listview",data-filter="true")
+						li None Yet
+
+	script(src="/scripts/regimportmsr.js")

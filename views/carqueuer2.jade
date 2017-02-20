@@ -1,0 +1,192 @@
+extend layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+		var participants = !{JSON.stringify(participants)};
+	style.
+		@media (max-width:480px) {
+			#public ul.ui-grid-c li
+				, #admin1 ul.ui-grid-c li
+				, #eventroles ul.ui-grid-d li {width:50% !important;}
+
+		}
+		@media all and (max-width:800px){
+			//- #page-addcar .ui-block-a, 
+			//- 	#page-addcar .ui-block-b {
+			//- 		width:100%;
+			//- 		float:none;
+			//- 	}
+		}
+		#page-addcar .ui-dialog-contain {margin-top:20px !important;max-width:92.5% !important;}
+		#queuelist .ui-li .ui-btn-inner a.ui-link-inherit, #queuelist .ui-li-static.ui-li {
+			padding-top:0; padding-bottom:0;
+		}
+block content
+	#page-carqueuer(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Car Queuer
+			a(href="#page-cqhelp", data-rel="popup", data-icon="info", data-position-to="window") Help
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			//- a#btn-addcar(href="#page-addcar", data-rel="dialog", data-role="button", data-theme="b") Insert Driver into Queue
+			//-a#btn-addcar(href="#page-addcar", data-rel="dialog", data-role="button", data-theme="b") Add Driver into Queue
+			a#btn-show(data-role="button", data-theme="b") Add Driver to Queue 
+			div#topofaddcar
+			div#addcar.hidden(style="margin-bottom:12px;")
+				div.pad2
+					div(data-num="1").pad2-num 1
+					div(data-num="2").pad2-num 2
+					div(data-num="3").pad2-num 3
+					div(data-num="4").pad2-num 4
+					div(data-num="5").pad2-num 5
+					div(data-num="6").pad2-num 6
+					div(data-num="7").pad2-num 7
+					div(data-num="8").pad2-num 8
+					div(data-num="9").pad2-num 9
+					div(data-num="0").pad2-num 0
+					div(data-num="").pad2-num &nbsp;
+					div(data-num="0").pad2-num X
+					div(style="clear:left;")
+				div 
+					div#searchbox
+				div#seachList
+					div 
+						div(style="font-weight:bold;") #999 Johnny Doedoedoedoedoe
+						div(style="font-size:.8em;color:gray;") Black 2010 Porsche Carrera
+			div
+				div#ins-0.q2-insert
+					div.ui-icon.ui-icon-check
+					span START LINE - Insert driver here
+				div#queueItems
+				div#ins-e.q2-insert
+					div.ui-icon.ui-icon-check
+					span LAST IN LINE - Insert driver here
+
+				//-div(class="ui-grid-a")
+					//- button#btn-test(data-role="button") test
+					//-div.ui-block-a(style="padding-right:10px;")
+						
+								
+					//-div.ui-block-b(style="padding-left:10px;")
+						//- div#ins-0.q2-insert
+						//- 	div.ui-icon.ui-icon-check
+						//- 	span START LINE - Insert driver here
+						//- div 
+						//- 	input(type="radio", name="inserthere",id="inserthere-s", data-mini="true",data-theme="e")
+						//- 	label(for="inserthere-s") Start Line - Insert Here 
+						//- div#queueItems
+							//- div.q2-item
+							//- 	div.q2-btns
+							//- 		a(href="", data-mini="true",data-inline="true", data-role="button",data-icon="arrow-u" data-iconpos="notext") 
+							//- 		a(href="", data-mini="true",data-inline="true", data-role="button",data-icon="arrow-d" data-iconpos="notext") 
+							//- 		a(href="",data-inline="true", data-role="button",data-icon="delete" data-iconpos="notext") 
+							//- 	div.q2-info
+							//- 		div(style="font-weight:bold;") #1147 Chris Trailer
+							//- 		div(style="font-size:.8em;color:gray;") Black 2010 Porsche Carrera
+								
+							//- div.q2-insert.selected
+							//- 	div.ui-icon.ui-icon-check
+							//- 	span Insert driver here
+							//- 	//- input(type="radio", name="inserthere",id="inserthere-1", data-mini="true",data-theme="e")
+							//- 	//- label(for="inserthere-1") Insert Here 
+							//- div.q2-item
+							//- 	div.q2-btns
+							//- 		a(href="", data-mini="true",data-inline="true", data-role="button",data-icon="arrow-u" data-iconpos="notext") 
+							//- 		a(href="", data-mini="true",data-inline="true", data-role="button",data-icon="arrow-d" data-iconpos="notext") 
+							//- 		a(href="",data-inline="true", data-role="button",data-icon="delete" data-iconpos="notext") 
+							//- 	div(style="padding:4px;")
+							//- 		div(style="font-weight:bold;") #999 Johnny Doedoedoedoedoe
+							//- 		div(style="font-size:.8em;color:gray;") Black 2010 Porsche Carrera
+							//- div.q2-insert
+							//- 	div.ui-icon.ui-icon-check
+							//- 	span Insert driver here
+							//- 	//- input(type="radio", name="inserthere",id="inserthere-2", data-mini="true",data-theme="e")
+							//- 	//- label(for="inserthere-2") Insert Here 
+							//- div.q2-item
+							//- 	div.q2-btns
+							//- 		a(href="", data-mini="true",data-inline="true", data-role="button",data-icon="arrow-u" data-iconpos="notext") 
+							//- 		a(href="", data-mini="true",data-inline="true", data-role="button",data-icon="arrow-d" data-iconpos="notext") 
+							//- 		a(href="",data-inline="true", data-role="button",data-icon="delete" data-iconpos="notext") 
+							//- 	div(style="padding:4px;")
+							//- 		div(style="font-weight:bold;") #999 Johnny Doedoedoedoedoe
+							//- 		div(style="font-size:.8em;color:gray;") Black 2010 Porsche Carrera
+							//- div.q2-insert 
+							//- 	div.ui-icon.ui-icon-check
+							//- 	span Insert driver here
+							//- 	//- input(type="radio", name="inserthere",id="inserthere-3", data-mini="true",data-theme="e")
+							//- 	//- label(for="inserthere-3") Insert Here 
+							//- div.q2-item
+							//- 	div.q2-btns
+							//- 		a(href="", data-mini="true",data-inline="true", data-role="button",data-icon="arrow-u" data-iconpos="notext") 
+							//- 		a(href="", data-mini="true",data-inline="true", data-role="button",data-icon="arrow-d" data-iconpos="notext") 
+							//- 		a(href="",data-inline="true", data-role="button",data-icon="delete" data-iconpos="notext") 
+							//- 	div(style="padding:4px;")
+							//- 		div(style="font-weight:bold;") #999 Johnny Doedoedoedoedoe
+							//- 		div(style="font-size:.8em;color:gray;") Black 2010 Porsche Carrera
+							//- div.q2-insert 
+							//- 	div.ui-icon.ui-icon-check
+							//- 	span Insert driver here
+							//- 	//- input(type="radio", name="inserthere",id="inserthere-4", data-mini="true",data-theme="e")
+							//- 	//- label(for="inserthere-4") Insert Here 
+							//- div.q2-item
+							//- 	div.q2-btns
+							//- 		a(href="", data-mini="true",data-inline="true", data-role="button",data-icon="arrow-u" data-iconpos="notext") 
+							//- 		a(href="", data-mini="true",data-inline="true", data-role="button",data-icon="arrow-d" data-iconpos="notext") 
+							//- 		a(href="",data-inline="true", data-role="button",data-icon="delete" data-iconpos="notext") 
+							//- 	div(style="padding:4px;")
+							//- 		div(style="font-weight:bold;") #999 Johnny Doedoedoedoedoe
+							//- 		div(style="font-size:.8em;color:gray;") Black 2010 Porsche Carrera
+						//- div#ins-e.q2-insert
+						//- 	div.ui-icon.ui-icon-check
+						//- 	span LAST IN LINE - Insert driver here
+						//- div 
+						//- 	input(type="radio", name="inserthere",id="inserthere-e", data-mini="true",data-theme="e")
+						//- 	label(for="inserthere-e") Last In Line - Insert Here 
+			#popup-multi(data-role="popup")
+				ul(data-role="listview",style="min-width:210px;")
+					li 
+						a Empty	
+			
+
+
+	#page-addcar(data-role="dialog")
+		div(data-role="header")
+			h1#lbl-driveredit Add Car to Queue
+		div(data-role="content")
+			div(class="ui-grid-d")
+				div(class="ui-block-a big-num2")
+					a(class="btn-bigpad", data-num="1",data-role="button") 1
+				div(class="ui-block-b big-num2")
+					a(class="btn-bigpad", data-num="2",data-role="button") 2
+				div(class="ui-block-c big-num2")
+					a(class="btn-bigpad", data-num="3",data-role="button") 3
+				div(class="ui-block-d big-num2")
+					a(class="btn-bigpad", data-num="4",data-role="button") 4
+				div(class="ui-block-e big-num2")
+					a(class="btn-bigpad", data-num="5",data-role="button") 5
+			div(class="ui-grid-d")
+				div(class="ui-block-a big-num2")
+					a(class="btn-bigpad", data-num="6",data-role="button") 6
+				div(class="ui-block-b big-num2")
+					a(class="btn-bigpad", data-num="7",data-role="button") 7
+				div(class="ui-block-c big-num2")
+					a(class="btn-bigpad", data-num="8",data-role="button") 8
+				div(class="ui-block-d big-num2")
+					a(class="btn-bigpad", data-num="9",data-role="button") 9
+				div(class="ui-block-e big-num2")
+					a(class="btn-bigpad", data-num="0",data-role="button") 0
+			div#part-search(style="margin-top:16px")
+				ul(data-role="listview", data-filter="true", data-inset="true")
+					each d in participants
+						li(id="dvrcon-#{d._id}" ,data-filtertext="#{d.driver.carNumber} #{d.driver.name} #{d.axClass.name}")
+							a.part(id="p-#{d._id}") 
+								p(class="list-rungroup", style="#{'background-color:' + d.runGroup.color}") &nbsp;
+								h3 ##{d.driver.carNumber} #{d.driver.name}  #{d.axClass.name}
+								p #{d.driver.car.description}
+
+	script(src="/scripts/carqueuer2.js")

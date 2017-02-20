@@ -1,0 +1,70 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var club = '#{club.name}';
+		var localFiles = !{JSON.stringify(files)};
+		var cloudKey = '#{cloudKey}';
+		var cloudFiles = [];
+block content
+	#page-restores(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Data Restore
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			
+			if (message)
+				div.ui-body.ui-body-a(style="color:red;")=message
+
+			p(style="color:red;") WARNING: Restoring from a backup overwrites ALL data in your system!
+
+			form(action="/club/#{club.name}/restore/cloud",method="get")
+				div(class="ui-grid-a")
+					div(class="ui-block-a",style="padding-right:12px")
+						h2 Local Restore  
+						p Restore a backup that is on your local computer.
+						p(style="color:red;") Clicking on a backup below will IMMEDIATELY begin the restore.
+						if files.length == 0
+							p No backups were found.
+						ul(data-role="listview",data-inset="true")
+							each f, ix in files
+								li
+									a.btn-restore(id="local-#{ix}")
+										h3=f.fileName
+										p=f.backupDate
+						
+					div(class="ui-block-b", style="padding-left:12px;")
+						h2 Cloud Restore
+						if !cloudKey
+							div(data-role="fieldcontain")
+								label(for="clubKey") Club Upload Key:
+								input(id="clubKey", name="clubKey", value="", placeholder="Club Upload Key")
+						
+						p 
+							a#btn-viewcloud(data-role="button", data-theme="b") View Your Cloud Backups
+						ul#lst-cloud(data-role="listview", data-inset="true")
+
+	#popup-confirm(data-role="popup", data-overlay-theme="a", data-theme="c")
+		div(data-role="header")
+			h1 Confirm Restore
+		div#confirm-msg(data-role="content")
+			p
+				span Are you sure you want to restore this backup
+				strong#lbl-confirm
+				| ?
+			
+			a.btn-confirm(data-role="button", data-doit="yes", data-rel="back", data-theme="c") Yes, Restore It
+			a#btn-cancel(href="#",data-role="button", data-rel="back", data-theme="b") Cancel
+	#popup-msg(data-role="dialog", data-overlay-theme="a", data-theme="c")
+		div(data-role="header")
+			h1 Downloading and Restoring backup
+		div(data-role="content")
+			div#error-msg(style="max-width:400px;") 
+				p The system is downloading the backup from the Cloud and then will restore it.  
+				p Please be patient as this could take many minutes to complete.
+	script(src="/scripts/backup-restore.js")
+	
+				
+				

@@ -1,0 +1,41 @@
+extend ../layout_1_3
+block head
+	script(src="/scripts/hardware.js")
+block content
+	#page-backup(data-role="page")
+		
+		div(data-role="header")
+			a(href="/", data-icon="bars") Home
+			h1 Timing Hardware
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			div
+				div(data-role="fieldcontain")
+					label(for="hardwareEnabled") Timing Hardware Enabled?
+					select(id="hardwareEnabled", name="hardwareEnabled", data-role="slider")
+						option(value="no", selected=!settings.hardware.enabled) No
+						option(value="yes", selected=settings.hardware.enabled) Yes
+				div(style="margin-left:22%;margin-top:-10px;color:gray;font-size:.8em;") Enable if you have timing hardware connected, like JA Circuits, RaceAmerica or FarmTek.
+				div(data-role="fieldcontain")
+					label(for="interfaceType") Interface Type:
+					select(name="interfaceType", id="interfaceType")
+						option(value="JaCircuitsNormal" selected=settings.hardware.interfaceType == "JaCircuitsNormal") Normal
+						option(value="JaCircuitsChrono" selected=settings.hardware.interfaceType == "JaCircuitsChrono") Chrono
+						option(value="TlinkDirect" selected=settings.hardware.interfaceType == "TlinkDirect") Tlink Direct (Chrono)
+						option(value="Debug" selected=settings.hardware.interfaceType == "Debug") DEBUG
+				div(style="margin-left:22%;margin-top:-10px;color:gray;font-size:.8em;") Normal is for RaceAmerica AC4 or FarmTek's (JaCircuitsNormal) or single time output.  Chrono is for FarmTek's (JaCircuitsChrono). Tlink Direct is for RaceAmerica no AC4. Debug is to output the data and send to AXti.me
+				div(data-role="fieldcontain")
+					label(for="comport") COM port:
+					input(id="comport", name="comport", value="#{settings.hardware.comPort}")
+				
+				div(style="margin-left:22%;margin-top:10px;margin-bottom:20px;") Ports currently available:
+				div(style="margin-left:22%;margin-top:10px;margin-bottom:20px;")
+					#portlist
+				div(style="margin-left:22%;margin-top:-10px;color:gray;font-size:.8em;") You'll have to find the COM port being used for the timing hardware.  On Windows it will be something like COM2 or COM5.  OSX is usually /dev/cu.usbserial
+				
+				div.ui-grid-a
+					div.ui-block-a
+						a(data-role="button",name="go", id="btn-save", data-theme="b") Save Settings
+					div.ui-block-b
+						a(href="/", data-theme="a", data-role="button") Cancel

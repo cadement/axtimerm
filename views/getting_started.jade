@@ -1,0 +1,156 @@
+extend layout_1_3
+block head
+block content
+	#page-announcer(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 FAQ's
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			h3 FAQ List
+			p 
+				ul(data-role="listview",data-inset="true", data-filter="true", id="toc",data-filter-placeholder="Search topics...")
+					li 
+						a(href="#gettingstarted") Getting Started
+					li 
+						a(href="#roles") What are Event Roles? A must read.
+					li
+						a(href="#howto-runevent") How To Run an Event
+					li 
+						a(href="#axware-transfer") Migrating from AXWare to AXti.me RM
+					li 
+						a(href="#import-axware-members") Importing Members from AXWare
+					li 
+						a(href="#import-msr-members") Importing Members from MotorsportReg.com
+					li 
+						a(href="#import-csv-event") Import Past Event from a CSV or Excel File 
+					li 
+						a(href="#import-axware-event") Import Past Event from AXWare RGG File
+			
+			h1#gettingstarted Getting Started
+			h3 Import Members
+			p You can easily import your members and past participants. If you use MotorsportReg.com, the process takes only seconds.  If you use AXware, simply export your membership file from AXware and then import the CSV file.  
+				div.ui-grid-a
+					div.ui-block-a
+						a.ilink(href="#import-msr-members", data-role="button",data-theme="e") How To Import from MotorsportReg.com
+					div.ui-block-b
+						a.ilink(href="#import-axware-members", data-role="button", data-theme="e") How To Import from CSV File (AXWare)
+			
+			h3 Setup Your Current Season
+			p Before creating a new event or importing past ones, you must first setup a season.  A season consists of a year, classes and indexes, championship points, how many events to count (or how many drops are allowed).
+			p
+				a(href="/club/#{club.name}/newseason",data-role="button",data-inline="true",data-theme="b") Create a Season
+			
+
+			div(style="float:right;")
+				a.top(data-role="button",data-mini="true", data-icon="arrow-u", data-iconpos="notext")
+			h1#roles What are Event Roles?
+			p Event Roles, among many other things, truly set AXti.me apart from other software.  By separating responsibilities of key people helping in the trailer you events run smoother, the software is easier to use to almost anyone and we eliminate the need for the same people to run your timing.
+			p
+				a(href="/help/#{club.name}/roles", data-role="button", data-theme="b") Read a brief overview of Event Roles
+
+			div(style="float:right;")
+				a.top(data-role="button",data-mini="true", data-icon="arrow-u", data-iconpos="notext")
+			h1#howto-runevent How to run an event
+			
+			p There are lots of ways to run an event and it can easily vary based upon venue, number of participants and even the type of club.  Here we will give you an overview of how to best take advantage of your AXti.me RM system.
+
+			h3 How to staff your event
+			p For any event, we recommend always staffing the 3 major roles: <a href="/help/#{club.name}/roles">Time Keeper</a>, <a href="/help/#{club.name}/roles">Car Queuer</a> and <a href="/help/#{club.name}/roles">Cone Counter</a>. 
+
+			img(src="/css/images/comm-AXtime.png")
+
+			div(style="float:right;")
+				a.top(data-role="button",data-mini="true", data-icon="arrow-u", data-iconpos="notext")
+				
+			h1#axware-transfer Migrating from AXWare to AXti.me RM
+			p We have made it as easy as possible to migrate/transfer all your data from AXWare to AXti.me RM.  There are many different version of AXWare in use today, so if you have an issue, send us an email to <a href="mailto:clubsupport@axti.me">clubsupport@axti.me</a>.
+			ol
+				li 
+					a.ilink(href="#import-axware-members") Import your AXWare membership data
+				li
+					a.ilink(href="#season-create") Create a #{new Date().getFullYear()} Season
+				li 
+					a.ilink(href="#import-axware-classes") Import your AXWare Class Definitions
+				li 
+					a.ilink(href="#import-axware-event") Import your current season's events
+
+			
+			div(style="float:right;")
+				a.top(data-role="button",data-mini="true", data-icon="arrow-u", data-iconpos="notext")
+
+			h1 Importing Data
+			h3#import-msr-members Importing Members from MotorsportReg.com
+			p 
+				img(src="/css/images/msr.png")
+			p This is the easiest and fastest way to import membership.  
+			ol 
+				li Go to <a href="http://www.MotorsportReg.com" target="_blank">MotorsportReg.com</a> and sign in via the Event Organizer sign in 
+				li Once you have signed in, look on the top menu bar and navigate to <strong>Club Profile</strong> > <strong>Developer API</strong>
+				li Now higlight and copy your Organization ID, which looks something like 69E8B1AA-BF5A-DDA9-F1F47180433F9278.
+				li Log into your AXti.me RM system via the Admin Login screen
+				li Click on <strong>Import Data</strong> 
+				li Click on 
+					a(href="/club/#{club.name}/msrimport") Import Members from MotorsportReg.com
+				li Type in your MotorsportReg.com username, password and paste the Organization ID we got earlier
+				li Click Begin Import from MotorsportReg.com
+				li Done.
+
+			div(style="float:right;")
+				a.top(data-role="button",data-mini="true", data-icon="arrow-u", data-iconpos="notext")
+				
+			h3#import-axware-members Importing Members from AXware
+			p To import your membership information from AXWare, you must first export the data and then we'll import that file into AXti.me RM
+			ol 
+				li Open AXWare and then Open your current membership file (the file's extension is .mcf) File > Open Membership File 
+				li Now we need to export it.  On the top menu bar File > Export > Tab Delimited Membership List
+				li Save the file to a place you know where to find it.  Let's call it <strong>AXWare Member Export.txt</strong>
+				li Log into your AXti.me RM system via the Admin Login screen
+				li Click on <strong>Import Data</strong> 
+				li Click on 
+					a(href="/club/#{club.name}/memberimport") Import Members from text file
+
+			div(style="float:right;")
+				a.top(data-role="button",data-mini="true", data-icon="arrow-u", data-iconpos="notext")
+				
+			h3#import-axware-classes Importing classes from AXware
+			p To import classes you must first create the Season.
+			ol 
+				li Open AXWare and then in the top menu bar navigate to <strong>Setup</strong> > <strong>Class Definitions</strong>
+				li A new window appears and you should see a file path (named Active Class Definition file).  Make note of its location, as this is the file we will import.
+				li Log into your AXti.me RM system via the Admin Login screen
+				li Click on <strong>Import Data</strong> 
+				li Click on <strong>Import Members from text file</strong>
+			
+			div(style="float:right;")
+				a.top(data-role="button",data-mini="true", data-icon="arrow-u", data-iconpos="notext")
+				
+			h3#import-axware-event Importing past events from AXware
+			p Importing AXWare event results into AXti.me RM is simple.
+			ol 
+				li You need to find the AXWare .rgg file for the event.  Try looking in C:\axware folder or do a file search for *.rgg.  Usually the files have a date or you can look at the Date Modified. Once you found it, move on.
+				li Log into your AXti.me RM system via the Admin Login screen
+				li Click on <strong>Import Data</strong> 
+				li Click on <strong><a href="/club/#{club.name}/import">Import Past Event from AXWare RGG file</a></strong>
+				li Fill out the form as labeled
+				li For the .RGG file field, click the Choose File button, then find and select the file you located above.
+				li Click <strong>Upload and Import</strong>
+				li That's it. 
+
+			div(style="float:right;")
+				a.top(data-role="button",data-mini="true", data-icon="arrow-u", data-iconpos="notext")
+				
+			h3#import-csv-event Importing past events from CSV or Excel files
+			p Lots of clubs have their results in Excel, which makes it pretty easy to put that data into a CSV file to import into AXti.me RM.  You'll need to follow the guidelines defined on the CSV import screen.
+			ol 
+				li Create a copy of your excel file and then open it in Excel 
+				li 
+		
+			div(style="float:right;")
+				a.top(data-role="button",data-mini="true", data-icon="arrow-u", data-iconpos="notext")
+				
+			h1 Event Setup
+			p TODO
+	script(src="/scripts/faqs.js")

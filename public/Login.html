@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>AXti.me</title>   
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <link rel="stylesheet" href="/css/jquery.mobile-1.2.0.min.css" />
+    <link href="/css/base.css" rel="stylesheet" />
+    <script src="/scripts/jquery-1.8.2.min.js"></script>
+    <script src="/scripts/base.js"></script>
+    <script src="/scripts/jquery.mobile-1.2.0.min.js"></script>
+</head>
+<body>
+    <div data-role="page">
+	    <div data-role="header">
+            <a href="/" data-icon="arrow-l">Home</a>
+		    <h1>Login</h1>
+	    </div><!-- /header -->
+
+	    <div data-role="content">	
+
+            <div class="logo-horiz"><img src="/css/images/axtime-logo-horizontal.png" alt="AXti.me logo"</div>
+
+		    <div data-role="collapsible" data-theme="e" data-content-theme="c">
+				<h2>I'm a Club Admin or Have an AXti.me Account</h2>
+                <form class="login-form" action="" method="post">
+                    <input type="hidden" name="type" value="account" />
+                    <fieldset>
+                        <p>If you have already registered with AXti.me, use this form to login.</p>
+                        <div data-role="fieldcontain">
+                            <label for="email">Email:</label>
+                            <input type="text" name="email" id="email" value=""  />
+                        </div>
+                        <div data-role="fieldcontain">
+                            <label for="password">Password:</label>
+                            <input type="password" name="password" id="password" value=""  />
+                        </div>
+                        <p><input type="submit" data-theme="b" value="Login" /></p>
+                        <p><a href="#" data-role="button" data-theme="a">Register with AXti.me</a></p>
+                    </fieldset>
+                </form>
+            </div>
+            <div data-role="collapsible" data-theme="e" data-content-theme="c">
+				<h2>I have been assigned a role</h2>
+                <form class="login-form" action="" method="post">
+                    <input type="hidden" name="type" value="role" />
+                    <fieldset>
+                        <p>Attending an event and have a role? (Time Keeper, Cone Counter, Car Queuer, Tech Inspector)</p>
+                        <!--<div data-role="fieldcontain">
+                            <label for="e-club">Club:</label>
+                            <select id="e-club"><option value="PCA Golden Gate Region">PCA Golden Gate Region</option></select>
+                        </div>-->
+                        <div data-role="fieldcontain">
+                            <label for="e-role">Role:</label>
+                            <select id="e-role" name="role"><option value="Event Admin">Event Admin</option><option value="Time Keeper">Time Keeper</option><option value="Cone Counter">Cone Counter</option><option value="Car Queuer">Car Queuer</option><option value="Tech Inspector">Tech Inspector</option></select>
+                        </div>
+                        <div data-role="fieldcontain">
+                            <label for="password">Role Password:</label>
+                            <input type="password" name="password" id="g-password" value=""  />
+                            
+                        </div>
+                            <p><input type="submit" data-theme="b" value="Login" /></p>
+                    </fieldset>
+                </form>
+            </div>
+            <div data-role="collapsible" data-theme="e" data-content-theme="c">
+				<h2>I'm just driving and working the course</h2>
+                <form class="login-form" action="" method="post">
+                    <input type="hidden" name="type" value="guest" />
+                    <fieldset>
+                        <p>Attending an event and want to see Live Results</p>
+                        <!--<div data-role="fieldcontain">
+                            <label for="g-club">Club:</label>
+                            <select id="g-club" name="club"><option value="PCA Golden Gate Region">PCA Golden Gate Region</option></select>
+                        </div>-->
+                        <div data-role="fieldcontain">
+                            <label for="password">Club Password:</label>
+                            <input type="password" name="password" id="g-password" value=""  />
+                        </div>
+                            <p><input type="submit" data-theme="b" value="Login" /></p>
+                    </fieldset>
+                </form>
+            </div>
+	    </div><!-- /content -->
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-4253851-9']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+</script>
+    </div>
+    <!-- /page -->
+
+</body>
+</html>

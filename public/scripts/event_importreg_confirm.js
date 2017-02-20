@@ -1,0 +1,1 @@
+$(".btn-edit").on("click",function(){var t=parseInt($(this).attr("id").split("-")[1]),a=data[t];alert(a.firstName)});

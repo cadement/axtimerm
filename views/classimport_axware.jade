@@ -1,0 +1,67 @@
+extend layout_1_3
+block content
+	#page-classimport(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{club.name}/manageseasons", data-icon="arrow-l") Back
+			h1 AXWare Class Import
+		div(data-role="content")
+			div(class="ui-body-a") 
+				div(style="padding:16px") Find your most recent "class.def" file from your AXWare directories
+					p(style="color:red;") This will DELETE all existing Classes and PAX Classes entries for this event.
+			h3 Upload AXWare "class.def" File
+			if (message.length > 0)
+				.ui-body.ui-body-e=message
+			if seasons.length == 0
+				p You must first create a Season to import the classes to.
+				p 
+					a(href="/club/#{club.name}/newseason", data-theme="b", data-role="button") Create Your #{new Date().getFullYear()} Season
+			else 
+				form(method="POST", enctype="multipart/form-data", action="/club/#{club.name}/classimport_axware")
+				
+					div(data-role="fieldcontain")
+						label(for="seasonId") Season: 
+						select(name="seasonId", id="seasonId")
+							each s in seasons
+								option(value="#{s.id}")=s.seasonYear
+					div(data-role="fieldcontain")
+						label(for="csvfile") CSV File: 
+						input#csvfile(type="file", name="csvfile")
+					input(type="submit", value="Upload and Import", data-theme="b")
+				
+				if paxClasses.length > 0
+					h1 PAX Classes (rollups) Imported
+					table
+						thead
+							tr
+								th Name 
+								th Category 
+								th Description
+								th Ladies?
+						tbody
+							each p in paxClasses
+								tr
+									td=p.name 
+									td=p.category 
+									td=p.description
+									td=p.isLadies
+
+				if classes.length > 0
+					h1 Classes Imported
+					table(width="100%")
+						thead
+							tr
+								th Class 
+								th Index
+								th Description
+								th Category
+						tbody
+							each c in classes
+								tr
+									td=c.name
+									td=c.index 
+									td=c.description
+									td=c.category 
+
+					
+								
+						

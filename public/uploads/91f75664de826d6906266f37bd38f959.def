@@ -1,0 +1,106 @@
+SS	0.826	3	Super Street				Street
+AS	0.819	-1	A Street				Street
+BS	0.813	3	B Street				Street
+CS	0.810	3	C Street				Street
+DS	0.801	3	D Street				Street
+ES	0.794	3	E Street				Street
+FS	0.804	-1	F Street				Street
+GS	0.793	3	G Street				Street
+HS	0.786	2	H Street				Street
+HCS	0.809	2	Heritage Classic Street				Heritage Street
+STF	0.800	2	Street Touring FWD				Touring
+STS	0.818	2	Street Touring S				Touring
+STX	0.822	2	Street Touring X				Touring
+STR	0.830	3	Street Touring R				Touring
+STU	0.831	1	Street Touring U				Touring
+STP	0.820	1	Street Touring P				Touring
+SSP	0.862	2	S Street Prepared				Street Prepared
+ASP	0.856	-1	A Street Prepared				Street Prepared
+BSP	0.853	2	B Street Prepared				Street Prepared
+CSP	0.860	2	C Street Prepared				Street Prepared
+DSP	0.842	2	D Street Prepared				Street Prepared
+ESP	0.837	2	E Street Prepared				Street Prepared
+FSP	0.829	2	F Street Prepared				Street Prepared
+SSR	0.847	2	S Street R				Street R
+CAM-C	0.823	0	Classic American C				Classic American
+CAM-T	0.817	0	Classic American T				Classic American
+CAM-S	0.838	0	Classic American S				Classic American
+XP	0.892	2	X Prepared				Prepared
+BP	0.869	-1	B Prepared				Prepared
+CP	0.854	-1	C Prepared				Prepared
+DP	0.865	-1	D Prepared				Prepared
+EP	0.859	2	E Prepared				Prepared
+FP	0.873	2	F Prepared				Prepared
+HCR	0.825	2	Heritage Classic Race				Heritage Race
+SMF	0.848	-1	Street Modified F				Street Modified
+SM	0.861	1	Street Modified				Street Modified
+SSM	0.875	1	Super Street Modified				Street Modified
+AM	1.000	2	A Modified				Modified
+BM	0.956	2	B Modified				Modified
+CM	0.901	-1	C Modified				Modified
+DM	0.906	-1	D Modified				Modified
+EM	0.905	-1	E Modified				Modified
+FM	0.916	-1	F Modified				Modified
+FSAE	0.966	-1	Formula SAE				Formula
+KM	0.939	-1	F125 Shifter Kart				Kart
+JA	0.864	-1	Junior Kart A				Junior Kart
+JB	0.834	-1	Junior Kart B				Junior Kart
+JC	0.726	-1	Junior Kart C				Junior Kart
+STM	1.000	0	Street Tire Mod				Street Tire Class
+SSL	0.826	3	Super Street Ladies				Street Ladies
+ASL	0.819	-1	A Street Ladies				Street Ladies
+BSL	0.813	3	B Street Ladies				Street Ladies
+CSL	0.810	3	C Street Ladies				Street Ladies
+DSL	0.801	3	D Street Ladies				Street Ladies
+ESL	0.794	3	E Street Ladies				Street Ladies
+FSL	0.804	-1	F Street Ladies				Street Ladies
+GSL	0.793	3	G Street Ladies				Street Ladies
+HSL	0.786	2	H Street Ladies				Street Ladies
+HCSL	0.809	2	Heritage Classic Street Ladies				Heritage Street Ladies
+STFL	0.800	2	Street Touring FWD Ladies				Touring Ladies
+STSL	0.818	2	Street Touring S Ladies				Touring Ladies
+STXL	0.822	2	Street Touring X Ladies				Touring Ladies
+STRL	0.830	3	Street Touring R Ladies				Touring Ladies
+STUL	0.831	1	Street Touring U Ladies				Touring Ladies
+STPL	0.820	1	Street Touring P Ladies				Touring Ladies
+SSPL	0.862	2	S Street Prepared Ladies				Street Prepared Ladies
+ASPL	0.856	-1	A Street Prepared Ladies				Street Prepared Ladies
+BSPL	0.853	2	B Street Prepared Ladies				Street Prepared Ladies
+CSPL	0.860	2	C Street Prepared Ladies				Street Prepared Ladies
+DSPL	0.842	2	D Street Prepared Ladies				Street Prepared Ladies
+ESPL	0.837	2	E Street Prepared Ladies				Street Prepared Ladies
+FSPL	0.829	2	F Street Prepared Ladies				Street Prepared Ladies
+SSRL	0.847	2	S Street R  Ladies				Street R Ladies
+CAM-CL	0.823	0	Classic American C Ladies				Classic American Ladies
+CAM-TL	0.817	0	Classic American T Ladies				Classic American Ladies
+CAM-SL	0.838	0	Classic American S Ladies				Classic American Ladies
+XPL	0.892	2	X Prepared Ladies				Prepared Ladies
+BPL	0.869	-1	B Prepared Ladies				Prepared Ladies
+CPL	0.854	-1	C Prepared Ladies				Prepared Ladies
+DPL	0.865	-1	D Prepared Ladies				Prepared Ladies
+EPL	0.859	2	E Prepared Ladies				Prepared Ladies
+FPL	0.873	2	F Prepared Ladies				Prepared Ladies
+HCRL	0.825	2	Heritage Classic Race Ladies				Heritage Race Ladies
+SMFL	0.848	-1	Street Modified F Ladies				Street Modified Ladies
+SML	0.861	1	Street Modified Ladies				Street Modified Ladies
+SSML	0.875	1	Super Street Modified Ladies				Street Modified Ladies
+AML	1.000	2	A Modified Ladies				Modified Ladies
+BML	0.956	2	B Modified Ladies				Modified Ladies
+CML	0.901	-1	C Modified Ladies				Modified Ladies
+DML	0.906	-1	D Modified Ladies				Modified Ladies
+EML	0.905	-1	E Modified Ladies				Modified Ladies
+FML	0.916	-1	F Modified Ladies				Modified Ladies
+FSAEL	0.966	-1	Formula SAE Ladies				Formula Ladies
+KML	0.939	-1	F125 Shifter Kart Ladies				Kart Ladies
+JAL	0.864	-1	Junior Kart A Ladies				Junior Kart Ladies
+JBL	0.834	-1	Junior Kart B Ladies				Junior Kart Ladies
+JCL	0.726	-1	Junior Kart C Ladies				Junior Kart Ladies
+STML	1.000	0	Street Tire Mod Ladies				Street Tire Class
+T	0.000	1	Street Tire Class	pax			Street Tire Class
+P	0.000	1	Pro	pax			
+C	1.000	0	CMC w/ pax	pax			
+CMC	1.000	0	CMC				Classic American
+TO	1.000	0	Time Only 1		nonpoints	exclude	Exclude
+EAR	1.000	0	Extra Afternoon Runs	pax	nonpoints	exclude	Exclude
+SL	1.000	0	Starting Line		nonpoints	exclude	Exclude
+TNT	1.000	0	Test-N-Tune	pax	nonpoints	exclude	Exclude

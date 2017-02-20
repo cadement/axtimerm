@@ -1,0 +1,28 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/event/#{event.id}", data-icon="arrow-l") Back
+			h1 Course Map Upload
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			if (message != null)
+				p(style="color:red;") #{message}
+			p Only upload an image file, either .JPG, .PNG or .PDF
+			form(method="POST",  enctype="multipart/form-data", action="/event/coursemap/#{event._id}")
+				div(class="fieldcontain")
+					label(for="coursemap") Course Map Image: 
+					input#csvfile(type="file", name="coursemap")
+				input(type="submit", value="Upload", data-theme="b")
+			if (url != null)
+				if (url.indexOf('.pdf') > -1)
+					p
+						a(href="#{url}", data-theme="e", data-role="button", target="_blank") Download PDF
+				else
+					div(class="img-coursemap")
+						a(href="#{url}",target="_blank")
+							img(src="#{url}",alt="Course Map")

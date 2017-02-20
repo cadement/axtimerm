@@ -1,0 +1,144 @@
+<html>
+	<head>
+		<title>new lr</title>
+		<script type="text/javascript" src="scripts/jquery-1.9.0.min.js"></script>
+		<script type="text/javascript">
+
+		var Result = {}
+
+		</script>
+		<style>
+		body {
+			font-family:Helvetica,Arial,sans-serif;
+			font-size:15px;
+		}
+		#header {
+			height:40px;background-color:black;color:white;text-align:center;
+			line-height:40px;
+		}
+		.ui-bar-black {
+			border: 1px solid #333;
+			background: #111;
+			color: #fff;
+			font-weight: 700;
+			background-image: -webkit-gradient(linear,left top,left bottom,from(#3c3c3c),to(#111));
+			background-image: -webkit-linear-gradient(#3c3c3c,#111);
+			background-image: -moz-linear-gradient(#3c3c3c,#111);
+			background-image: -ms-linear-gradient(#3c3c3c,#111);
+			background-image: -o-linear-gradient(#3c3c3c,#111);
+			background-image: linear-gradient(#3c3c3c,#111);
+
+		}
+		.item {
+			height:60px;
+			padding:12px 20px 12px 0;
+			background-color:#cecece;
+			position:relative;
+			/*font-size:14px;*/
+			color:#222;
+			border-bottom:1px solid #ccc;
+			/*background-image: linear-gradient(#f6f6f6,#e0e0e0);*/
+			background-image: linear-gradient(#fff,#f1f1f1);
+		}
+
+		.item .rank-container {
+			width:100px;
+			text-align:center;
+			position:absolute;
+		}
+		.item .rank-num {
+			font-size:50px;
+			line-height: 50px;
+
+		}
+		.item .driver-info {
+			margin-left:100px;
+			line-height:20px;
+		}
+		.item .ranks {
+			font-size:.6em;
+			line-height: 15px;
+		}
+		.item .rightbar {
+			position:absolute;
+			right:0px;
+			width:220px;
+			text-align:right;
+			padding-right:20px;
+			
+		}
+		.item .time {
+			font-size:36px;
+			
+			/*text-shadow: 3px 3px 1px rgba(150, 150, 150, 1);*/
+			font-weight:bold;
+		}
+		.item .carnum {
+			font-size:1.2em;
+			font-weight:bold;
+			line-height:;
+		}
+		.item .name, .item .stats {
+			color:gray;
+		}
+
+
+		.itemlist.skinny .ranks, .itemlist.skinny .stats,  .itemlist.skinny .runs {
+			display:none;
+		}
+		.itemlist.skinny .rank-num {
+			font-size:36px;
+			line-height:36px;
+		}
+		.itemlist.skinny .item {
+
+			height:36px;
+			padding:6px 10px 6px 0;
+		}
+
+		</style>
+	</head>
+	<body style="margin:0;padding:0">
+		<div id="doc">
+			<div id="header" class="ui-bar-black">
+				<div>Header bar</div>
+			</div>
+			<div id="content">
+				<div class="itemlist">
+					<div class="item">
+						<div class="rank-container">
+							<div class="rank-num">110</div>
+							<div class="ranks">10-21-34</div>
+						</div>
+						<div class="rightbar">
+							<div class="time">67.999</div>
+							<div class="runs">Runs: 6</div>
+						</div>
+						<div class="driver-info">
+							<div class="carnum">#1197 - AX07</div>
+							<div class="name">Christopher Trailer</div>
+							<div class="stats">DNFs: 0 / Reruns: 0 / Cones: 9</div>
+						</div>
+						
+					</div>
+					<div class="item">
+						<div class="rank-container">
+							<div class="rank-num">110</div>
+							<div class="ranks">10-21-34</div>
+						</div>
+						<div class="rightbar">
+							<div class="time">67.999</div>
+							<div class="runs">Runs: 6</div>
+						</div>
+						<div class="driver-info">
+							<div class="carnum">#1197 - AX07</div>
+							<div class="name">Christopher Trailer</div>
+							<div class="stats">DNFs: 0 / Reruns: 0 / Cones: 9</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

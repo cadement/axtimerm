@@ -1,0 +1,93 @@
+extend layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+block content
+	#page-liveresults(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Live Results
+			a#btn-showdetails(data-role="button" ,data-icon="check",class="ui-btn-active") Details
+			//- div(data-role="navbar")
+			//- 	ul
+			//- 		li
+			//- 			a(href="#" ,data-theme="e", class="ui-btn-active") Time
+			//- 		li
+			//- 			a(href="#" ,data-theme="e", class="btn-results") Class
+			//- 		li
+			//- 			a(href="#" ,data-theme="e", class="btn-results") PAX
+		div(data-role="content", style="padding-top:0px;")
+			div#resultspanel
+				.ui-grid-b
+					.ui-block-a 
+						a#btn-raw(data-role="button", data-theme="b", class="btn-results") Raw Time
+					.ui-block-b
+						a#btn-class(data-role="button", data-theme="b", class="btn-results") Class 
+					.ui-block-c 
+						a#btn-pax(data-role="button", data-theme="b", class="btn-results") PAX
+				p#info(style="margin-top:4px;") Times auto update! # of Runs: 
+					strong#results-runcount -
+					span / Updated:
+					strong#results-lastupdated -
+				ul#classlist(class="class-select")
+				p(style="clear:both;")
+					a#btn-classselect(href="#", data-role="button", data-theme="e") Choose a Different Class
+				ul#resulttimes(data-role="listview", data-divider-theme="e", class="rank-overall", style="clear:both;",data-filter="true", data-filter-placeholder="Filter by car # or name")
+					li(class="ax-loading") Loading...
+		div(data-role="footer", data-position="fixed", data-id="footerbar" ,class="custom-icons")
+			div(data-role="navbar", class="custom-icons")
+				ul
+					li
+						a(href="#page-search", class="nb-carsearch",data-rel="dialog", data-role="button" ,data-transition="none" ,data-icon="custom") Car Search
+					li
+						a(href="#page-ttod", class="nb-ttod", data-role="button", data-transition="none" ,data-icon="custom") TTOD
+					li
+						a(href="/event/runs/#{event._id}" ,class="nb-runs", data-ajax="false", data-role="button", data-transition="none", data-icon="custom") Runs
+					li
+						a(href="", class="nb-results ui-btn-active", data-transition="none" ,data-icon="custom") Results
+	#page-ttod(data-role="dialog")
+		div(data-role="header")
+			h1 Top Times of Day
+		div(data-role="content")
+			ul#ttodresults(data-role="listview", data-divider-theme="e")
+				li Loading...
+	#page-search(data-role="dialog")
+		div(data-role="header")
+			h1 Driver Search
+		div(data-role="content")
+			ul#driversearch(data-role="listview", data-divider-theme="e", data-filter="true")
+				
+	#page-driver(data-role="dialog")
+		div(data-role="header")
+			h1 Driver Details
+		div(data-role="content")
+			h1 
+				span#drivername -
+			p(id="info") # of Runs: <strong><span id="runcount">-</span></strong> -  Last Updated: <strong><span id="lastupdated">-</span></strong>
+			p#driverinfo(style="line-height:1.3em;")
+			div( class="ui-grid-b")
+				div(class="ui-block-a", style="text-align:center") Overall
+					div(style="text-align:center;font-size:50px;font-weight:bold;")
+						span#rankoverall -
+				div(class="ui-block-b", style="text-align:center") 
+					span#dtclass Class
+					div(style="text-align:center;font-size:50px;font-weight:bold;")
+						span#rankclass -
+				div(class="ui-block-c", style="text-align:center") PAX
+					div(style="text-align:center;font-size:50px;font-weight:bold;")
+						span#rankpax -
+			
+			<ul data-role="listview" id="dtlegend" data-inset="true" data-divider-theme="d">
+			<li data-role="list-divider">Legend</li>
+			<li data-theme="b" data-icon="check"><a href="#">Best Time</a></li>
+			<li data-theme="a" data-icon="delete"><a href="#">DNF / Off</a></li>
+			<li data-theme="e" data-icon="alert"><a href="#">Gets A Rerun</a></li>
+			</ul>
+			p
+				ul#driver-runs(data-role="listview", data-inset="true",data-divider-theme="d")
+					li Loading...
+
+	script(src="/scripts/liveresults.js")

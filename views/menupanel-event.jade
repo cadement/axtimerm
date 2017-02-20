@@ -1,0 +1,75 @@
+div#panelmenu(data-role="panel", data-theme="a")
+	ul(data-role="listview")
+		li 
+			a(href="/club/#{event.club.name}") Club Home
+		li 
+			a(href="/event/#{event._id}") Event Home
+		li
+			a(href="/event/liveresults/#{event._id}") 
+				img.ui-li-icon(src="/css/images/flags-2g.png")
+				| Live Results
+		li
+			a(href="/event/runs/#{event._id}") 
+				img.ui-li-icon(src="/css/images/list-2g.png")
+				| All Runs
+		li
+			a(href="/event/announcer/#{event._id}") 
+				img.ui-li-icon(src="/css/images/bullhorn-2g.png")
+				| Announcer
+		li
+			a(href="/event/leaderboard/#{event._id}") 
+				img.ui-li-icon(src="/css/images/trophy-2g.png")
+				| Leaderboard
+
+	if user
+		h3 Event Roles
+		ul(data-role="listview")
+			if ['Club Admin', 'Event Admin', 'Time Keeper'].indexOf(user.role) > -1
+				li 
+					a(href="/event/queue/#{event._id}") 
+						img.ui-li-icon(src="/css/images/stopwatch-2.png")
+						| Time Keeper
+			if ['Club Admin', 'Event Admin', 'Time Keeper','Cone Counter'].indexOf(user.role) > -1
+				li
+					a(href="/event/conecounter/#{event._id}") 
+						img.ui-li-icon(src="/css/images/sketchbook-2g.png")
+						| Cone Counter
+			if ['Club Admin', 'Event Admin', 'Time Keeper','Car Queuer'].indexOf(user.role) > -1
+				li
+					a(href="/event/carqueuer/#{event._id}") 
+						img.ui-li-icon(src="/css/images/loopback-2g.png")
+						| Car Queuer
+			if ['Club Admin', 'Event Admin', 'Time Keeper','Registrar','Worker Checkin'].indexOf(user.role) > -1
+				li
+					a(href="/event/workercheckin/#{event._id}")  
+						img.ui-li-icon(src="/css/images/checkmark-2g.png")
+						| Worker Checkin
+			if ['Club Admin', 'Event Admin', 'Time Keeper','Tech Inspector'].indexOf(user.role) > -1
+				li
+					a(href="/event/techinspector/#{event._id}") 
+						img.ui-li-icon(src="/css/images/wrench-2g.png")
+						| Tech Inspector 
+	if user &&  ['Club Admin', 'Event Admin'].indexOf(user.role) > -1
+			h3 Administration
+			ul(data-role="listview")
+				li
+					a(href="/event/registration/#{event._id}") 
+						img.ui-li-icon(src="/css/images/idcard-2g2.png")
+						| Registration
+				li
+					a(href="/event/drivercheckin/#{event._id}") 
+						img.ui-li-icon(src="/css/images/check-2g.png")
+						| Driver Checkin
+				li
+					a(href="/event/edit/#{event._id}") 
+						img.ui-li-icon(src="/css/images/gears-2g.png")
+						| Event Setup 
+				li
+					a(href="/event/times/#{event._id}") 
+						img.ui-li-icon(src="/css/images/clock-2g.png")
+						| Raw Times
+
+		
+
+		
+

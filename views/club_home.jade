@@ -1,0 +1,190 @@
+extends layout_1_3
+block content
+	#page-event(data-role="page")
+		div(data-role="header")
+			
+			h1 #{club.name}
+			if !user
+				a(href="/login", data-theme="b") Admin Login
+			else
+				a(href="/logout", data-theme="b") Log Off
+
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			//- if session.auth && session.auth.role == "Club Admin"
+			if user && user.role == 'Club Admin'
+				if dbUpgrade
+					div(style="height:100px;background-color:red;padding:12px")
+						p You need to upgrade the database.  Click the Upgrade Database record
+						p 
+							a(href="/admin/#{club.name}/dbupgrade",data-role="button",data-theme="b") Upgrade Database
+				div#newversion(style="display:none;")
+					h1 New Version Available
+					p 
+			if settings.isDemo
+				h1 DEMO VERSION
+				p Welcome to the AXti.me RM demo.  This version allows you to completely test all features of the system.  We even provide you with a virtual timing system to replicate what your timing hardware would do.
+				p Read the FAQs first!
+				p Email clubsupport@axti.me with any questions or feedback.  We love hearing from you!
+				p Since this is online, there is no timing hardware to test with.  So, we created a virtual timer (Event Home > Timer) that let's Start, Finish, Split, Reset Finish and Reset Start.  Just like your timing hardware would.
+				p Please note the Backup and Restore features do not work in the online demo.
+
+			if events.length == 0
+				h1 Getting Started
+				ol
+					li Setup a Season. 
+						a(href="/help/#{club.name}/faqs") Read more.
+					li Import or Add Members.  
+						a(href="/help/#{club.name}/faqs") Read more.
+					li Import Past Season Events.
+						a(href="/help/#{club.name}/faqs") Read more.
+					li Create Your Next Event.
+			div.ui-grid-a.ui-responsive
+				div.ui-block-a(style="padding:12px")
+					ul(data-role="listview",data-inset="true", style="margin:0px;",data-divider-theme="a")
+						li(data-role="list-divider") Menu
+						li
+							a(href="/club/#{club.name}/leaderboard") Season Leaderboards
+						//- li
+						//- 	a(href="/club/#{club.name}/mystuff") What Are My Stats?
+						
+						if user && user.role == "Club Admin"
+							li(data-role="list-divider") System Admin
+							li
+								a(href="/club/#{club.name}/newevent") Create Event
+							li
+								a(href="/admin/hardware") Timing Hardware
+							li
+								a(href="/club/#{club.name}/backup") Backup Data 
+							li(data-role="list-divider") More Tools
+							li 
+								a(href="/club/#{club.name}/members") Members
+							li
+								a(href="/help/#{club.name}/faqs") FAQs
+							li
+								a(href="/club/#{club.name}/leaderboard/recalc") Recalc Leaderboards
+							li
+								a(href="/club/#{club.name}/restore") Restore Data from Backup
+							li
+								a(href="/club/#{club.name}/manageseasons") Manage Seasons
+							li
+								a(href="/club/#{club.name}/importhome") Import Data
+							li
+								a(href="/club/#{club.name}/users") Club Admin Users
+							li
+								a(href="/club/#{club.name}/settings") System Configuration
+							li 
+								a(href="/admin/#{club.name}/upgrade") System Upgrade
+							//- li
+							//- 	a(href="/club/#{club.name}/upload") Upload to AXR
+					
+				div.ui-block-b(style="padding:12px")
+					ul(data-role="listview",data-inset="true",data-divider-theme="e", style="margin:0")
+						li EVENTS
+						- var d = new Date();
+						- var today = (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getFullYear();
+						- var todayDone = false, year = d.getFullYear();
+						- var pastDone = false, futureDone=false;
+						- function dd(d){return (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getFullYear();}
+						each ev in events
+							if (!futureDone && new Date() < new Date(ev.date))
+								li(data-role="list-divider")
+									h3 Future Events
+									- futureDone = true;
+							else if (!todayDone && today == dd(new Date(ev.date)))
+								li(data-role="list-divider")
+									h3 Todays Events
+								- todayDone = true;
+							else if (new Date(today) > new Date(ev.date) && !pastDone)
+								li(data-role="list-divider")
+									h3 Past Events
+								- pastDone = true;
+							else if (year > ev.season)
+								li(data-role="list-divider")
+									h3=ev.season
+								- year = ev.season;
+							li
+								a(href="/event/#{ev._id}")
+									h3 #{ev.name}
+									p #{ev.location.name}
+									p #{ev.date}
+									p Participants: #{ev.participantCount} / Total Runs: #{ev.totalRuns}
+						if (events.length == 0)
+							li No Events
+			//- if session.auth && session.auth.role == "Club Admin"
+			//- 	div(data-role="navbar",class="custom-icons",style="margin-top:20px;")
+			//- 		ul
+			//- 			li(style="padding:8px 16px;")
+			//- 				a(href="/club/#{club.name}/newevent",class="big-newevent",data-icon="custom",data-role="button",data-theme="b") New Event
+			//- 			li(style="padding:8px 16px;")
+			//- 				a(href="/club/#{club.name}/manageseasons",class="big-manageseasons",data-icon="custom",data-role="button",data-theme="b") Manage Seasons
+			//- 			li(style="padding:8px 16px;")
+			//- 				a(href="/club/#{club.name}/importhome",class="big-importdata",data-icon="custom",data-role="button",data-theme="b") Import Data
+						
+			//- 	div(data-role="navbar",class="custom-icons")
+			//- 		ul
+			//- 			li(style="padding:8px 16px;")
+			//- 				a(href="/help/#{club.name}/faqs",class="big-faqs",data-icon="custom",data-role="button",data-theme="b") FAQs
+			//- 			li(style="padding:8px 16px;")
+			//- 				a(href="/club/#{club.name}/upload",class="big-upload",data-icon="custom",data-role="button",data-theme="b") Upload to AXR
+			//- 			li(style="padding:8px 16px;")
+			//- 				a(href="/club/#{club.name}/leaderboard/recalc",class="big-lbrecalc",data-icon="custom",data-role="button",data-theme="b") Recalc Leaderboards
+
+			//- 	div(data-role="navbar",class="custom-icons")
+			//- 		ul
+			//- 			li(style="padding:8px 16px;")
+			//- 				a(href="/club/#{club.name}/backup",class="big-backup",data-icon="custom",data-role="button",data-theme="b") Backup
+			//- 			li(style="padding:8px 16px;")
+			//- 				a(href="/club/#{club.name}/restore",class="big-restore",data-icon="custom",data-role="button",data-theme="b") Restore
+			//- 			li(style="padding:8px 16px;")
+			//- 				a(href="/club/#{club.name}/users",class="big-adminusers",data-icon="custom",data-role="button",data-theme="b") Admin Users
+				
+			//- div(data-role="navbar",class="custom-icons")
+			//- 	ul
+			//- 		li(style="padding:8px 16px;")
+			//- 			a(href="/club/#{club.name}/leaderboard",class="big-leaderboard",data-role="button",data-icon="custom", data-theme="b") Leaderboards
+			//- 		li(style="padding:8px 16px;")
+			//- 			a(href="/club/#{club.name}/members",class="big-members-w",data-role="button",data-icon="custom", data-theme="b") Members
+
+			//- h1 Events
+			//- p
+			//- 	ul(data-role="listview",data-divider-theme="e")
+			//- 		- var d = new Date();
+			//- 		- var today = (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getFullYear();
+			//- 		- var todayDone = false, year = d.getFullYear();
+			//- 		- var pastDone = false, futureDone=false;
+			//- 		- function dd(d){return (d.getMonth()+1) + '/' + d.getDate() + '/' + d.getFullYear();}
+			//- 		each ev in events
+			//- 			if (!futureDone && new Date() < new Date(ev.date))
+			//- 				li(data-role="list-divider")
+			//- 					h3 Future Events
+			//- 					- futureDone = true;
+			//- 			else if (!todayDone && today == dd(new Date(ev.date)))
+			//- 				li(data-role="list-divider")
+			//- 					h3 Todays Events
+			//- 				- todayDone = true;
+			//- 			else if (new Date(today) > new Date(ev.date) && !pastDone)
+			//- 				li(data-role="list-divider")
+			//- 					h3 Past Events
+			//- 				- pastDone = true;
+			//- 			else if (year > ev.season)
+			//- 				li(data-role="list-divider")
+			//- 					h3=ev.season
+			//- 				- year = ev.season;
+			//- 			li
+			//- 				a(href="/event/#{ev._id}")
+			//- 					h3 #{ev.name}
+			//- 					p #{ev.location.name}
+			//- 					p #{ev.date}
+			//- 					p Participants: #{ev.participantCount} / Total Runs: #{ev.totalRuns}
+			//- 		if (events.length == 0)
+			//- 			li No Events
+
+		div.ui-bar(data-role="footer")
+			div Version: #{site.version}
+							
+		script(src="/scripts/analytics.js")
+		if doVersionCheck
+			script(src="/scripts/club_home.js")
+			

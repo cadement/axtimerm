@@ -1,0 +1,160 @@
+extends layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = '#{event._id}';
+	style.
+		@media (max-width:480px) {
+			#public ul.ui-grid-c li
+				, #admin1 ul.ui-grid-c li
+				, #eventroles ul.ui-grid-d li {width:50% !important;}
+		}
+block content
+	#page-event(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{event.club.name}", data-icon="home") Club Home
+			h1 #{event.name}
+			if !user
+				a(href="/login?eid=#{event._id}",data-theme="b") Role Login
+			else
+				a(href="/logout")=user.role
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			div(class="ax-collapsible ui-grid-a ui-body ui-body-a",style="line-height:1.4em;")
+				div(class="ui-block-a")
+					strong Club: 
+					span #{event.club.name}
+				div(class="ui-block-b")
+					strong Location: 
+					span #{event.location.name}
+				div(class="ui-block-a")
+					strong Date: 
+					span #{event.date}
+				div(class="ui-block-b")
+					strong Counts For Points?: 
+					span #{event.countForPoints ? 'Yes' : 'No'}
+				div(class="ui-block-a")
+					strong Sessions: 
+					span #{event.sessions}
+				div(class="ui-block-b")
+					strong Run Groups: 
+					each rg in event.runGroups
+						span #{rg.name} 
+				div(class="ui-block-a")
+					strong Drivers: 
+					span #{event.participantCount}
+				div(class="ui-block-b")
+					strong Run Count: 
+					span #{event.totalRuns}
+			if event.rmLiveUrl
+				p
+					string RM Live URL: 
+					a(href=event.rmLiveUrl, target="_blank")=event.rmLiveUrl
+			if isLive
+				p 
+					span Current Session:
+					strong=event.currentSession
+					span , Current Run Group:
+					strong=' ' + event.currentRunGroup.name + (event.currentRunGroup.label ? (' (' + event.currentRunGroup.label + ')') : '')
+
+			if event.courseMap.url != null
+				div(data-role="collapsible", data-theme="b", data-content-theme="d")
+					h4 Course Map
+					if (event.courseMap.url.toLowerCase().indexOf('.pdf') > -1)
+						p
+							a(href="#{event.courseMap.url}", data-theme="e", data-role="button", target="_blank") Download PDF
+					else
+						div(class="img-coursemap")
+							a(href="#{event.courseMap.url}",target="_blank")
+								img(src="#{event.courseMap.url}",alt="Course Map")
+			if (isLive && user && ('Club Admin,Event Admin,Time Keeper,Cone Counter, Car Queuer,Registrar,Tech Inspector,Worker Checkin'.indexOf(user.role) > -1))
+				h3 Event Roles
+				div#eventroles(data-role="navbar",class="custom-icons")
+					ul
+						if ['Club Admin', 'Event Admin', 'Time Keeper'].indexOf(user.role) > -1
+							li(style="padding:8px 16px;")
+								a(href="/event/queue/#{event._id}",class="big-timekeeper",data-icon="custom",data-role="button",data-theme="e") Time Keeper
+						if ['Club Admin', 'Event Admin', 'Time Keeper','Cone Counter'].indexOf(user.role) > -1
+							li(style="padding:8px 16px;")
+								a(href="/event/conecounter/#{event._id}",class="big-conecounter",data-icon="custom",data-role="button",data-theme="e") Cone Counter
+						if ['Club Admin', 'Event Admin', 'Time Keeper','Car Queuer'].indexOf(user.role) > -1
+							li(style="padding:8px 16px;")
+								a(href="/event/carqueuer/#{event._id}",class="big-carqueuer",data-icon="custom",data-role="button",data-theme="e") Car Queuer
+						if ['Club Admin', 'Event Admin', 'Time Keeper','Registrar','Worker Checkin'].indexOf(user.role) > -1
+							li(style="padding:8px 16px;")
+								a(href="/event/workercheckin/#{event._id}",class="big-workercheckin",data-icon="custom",data-role="button",data-theme="e") Worker Checkin
+						if ['Club Admin', 'Event Admin', 'Time Keeper','Tech Inspector'].indexOf(user.role) > -1
+							li(style="padding:8px 16px;")
+								a(href="/event/techinspector/#{event._id}",class="big-techinspector",data-icon="custom",data-role="button",data-theme="e") Tech Inspector
+						
+			if user && ['Club Admin', 'Event Admin', 'Time Keeper','Registrar'].indexOf(user.role) > -1
+				h3 Event Administration
+				div#admin1(data-role="navbar",class="custom-icons")
+					ul
+						li(style="padding:8px 16px;")
+							a(href="/event/registration/#{event._id}",class="big-registration",data-icon="custom",data-role="button") Registration
+						li(style="padding:8px 16px;")
+							a(href="/event/drivercheckin/#{event._id}",class="big-drivercheckin",data-icon="custom",data-role="button") Driver Checkin
+						if user.role != 'Registrar'
+							li(style="padding:8px 16px;")
+								a(href="/event/edit/#{event._id}",class="big-eventsetup",data-icon="custom",data-role="button") Event Setup
+							li(style="padding:8px 16px;")
+								a(href="/event/coursemap/#{event._id}",class="big-coursemap",data-icon="custom",data-role="button") Upload Course Map
+				
+				div(data-role="navbar",class="custom-icons")
+					ul
+						li(style="padding:8px 16px;")
+							a(href="/event/times/#{event._id}",class="big-rawtimes",data-icon="custom",data-role="button") Raw Times
+						li(style="padding:8px 16px;")
+							a(href="/event/manualtimer/#{event._id}",class="big-rawtimes",data-icon="custom",data-role="button") Timer
+						li(style="padding:8px 16px;")
+							a(href="javascript:void(0)",id="btn-recalcEvent",class="big-eventsetup",data-icon="custom",data-role="button") Recalculate Event
+
+				div(data-role="navbar",class="custom-icons")
+					ul
+						li(style="padding:8px 16px;")
+							a(href="/api/event/#{event._id}/reports/full",target="_blank",class="big-printer",data-icon="custom",data-role="button") Print Results
+						li(style="padding:8px 16px;")
+							a(href="/event/exports/#{event._id}",class="big-exportcsv",data-icon="custom",data-role="button") Export
+						li(style="padding:8px 16px;")
+							a(href="/event/#{event._id}/postresults",target="_blank",class="big-exportcsv",data-icon="custom",data-role="button") Post Results
+				
+				h3 RM Live 
+				if settings.cloudKey.length === 0
+					p To post results and sync your results to RM Live, you'll need to update your Cloud Key in System Configuration.
+				else
+					div(data-role="navbar",class="custom-icons")
+						ul
+							li(style="padding:8px 16px;")
+								a#btn-rmlivesync(href="javascript:void(0);",target="_blank",class="big-exportcsv",data-icon="custom",data-role="button") Sync with RM Live
+						
+
+			h3 Results & Runs	
+			div#public(data-role="navbar",class="custom-icons")
+				ul
+					li(style="padding:8px 16px;")
+						a(href="/event/liveresults/#{event._id}",class="big-results",data-icon="custom",data-role="button",data-theme="b") #{isLive ? "Live Results" : "Results"}
+					li(style="padding:8px 16px;")
+						a(href="/event/runs/#{event._id}",class="big-runs",data-icon="custom",data-role="button",data-theme="b") All Runs
+					li(style="padding:8px 16px;")
+						a(href="/event/announcer/#{event._id}",class="big-announcer",data-icon="custom",data-role="button",data-theme="b") Announcer
+			div#public2(data-role="navbar",class="custom-icons")
+				ul
+					li(style="padding:8px 16px;")
+						a(href="/event/leaderboard/#{event._id}",class="big-leaderboard",data-icon="custom",data-role="button",data-theme="b") Leaderboards
+					li(style="padding:8px 16px;")
+						a(href="/event/oncourse/#{event._id}",class="big-oncourse",data-icon="custom",data-role="button",data-theme="b") On Course Live
+					li(style="padding:8px 16px;")
+						a(href="/event/chrono/#{event._id}",class="big-oncourse",data-icon="custom",data-role="button",data-theme="b") Chrono Display
+			p
+				a(href="/api/event/#{event._id}/reports/full", data-role="button",target="_blank") Printer Friendly Results
+			p
+				a(href="/event/reports/audit/#{event._id}", data-role="button",target="_blank") Audit Report
+			if user && ['Club Admin', 'Event Admin'].indexOf(user.role) > -1
+				p 
+					a(href="/event/#{event._id}/rungroupbyclass", data-role="button") Assign Run Groups by Class 
+					
+
+			script(src="/scripts/analytics.js")
+			script(src="/scripts/event_home.js")
+			

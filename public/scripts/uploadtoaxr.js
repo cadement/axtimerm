@@ -1,0 +1,1 @@
+$(document).bind("pageinit",function(){$.getJSON("http://www.axti.me",{},function(n,o,t){console.log("good")})});

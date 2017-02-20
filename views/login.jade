@@ -1,0 +1,114 @@
+extends layout_bootstrap
+block head
+	style.
+		body {
+			padding-top: 40px;
+			padding-bottom: 40px;
+			background-color: #eee;
+		}
+
+		.form-signin {
+		  max-width: 330px;
+		  padding: 15px;
+		  margin: 0 auto;
+		}
+		.form-signin .form-signin-heading,
+		.form-signin .checkbox {
+		  margin-bottom: 10px;
+		}
+		.form-signin .checkbox {
+		  font-weight: normal;
+		}
+		.form-signin input.form-control {
+		  position: relative;
+		  height: auto;
+		  -webkit-box-sizing: border-box;
+		     -moz-box-sizing: border-box;
+		          box-sizing: border-box;
+		  padding: 10px;
+		  font-size: 16px;
+		}
+		.form-signin .form-control:focus {
+		  z-index: 2;
+		}
+		.form-signin input[type="text"] {
+		  margin-bottom: -1px;
+		  border-bottom-right-radius: 0;
+		  border-bottom-left-radius: 0;
+		}
+		.form-signin input[type="password"] {
+		  margin-bottom: 10px;
+		  border-top-left-radius: 0;
+		  border-top-right-radius: 0;
+		}
+		.form-signin select {
+			margin-bottom:8px;
+		}
+		img {
+			width:50%;
+			
+		}
+		.head {margin:0 auto;}
+block content
+	.container
+		.head.text-center
+			a(href="/")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			
+		form(class="form-signin", method="POST",onsubmit="return doit()")
+			.admin-login.alert.alert-warning If you are an Event Role (Time Keeper, Car Queuer, etc), you must go to the Event's page and click the Role Login button.
+			h2.form-signin-header Please Log In
+			if errors
+				.alert.alert-danger
+					each e in errors
+						p=e
+			select#role.form-control
+				option Event Admin
+				option Time Keeper
+				option Cone Counter
+				option Car Queuer
+				option Tech Inspector
+				option Registrar
+				option Worker Checkin
+			label.sr-only(for="username") Username:
+			input.form-control(type="text", name="username", id="username",placeholder="Username")
+			label.sr-only(for="e-password") Password:
+			input.form-control(type="password", name="password", id="e-password", placeholder="Password")
+			input(type="hidden", name="eventId", value="")
+			input(type="hidden", name="login", value="")
+			input.btn.btn-primary.btn-lg.btn-block(type="submit",value="Login")
+			div.role-login.text-right(style="margin-top:18px;")
+				a(href="/login") Login as Club Admin
+block scripts
+	script.
+		var urlParams;
+		function doit(){
+			var login = $('#username').val();
+			if (urlParams.eid){
+				login = urlParams.eid + '||' + $('#role').val();
+				$('input[name=eventId]').val(urlParams.eid);
+			}
+			$('input[name=login]').val(login);
+			return true;
+		}
+		(window.onpopstate = function () {
+		    var match,
+		        pl     = /\+/g,  // Regex for replacing addition symbol with a space
+		        search = /([^&=]+)=?([^&]*)/g,
+		        decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+		        query  = window.location.search.substring(1);
+
+		    urlParams = {};
+		    while (match = search.exec(query))
+		       urlParams[decode(match[1])] = decode(match[2]);
+		})();
+		$(document).on('ready', function(){
+			if (!urlParams.eid) {
+				$('#role').hide();
+				$('.role-login').hide();
+			}
+			else {
+				$('#username').hide();
+				$('.admin-login').hide();
+			}
+		})

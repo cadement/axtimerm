@@ -1,0 +1,237 @@
+extends layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var eventId = "#{event._id}";
+		var conesAdvancedMode = #{event.coneCounterAdvancedMode.toString().toLowerCase()};
+		var sessionId = '#{session.id}';
+block content
+	#page-queue(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Time Keeper
+			a(href="#page-qhelp", data-rel="popup", data-icon="info", data-position-to="window") Help
+			div(class="ui-bar ui-bar-e ui-grid-a")
+				.ui-block-a
+					h3 #{event.name} #{event.date}
+				.ui-block-b(style="text-align:right")
+					span#battery-levels 
+
+		div(data-role="content")
+			.alert.alert-danger(style="display:none;")
+				span 5 errors in a row connecting to RM Live
+				a.alert-dismiss(href="javascript:void(0)",style="float:right") X
+			div(class="ui-grid-#{hardwareButtonsEnabled ? 'b' : 'a'}")
+				div(class="ui-block-a")
+					a(href="#popup-changeses", data-position-to="window", data-role="button",data-rel="popup", data-theme="b") Start Session or Run Group
+				div(class="ui-block-b")
+					a#btn-addcar(href="#page-addcar", data-rel="dialog", data-role="button", data-theme="b") Add Driver to Queue
+				if hardwareButtonsEnabled
+					div(class="ui-block-c")
+						a(href="#hardwareMenu", data-theme="b",data-role="button", data-rel="popup") TLink
+			div(class="ui-grid-a")
+				div(class="ui-block-a")
+					span(style="font-weight:bold;") Current Session: 
+					span#lbl-session #{event.currentSession}
+				div(class="ui-block-b")
+					span(style="font-weight:bold;") Current Run Group: 
+					span#lbl-rg(style="display:inline-block;color:#fff;padding:3px;background-color:#{event.currentRunGroup.color}")=event.currentRunGroup.name + (event.currentRunGroup.label ? (' (' + event.currentRunGroup.label + ')') : '')
+			div.splitscreen
+				div.ss-queue
+					h2 In Queue
+					ul#queuelist(data-role="listview", data-theme="a")
+						li Loading...
+				div.ss-runs
+					h2 Recent Runs
+					ul#runlist(data-role="listview")
+						li Loading...
+					p
+						a#btn-showallruns(data-role="button", data-theme="b") Show All Runs
+				div.clearfix
+			#popup-runoptions(data-role="popup")
+				ul(data-role="listview")
+					li 
+						a.btn-runoptions(data-action="deleterunkeeptimes") 
+							h3 Delete Driver but Keep Times
+							p Delete driver and shifts driver's times down. Use this when an extra car was inserted into queue.
+
+					li 
+						a.btn-runoptions(data-action="notimplemented") Delete Run
+			#popup-changeses(data-role="popup",data-overlay-theme="a", data-theme="a")
+				div(style="min-width:400px;padding:20px 30px")
+					h3 Change Current Session / RunGroup
+					fieldset(data-role="controlgroup", data-type="horizontal")
+						legend Session:
+						-for (var i=0;i<event.sessions;i++){
+							if (i+1 == event.currentSession)
+								input(type="radio", name="radio-session", id="radio-session-#{i}", value="#{i+1}", checked="checked",data-theme="e")
+								label(for="radio-session-#{i}") #{i+1}
+							else
+								input(type="radio", name="radio-session", id="radio-session-#{i}", value="#{i+1}",data-theme="e")
+								label(for="radio-session-#{i}") #{i+1}
+						- }
+					fieldset(data-role="controlgroup", data-type="horizontal")
+						legend Run Group:
+						each rg in event.runGroups
+							if (event.currentRunGroup && rg.name == event.currentRunGroup.name)
+								input(type="radio", name="radio-rg", id="radio-rg-#{rg.name}", value="#{rg.name}", checked="checked",data-theme="e")
+								label(for="radio-rg-#{rg.name}")=rg.name + (rg.label ? (' (' + rg.label + ')') : '')
+							else
+								input(type="radio", name="radio-rg", id="radio-rg-#{rg.name}", value="#{rg.name}",data-theme="e")
+								label(for="radio-rg-#{rg.name}")=rg.name + (rg.label ? (' (' + rg.label + ')') : '')
+					p
+						a(id="btn-save-session",data-rel="back", data-role="button",data-theme="b", data-inline="true") Save
+						a(href="#popup-changeses",data-role="button", data-inline="true", data-rel="back", data-theme="a") Cancel
+
+			#page-qhelp(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Time Keeper Help
+				div(data-role="content")
+					div(style="max-width:400px;") 
+						p You are the Time Keeper, the manager of all.  
+						p Your role is to oversee everything: 
+						ul
+							li Make sure the car that crosses the finish line is correct in the system
+							li Make sure times are coming through from the hardware
+							li Ensure system is up and running
+							li Answer driver questions
+							li Keep an eye on Queue order and times are reasonable
+							li Handle any issues that come along like Car is out of order, reset finish, etc.
+						//- p All this data is live and in realtime, so if you have a cone counter using the system too, when they add cones, they will instantly appear.  The same goes for a Car Queuer, your car queue list will automatically and instantly update.
+						p
+							a(data-rel="back", data-role="button", data-theme="a") Close
+			div(data-role="popup", id="hardwareMenu", data-theme="b")
+				ul(data-role="listview", data-inset="true", style="min-width:210px")
+					li(data-role="divider", data-theme="a") Reset Timing Hardware
+					li
+						a.btn-resethardware(href="javascript:void(0)",data-reset="finish", data-rel="back") Reset Finish 
+					li
+						a.btn-resethardware(href="javascript:void(0)", data-reset="start", data-rel="back") Reset Start		
+	#popup-trouble2(data-role="page",data-dismissible="false", data-theme="d", data-overlay-theme="a")
+		div(data-role="header")
+			h1 Run Options
+		div(data-role="content")
+			p#options-desc
+			a#btn-showparticipant.btn-options(data-role="button",data-icon="info") View Driver Info
+			a#btn-showeditrun.btn-options(data-role="button") Edit Run
+			a#btn-optionsdelete.btn-options(data-role="button", class="btn-delete delete",data-icon="delete") Permantently Delete Run
+
+			div(data-role="collapsible-set")
+				div(data-role="collapsible", data-theme="e", data-expanded-icon="arrow-u",data-collapsed-icon="arrow-d")
+					h3 Remove Driver but Keep Times
+					p An extra car was inserted into the Queue, but all the times are correct. (Move Drivers Down)
+					a#btn-trouble-deldriverkeeptimes.btn-trouble(data-role="button", data-theme="b") Do It!
+				div(data-role="collapsible", data-theme="e", data-expanded-icon="arrow-u",data-collapsed-icon="arrow-d")
+					h3 Swap The Car/Driver of This Run For:
+					ul(data-role="listview", data-filter="true", data-filter-reveal="true", data-filter-placeholder="Search name, # or class...")
+						each p in participants 
+							li 
+								a.parts(id="pid-#{p._id}",data-rel="back")
+									div(class="carnumber small")=p.axClass.name + ' ' + p.driver.carNumber
+									h1=p.driver.name
+									p=p.driver.car.description
+				div(data-role="collapsible", data-theme="e", data-expanded-icon="arrow-u",data-collapsed-icon="arrow-d")
+					h3 Someone Tripped the Finish line
+					p Scenario: a course worker accidentally tripped the finish, so erase the time and move driver back to the front of the Queue.
+					a#btn-addback(data-rel="back",data-role="button", data-theme="b") Erase time and send driver back to queue
+						
+				div(data-role="collapsible", data-theme="e", data-expanded-icon="arrow-u",data-collapsed-icon="arrow-d")
+					h1 Change This Driver's Time, and move the times up
+					p Scenario: timing hardware failed to send a time to RM. Driver order is correct, but just need to change this driver's time and keep all existing times and move them up one.
+						div(data-role="fieldcontain")
+							label(for="tb-trouble-time") Raw Time:
+							input#tb-trouble-time(type="text")
+						div
+							button#btn-trouble-changetimemoveup.btn-trouble(data-theme="b") Change Time 
+			p 
+				a(data-role="button", data-rel="back", data-theme="a") Cancel
+	#page-addcar(data-role="page")
+		div(data-role="header")
+			h1#adddlgtitle Add Car to Queue
+		div(data-role="content")
+			div( data-role="controlgroup",data-type="horizontal")
+				button(class="btn-number", data-inline="true") 1
+				button(class="btn-number", data-inline="true") 2
+				button(class="btn-number", data-inline="true") 3
+				button(class="btn-number", data-inline="true") 4
+				button(class="btn-number", data-inline="true") 5
+				button(class="btn-number", data-inline="true") 6
+				button(class="btn-number", data-inline="true") 7
+				button(class="btn-number", data-inline="true") 8
+				button(class="btn-number", data-inline="true") 9
+				button(class="btn-number", data-inline="true") 0
+				button(class="btn-number", data-inline="true", data-icon="arrow-l") Del
+				button(class="btn-number", data-inline="true" ,data-icon="delete") Clr
+			h1 Participants
+			ul#drivers(data-role="listview",data-filter="true")
+				each d in participants
+					li(id="part-#{d._id}", data-filtertext="#{d.driver.carNumber} #{d.driver.name} #{d.axClass.name}")
+						a(id="driver-#{d.memberId}-#{d._id}") 
+							p(class="list-rungroup", style="color:#fff;font-size:24px;line-height:30px;background-color:#{d.runGroup.color}")=d.runGroup.label || '&nbsp;'
+							h3 #{d.driver.name} # #{d.driver.carNumber}
+							p
+								strong=d.axClass.name
+							p #{d.driver.car.description}
+							span(class="ui-li-count") #{d.totalCountedRuns}
+	#page-editrun(data-role="page")
+		div(data-role="header")
+			h1#editrun-name
+				Edit Run
+		div(data-role="content")
+			div(class="edit-run-box")
+				span(style="color:gray") Time: 
+				span#er-time
+				span#er-cones
+			ul(class="fivebtn")
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") 1
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") 2
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") 3
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") 4
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") 5
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") 6
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") 7
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") 8
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") 9
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") 0
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") . 
+				li
+					a(class="ui-btn ui-btn-up-c btn-number") &lt;
+			div(style="clear:left;")
+				div(class="ui-grid-a", style="padding-top:16px;text-align:center;")
+					div(class="ui-block-a")
+						a(class="btn-cones add", data-role="button", data-icon="plus", data-theme="e") +1 Cone
+					div(class="ui-block-b")
+						a(class="btn-cones del", data-role="button", data-icon="plus", data-theme="e") -1 Cone
+
+			div
+				fieldset( data-role="controlgroup", data-type="horizontal")
+					legend Result:
+					input(type="radio", name="radio-pen", id="radio-pen-none", value="none")
+					label(for="radio-pen-none") None
+					input(type="radio", name="radio-pen", id="radio-pen-dnf", value="dnf")
+					label(for="radio-pen-dnf") DNF
+					input(type="radio", name="radio-pen", id="radio-pen-rerun", value="rerun")
+					label(for="radio-pen-rerun") RERUN
+					input(type="radio", name="radio-pen", id="radio-pen-off", value="off")
+					label(for="radio-pen-off") OFF
+			p
+				a(data-role="button", data-theme="b", data-icon="check", class="btn-save save") FINISH & SAVE RUN
+
+			p 
+				a(data-role="button", data-theme="a", class="btn-delete delete",data-icon="delete") Delete
+			p 
+				a(data-role="button", data-rel="back", data-theme="a") Cancel
+	script(src="/scripts/queue.js")

@@ -1,0 +1,45 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var club = '';
+block content
+	#page-backup(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Data Backup
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			
+			if (message)
+				div.ui-body.ui-body-a(style="color:red;")=message
+
+			form(action="/club/#{club.name}/backup",method="POST")
+				div(class="ui-grid-a")
+					div(class="ui-block-a",style="padding:20px;")
+						h2 About Backups
+						p Backup your data often! At a minimum after each event.  We backup only your data in a format known as JSON and then compress it using industry standard Zip file format.  The resulting file is very small, so backup often.
+						h2 Local Backup 
+						p This will backup all your data to a file on your computer.  We recommend copying the file somewhere else in case your hard drive or computer crashes.
+						h2 Cloud Backup
+						p Worry no more, as your backups will be safe and sound on our servers.  Even if your computer crashes or hard drives fail, you'll always have access to your data. 
+						p This will backup all your data to a file on your computer AND upload the file to a secure location on AXti.me servers.  To use this service, you must obtain your club's Cloud Key.  Contact clubsupport@axti.me if you don't have one.
+
+					div(class="ui-block-b",style="padding:20px;")
+
+						div(data-role="fieldcontain")
+							label(for="label") Backup Label:
+							input(id="label", name="label", value="", placeholder="Letters and numbers only")
+						p 
+							input(type="submit", value="Do a Local Backup Only",data-theme="b")
+						if !cloudKey
+							p You should update your System Configuration with your Cloud Key so you don't have to enter it all the time.
+							div(data-role="fieldcontain")
+								label(for="clubKey") Club Upload Key:
+								input(id="clubKey", name="clubKey", value="", placeholder="Club Upload Key")
+						else
+							input(type="hidden", name="clubKey", value=cloudKey)
+						p 
+							input(type="submit", name="type", value="Do Local and Cloud Backup",data-theme="b")
+			

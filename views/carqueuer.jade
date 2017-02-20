@@ -1,0 +1,129 @@
+extend layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+		var participants = !{JSON.stringify(participants)};
+block content
+	#page-carqueuer(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Car Queuer
+			a(href="#page-cqhelp", data-rel="popup", data-icon="info", data-position-to="window") Help
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+				a#btn-addcar(href="#page-addcar", data-rel="dialog", data-role="button", data-theme="b") Insert Driver into Queue
+		div(data-role="content")
+			div(class="ui-grid-d")
+				div(class="ui-block-a big-num2")
+					a(class="btn-bigpad", data-num="1",data-role="button") 1
+				div(class="ui-block-b big-num2")
+					a(class="btn-bigpad", data-num="2",data-role="button") 2
+				div(class="ui-block-c big-num2")
+					a(class="btn-bigpad", data-num="3",data-role="button") 3
+				div(class="ui-block-d big-num2")
+					a(class="btn-bigpad", data-num="4",data-role="button") 4
+				div(class="ui-block-e big-num2")
+					a(class="btn-bigpad", data-num="5",data-role="button") 5
+				div(class="ui-block-a big-num2")
+					a(class="btn-bigpad", data-num="6",data-role="button") 6
+				div(class="ui-block-b big-num2")
+					a(class="btn-bigpad", data-num="7",data-role="button") 7
+				div(class="ui-block-c big-num2")
+					a(class="btn-bigpad", data-num="8",data-role="button") 8
+				div(class="ui-block-d big-num2")
+					a(class="btn-bigpad", data-num="9",data-role="button") 9
+				div(class="ui-block-e big-num2")
+					a(class="btn-bigpad", data-num="0",data-role="button") 0
+
+			div(class="ui-grid-b")
+				div(class="ui-block-a ui-body-a")
+					span#lbl-carnum(class="ui-btn-inner", style="font-weight:bold;font-size:30px;padding:.2em 10px;") Car #
+				div(class="ui-block-b")
+					a(class="btn-bigpad",data-role="button",data-theme="b") Add
+				div(class="ui-block-c")
+					a(class="btn-bigpad", data-role="button") Clear
+						
+			div.splitscreen
+				div.ss-queue
+					h2 In Queue
+					ul#queuelist(data-role="listview", data-theme="a")
+						li Loading...
+				div.ss-runs
+					h2 Recent Runs
+					ul#runlist(data-role="listview")
+						li Loading...
+			#page-cqhelp(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Cone Counter Help
+				div(data-role="content")
+					div(style="max-width:400px;") 
+						p You have the easiest but 
+							b the most important job
+							|, you are responsible for the 
+							b exact car order 
+							| in the system.
+						p Only Queue up at most 3 cars from the start line.  Beyond that, drivers can pull out of order to brush off tires, use the bathroom or have mechanical problems while you might not see they got out of line.
+						p Out of order cars are one of the biggest reasons for event delays and holding the start. 
+						p Pay attention, make sure the driver you enter is indeed the driver in line.
+						p This screen is keyboard enabled.  
+							b Just type a car # and hit Enter.
+							| You'll see the black box update as you type.
+						p
+							a(data-rel="back", data-role="button", data-theme="a") Close
+						
+			#page-confirm(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Confirm Delete
+				div(data-role="content")
+					p Are you sure you want to delete <strong id="lbl-confirm"></strong> from the queue?
+					div
+						a#btn-confirm(data-role="button", data-inline="true", data-rel="back", data-theme="c") Yes, Delete
+						a#btn-cancel(href="#",data-role="button", data-inline="true", data-rel="back", data-theme="b") Cancel
+			#page-reconnect(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Reconnect
+				div(data-role="content")
+					p You were disconnected for the server.  Reconnect now.
+					div
+						a#btn-reconnect(data-role="button", data-rel="back", data-theme="c") Reconnect
+						
+			#popup-multi(data-role="popup")
+				ul(data-role="listview",style="min-width:210px;")
+					li 
+						a Empty				
+	#page-addcar(data-role="dialog")
+		div(data-role="header")
+			h1#dlgtitle Add Car to Queue
+		div(data-role="content")
+			div(class="fieldcontain")
+				label(for="ddl-insertbefore") Insert Before:
+				select(id="ddl-insertbefore")
+					
+			div( data-role="controlgroup",data-type="horizontal")
+				button(class="btn-number", data-inline="true") 1
+				button(class="btn-number", data-inline="true") 2
+				button(class="btn-number", data-inline="true") 3
+				button(class="btn-number", data-inline="true") 4
+				button(class="btn-number", data-inline="true") 5
+				button(class="btn-number", data-inline="true") 6
+				button(class="btn-number", data-inline="true") 7
+				button(class="btn-number", data-inline="true") 8
+				button(class="btn-number", data-inline="true") 9
+				button(class="btn-number", data-inline="true") 0
+				button(class="btn-number", data-inline="true", data-icon="arrow-l") Del
+				button(class="btn-number", data-inline="true" ,data-icon="delete") Clr
+			h1 Participants
+			ul#drivers(data-role="listview", data-filter="true")
+				each d in participants
+					li(id="dvrcon-#{d._id}" ,data-filtertext="#{d.driver.carNumber} #{d.driver.name} #{d.axClass.name}")
+						a(id="driver-#{d._id}") 
+							p(class="list-rungroup", style="background-color:#{d.runGroup.color}") &nbsp;
+							h3 #{d.driver.name} - #{d.driver.carNumber}
+							p 
+								strong=d.axClass.name
+							p #{d.driver.car.description}
+	
+	script(src="/scripts/carqueuer.js")

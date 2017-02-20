@@ -1,0 +1,1 @@
+$("#btn-save").on("click",function(){$.ajax({url:"/api/"+clubname+"/settings",type:"POST",dataType:"json",data:{interfaceType:$("#interfaceType").val()},success:function(e){e.success?alert("Saved."):alert(JSON.stringify(e))}})});

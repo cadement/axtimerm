@@ -1,0 +1,25 @@
+extends layout_1_3
+block content
+	#page-event(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{club.name}", data-icon="home") Home
+			h1 Upload to AXR
+
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/logo-100.png",alt="AutocrossResults.com logo")
+
+			p Use this screen to upload all your event results and standings to 
+				a(href="http://www.AutocrossResults.com",target="_blank") AutocrossResults.com
+
+			p This feature is currently under development.  Coming soon!
+			//- div#noconnection(class="ui-content ui-bar ui-bar-a",style="color:red;")
+			//- 	p It appears you are not connected to the Internet.  We just checked and we couldn't connect to our servers.
+			//- 	p Please connect this computer to the Internet and then refresh this page
+			//- 	p
+			//- 		a(href="/club/#{club.name}/upload", data-role="button", data-theme="b") Refresh Page
+			//- div#allgood
+			//- 	p Last Uploaded: Saturday, January 1, 2012
+			//- 	p
+			//- 		a(href="/club/#{club.name}/upload", data-role="button", data-theme="b") Upload Event Results
+		//script(src="/scripts/uploadtoaxr.js")

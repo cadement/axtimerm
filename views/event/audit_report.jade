@@ -1,0 +1,41 @@
+extend ../layout_bootstrap
+block content
+	.container
+		.row
+			.col-sm-6
+				h1 Audit Report
+			.col-sm-6.text-right
+				div=event.name
+				div=event.date
+				div=event.location.name
+		.row
+			table.table.table-striped
+				thead
+					tr 
+						th Run #
+						th Car #
+						th Class
+						th Time
+						th Penalty
+				tbody
+					each r in runs
+						tr 
+							td=r.runNumber
+							td=r.driver.carNumber
+							td=r.axClass.name
+							td=r.rawTime.toFixed(3)
+							td
+								if r.isDnf
+									span DNF 
+								else if r.getsRerun
+									span RERUN 
+								else if r.isOff
+									span OFF 
+								else if r.cones > 0
+									span='+'+r.cones
+			div.footer.row
+				.col-sm-6
+					span='Created at ' + new Date()
+				.col-sm-6.text-right
+					a(href="http://axti.me", target="_blank") AXti.me &copy; #{new Date().getFullYear()}
+

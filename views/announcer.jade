@@ -1,0 +1,58 @@
+extend layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+block content
+	#page-announcer(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Announcer Window
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			div(style="width:125px;float:left;")
+				ul#classList(data-role="listview",style="margin-right:18px;margin-top:0px;border-right:1px solid gray;")
+					li Loading...
+				div(style="clear:left;")
+					
+			div(style="margin-left:125px;")
+				div#ttod(style="height:32px")
+					
+				div#inqueue(style="height:48px;overflow:hidden;margin-bottom:12px;;")
+					div(style="float:left;font-size:1.6em;font-weight:bold;") Next to Finish:
+					
+					div(style="clear:left;")
+				div.ui-body-d(style="padding:16px;")
+					.ui-grid-a
+						#nextUpblock.ui-block-a
+							
+						#nextUpParts.ui-block-b(style="height:250px;overflow:scroll")
+							table(width="100%")
+								tr
+									th Rank 
+									th Driver
+									th Time
+									th Diff
+								
+				div.ui-body-e(style="padding:16px;margin-top:24px;")
+					.ui-grid-a
+						.ui-block-a
+							div#justfinished
+						.ui-block-b
+							div#justfinished-class
+			#classpopup(data-role="popup",style="min-width:500px;",data-overlay-theme="a")
+				a(href="#", data-rel="back", data-role="button", data-theme="a", data-icon="delete", data-iconpos="notext", class="ui-btn-right") Close
+				ul(data-role="listview")
+					li(data-role="divider",data-theme="e") Class Standings
+					li#classpopupdata Loading...
+			#popuppart(data-role="popup",style="min-width:500px;",data-overlay-theme="a")
+				a(href="#", data-rel="back", data-role="button", data-theme="a", data-icon="delete", data-iconpos="notext", class="ui-btn-right") Close
+				ul(data-role="listview")
+					li(data-role="divider",data-theme="e") Participant Info
+					li#popuppartdata Loading...
+			
+	
+	script(src="/scripts/announcer.js")

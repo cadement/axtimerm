@@ -1,0 +1,24 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var club = '';
+block content
+	#page-users(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			//a(href="/club/#{club.name}", data-icon="home") Club Home
+			h1 Club Admin Users
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			div
+				p 
+					a(href="/club/#{club.name}/user",data-role="button",data-theme="b") New User
+				p
+					h2 Club Admins
+					ul(data-role="listview",data-divider-theme="e")
+						each u in users 
+							li 
+								a(href="/club/#{club.name}/user/#{u.username}")=u.firstName + ' ' + u.lastName
+									|  (#{u.username})

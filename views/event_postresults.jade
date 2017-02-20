@@ -1,0 +1,23 @@
+extends layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = '#{event._id}';
+block content
+	#page-postresults(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{event.club.name}", data-icon="home") Club Home
+			h1 #{event.name}
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			div#results(style="padding:20px;")
+			div
+				p Post your results to our servers
+				p Then send the link to your members or embed it on your own site.
+				if (settings.cloudKey.length === 32)
+					p 
+						a#btn-postresults(data-role="button", data-theme="b") Post Results to AXti.me Cloud
+				else
+					p Oops, you first need to update your System Configuration with your Cloud Key.
+
+			script(src="/scripts/event_postresults.js")

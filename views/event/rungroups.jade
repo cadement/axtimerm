@@ -1,0 +1,19 @@
+extend ../layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+
+	script(type="text/javascript").
+		var runGroups = !{JSON.stringify(event.runGroups)};
+		var classes = !{JSON.stringify(season.classes)};
+		var paxClasses = !{JSON.stringify(season.paxClasses)};
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/event/#{event.id}", data-icon="arrow-l") Home
+			h1 Run Groups
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			p Run Group Run Order
+			p Auto assign RG by class at registration and checkin

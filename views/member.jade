@@ -1,0 +1,285 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		
+		var memberId = "#{member._id.toString()}";
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{club.name}/members", data-icon="arrow-l") Back
+			h1 Member Info
+		div(data-role="content")
+			if (member == null)
+				div Member not found.
+			else
+				if (message)
+					div.ui-body.ui-body-a(style="color:red;")=message
+				form(action="/club/#{club.name}/member/#{member.id}", method="POST")
+					div.ui-grid-a
+						div.ui-block-a(style="padding:10px;")
+							div(data-role="fieldcontain")
+								label(for="firstName") First Name:
+								input(id="firstName", name="firstName", value="#{member.firstName}")
+							div(data-role="fieldcontain")
+								label(for="lastName") Last Name:
+								input(id="lastName", name="lastName", value="#{member.lastName}")
+							//- div(data-role="fieldcontain")
+							//- 	label(for="isMember") Is Member?:
+							//- 	select(id="isMember", name="isMember", data-role="slider")
+							//- 		if member.isMember
+							//- 			option(value="no") No
+							//- 			option(value="yes", selected="selected") Yes
+							//- 		else
+							//- 			option(value="no", selected="selected") No
+							//- 			option(value="yes") Yes
+
+							div(data-role="fieldcontain")
+								label(for="clubMemberId") Member #:
+								input(id="clubMemberId", name="clubMemberId", value="#{member.clubMemberId}")
+
+							div(data-role="fieldcontain")
+								label(for="currentEmail") Current Email:
+								input(type="email", id="currentEmail", name="currentEmail", value="#{member.currentEmail}")
+							div(data-role="fieldcontain")
+								label(for="msrId") MSR ID:
+								input(id="msrId", name="msrId", value="#{member.msrId}")
+						div.ui-block-b(style="padding:10px;")
+							div(data-role="fieldcontain")
+								label(for="dedicatedNumber") Dedicated #:
+								input(id="dedicatedNumber", name="dedicatedNumber", value="#{member.dedicatedNumber}")
+							div(data-role="fieldcontain")
+								label(for="lastPaxClass") Dedicated PAX Class:
+								input(id="lastPaxClass", name="lastPaxClass", value="#{member.lastPaxClass}")
+							div(data-role="fieldcontain")
+								label(for="lastAxClass") Dedicated Class:
+								input(id="lastAxClass", name="lastAxClass", value="#{member.lastAxClass}")
+							div(data-role="fieldcontain")
+								label(for="region") Club Region:
+								input(id="region", name="region", value="#{member.clubRegion}")
+							div(data-role="fieldcontain")
+								label(for="mailNewsLetter") Mail Newsletter?:
+								select(id="mailNewsLetter", name="mailNewsLetter", data-role="slider")
+									option(value="no", selected=!member.mailNewsLetter) No
+									option(value="yes", selected=member.mailNewsLetter) Yes
+							div(data-role="fieldcontain")
+								label(for="emailNewsLetter") Email Newsletter?:
+								select(id="emailNewsLetter", name="emailNewsLetter", data-role="slider")
+									option(value="no", selected=!member.emailNewsLetter) No
+									option(value="yes", selected=member.emailNewsLetter) Yes
+					div.ui-grid-b
+						div.ui-block-a
+							input#btn-save(type="submit", data-role="button", data-theme="b", value="Save Member Info")
+						div.ui-block-b
+							a(href="#popup-confirm",data-rel="popup", data-role="button", data-theme="e") DELETE Member
+						div.ui-block-c
+							a(href="/club/#{club.name}/membermerge/#{member._id}", data-role="button") Clean up / Merge
+				div.ui-grid-b
+					div.ui-block-a(style="padding:10px;")
+						ul#member-emails(data-role="listview", data-inset="true")
+							li(data-theme="a") 
+								div(style="float:right;")
+									a(href="#dlg-addemail", data-rel="popup", data-transition="slidedown",data-role="button", data-inline="true", data-mini="true", data-icon="plus", data-theme="b") Add 
+								h3 Other Email Addresses
+							//- li(data-theme="b", data-icon="plus")
+							//- 	a Add Email 
+							each p in member.emails 
+								li(id="email-#{p._id}",data-icon="delete")
+									a(onclick="showConfirm('#{p._id}','email');")=p.address
+							if member.emails.length == 0
+								li.none None
+						ul#member-phones(data-role="listview", data-inset="true")
+							li(data-theme="a") 
+								div(style="float:right;")
+									a(href="#dlg-addphone", data-rel="popup", data-transition="slidedown",data-role="button", data-inline="true", data-mini="true", data-icon="plus", data-theme="b") Add 
+								h3 Phone Numbers
+							//- li(data-theme="b", data-icon="plus")
+							//- 	a Add Phone 
+							each p in member.phones 
+								li(id="phone-#{p._id}",data-icon="delete")
+									a(onclick="showConfirm('#{p._id}','phone');")
+										h1=p.number 
+										p=p.phoneType 
+							if member.phones.length == 0
+								li.none None
+					div.ui-block-b(style="padding:10px;")
+						ul#member-addresses(data-role="listview",data-inset="true")
+							li(data-theme="a") 
+								div(style="float:right;")
+									a(href="#dlg-addaddress", data-rel="popup", data-transition="slidedown",data-role="button", data-inline="true", data-mini="true", data-icon="plus", data-theme="b") Add 
+								h3 Addresses 
+								
+							//- li(data-theme="b", data-icon="plus")
+							//- 	a Add Address
+							each p in member.addresses 
+								li(id="addr-#{p._id}",data-icon="delete")
+									a(onclick="showConfirm('#{p._id}','addr');")
+										h1=p.addrType 
+										p=p.street
+										p=p.city + ', ' + p.state + ' ' + p.zip 
+							if member.addresses.length == 0
+								li.none None
+						
+					div.ui-block-c(style="padding:10px;")
+						ul#member-sponsors(data-role="listview", data-inset="true")
+							li(data-theme="a") 
+								div(style="float:right;")
+									a(href="#dlg-addsponsor", data-rel="popup", data-transition="slidedown",data-role="button", data-inline="true", data-mini="true", data-icon="plus", data-theme="b") Add 
+								h3 Sponsors
+							//- li(data-theme="b", data-icon="plus")
+							//- 	a Add sponsor 
+							each p in member.sponsors 
+								li(id="sponsor-#{p._id}",data-icon="delete")
+									a(onclick="showConfirm('#{p._id}','sponsor');")=p.name
+							if member.sponsors.length == 0
+								li.none None
+						ul#member-cars(data-role="listview", data-inset="true")
+							li(data-theme="a") 
+								div(style="float:right;")
+									a(href="#dlg-addcar", data-rel="popup", data-transition="slidedown",data-role="button", data-inline="true", data-mini="true", data-icon="plus", data-theme="b") Add 
+								h3 Cars
+							//- li(data-theme="b", data-icon="plus")
+							//- 	a Add car 
+							each p in member.cars 
+								li(id="car-#{p._id}",data-icon="delete")
+									a(onclick="showConfirm('#{p._id}','car');")
+										h1=p.make + ' ' + p.model
+										p=p.color 
+										p=p.year
+							if member.cars.length == 0
+								li.none None
+				div
+					h1 Events
+					ul(data-role="listview")
+						each p in participants
+							li 
+								a(href="/event/#{p.eventId}")
+									h1=p.eventName + ' - ' + p.eventDate
+									p=p.axClass.name
+									p=p.driver.car.description
+									p=p.bestTime
+									p.ui-li-aside(style="font-size:1.1em;")
+										span Overall: #{p.rankOverall}
+										br 
+										span Class: #{p.rankClass}
+										br
+										span PAX: #{p.rankPax} 
+				#popup-confirm(data-role="popup", data-overlay-theme="a", data-theme="c")
+					div(data-role="header")
+						h1 Confirm Delete
+					div(data-role="content")
+						p 
+							span Are you sure you want to Permanently delete member 
+							strong#lbl-confirm
+							| ?
+						form(action="/club/#{club.name}/member/#{member.id}", method="POST")
+							div
+								input(type="submit",name="dodelete",value="Yes, Delete",data-role="button", data-inline="true", data-rel="back", data-theme="c")
+								a#btn-cancel(href="#",data-role="button", data-inline="true", data-rel="back", data-theme="b") Cancel
+				#popup-delconfirm(data-role="popup", data-overlay-theme="a", data-theme="c")
+					div(data-role="header")
+						h1 Confirm Delete 
+					div(data-role="content")
+						p Are you sure you want to permanently delete this
+						div.ui-grid-a
+							div.ui-block-a
+								a#btn-confirmdelete(data-role="button", data-icon="delete", data-theme="b") Delete
+							div.ui-block-b
+								a#btn-canceldelete(href="#",data-role="button", data-rel="back", data-theme="a") Cancel
+
+		div#dlg-addaddress(data-role="popup",style="width:350px;")
+			div(data-role="header")
+				h1 New Address
+			div(data-role="content")
+				div(data-role="fieldcontain")
+					label(for="tb-addrtype") Type:
+					select(id="tb-addrtype")
+						option(value="Mailing") Mailing
+						option(value="Billing") Billing 
+				div(data-role="fieldcontain")
+					label(for="tb-street") Street:
+					input(type="text", name="tb-street", id="tb-street") 
+				div(data-role="fieldcontain")
+					label(for="tb-city") City:
+					input(type="text", name="tb-city", id="tb-city")
+				div(data-role="fieldcontain")
+					label(for="tb-state") State:
+					input(type="text", name="tb-state", id="tb-state")
+				div(data-role="fieldcontain")
+					label(for="tb-zip") Zip:
+					input(type="text", name="tb-zip", id="tb-zip")
+				div(class="ui-grid-a")
+					div(class="ui-block-a")
+						a#btn-save-address(data-role="button",data-theme="b") Save Address
+					div(class="ui-block-b")
+						a(data-role="button", data-rel="back") Cancel
+
+		div#dlg-addphone(data-role="popup",style="width:350px;")
+			div(data-role="header")
+				h1 Add Phone
+			div(data-role="content")
+				div(data-role="fieldcontain")
+					label(for="tb-phonetype") Type:
+					select(id="tb-phonetype")
+						option(value="MOBILE") Mobile
+						option(value="HOME") Home 
+						option(value="WORK") Work 
+						option(value="FAX") Fax 
+				div(data-role="fieldcontain")
+					label(for="tb-phone") Number:
+					input(type="tel", name="tb-phone", id="tb-phone")
+				div(class="ui-grid-a")
+					div(class="ui-block-a")
+						a#btn-save-phone(data-role="button",data-theme="b") Add Number
+					div(class="ui-block-b")
+						a(data-role="button", data-rel="back") Cancel
+
+		div#dlg-addemail(data-role="popup",style="width:350px;")
+			div(data-role="header")
+				h1 Add Email
+			div(data-role="content")
+				div(data-role="fieldcontain")
+					label(for="tb-email") Email:
+					input(type="text", name="tb-email", id="tb-email")
+				div(class="ui-grid-a")
+					div(class="ui-block-a")
+						a#btn-save-email(data-role="button",data-theme="b") Add Email
+					div(class="ui-block-b")
+						a(data-role="button", data-rel="back") Cancel
+
+		div#dlg-addsponsor(data-role="popup",style="width:350px;")
+			div(data-role="header")
+				h1 Add Sponsor
+			div(data-role="content")
+				div(data-role="fieldcontain")
+					label(for="tb-sponsor") Sponsor:
+					input(type="text", name="tb-sponsor", id="tb-sponsor")
+				div(class="ui-grid-a")
+					div(class="ui-block-a")
+						a#btn-save-sponsor(data-role="button",data-theme="b") Add Sponsor
+					div(class="ui-block-b")
+						a(data-role="button", data-rel="back") Cancel
+
+		div#dlg-addcar(data-role="popup",style="width:350px;")
+			div(data-role="header")
+				h1 New Car
+			div(data-role="content")
+				div(data-role="fieldcontain")
+					label(for="tb-make") Make:
+					input(type="text", name="tb-make", id="tb-make") 
+				div(data-role="fieldcontain")
+					label(for="tb-model") Model:
+					input(type="text", name="tb-model", id="tb-model")
+				div(data-role="fieldcontain")
+					label(for="tb-color") Color:
+					input(type="text", name="tb-color", id="tb-color")
+				div(data-role="fieldcontain")
+					label(for="tb-year") Year:
+					input(type="text", name="tb-year", id="tb-year")
+				div(class="ui-grid-a")
+					div(class="ui-block-a")
+						a#btn-save-car(data-role="button",data-theme="b") Save Car
+					div(class="ui-block-b")
+						a(data-role="button", data-rel="back") Cancel
+		script(src="/scripts/member.js", type="text/javascript")
+								
+						

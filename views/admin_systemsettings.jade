@@ -1,0 +1,18 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var clubname = "#{clubname}";
+block content
+	#page-adminpw(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{clubname}", data-icon="home") Club Home
+			h1 System Settings
+		div(data-role="content")
+			label(for="interfaceType") Hardware Interface Type:
+			select#interfaceType
+				option(value="0") JA Circuits Normal
+				option(value="1") JA Circuits Chrono
+			p
+				a#btn-save(data-role="button", data-theme="b") Save Settings
+
+		script(src="/scripts/admin_systemsettings.js")

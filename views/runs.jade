@@ -1,0 +1,98 @@
+extend layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+
+block content
+	#page-runs(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Runs
+			a(href="/event/liveresults/#{event.id}", data-icon="star") Results
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			ul#runlist(data-role="listview", data-filter="true")
+				each run in runs
+					li.runs(id="run-#{run._id}", data-run-drivername="#{run.driver.name}", data-run-rawtime="#{run.rawTime}", data-run-cones="#{run.cones}" , data-run-penalty="#{run.isOff ? 'off' : (run.isDnf ? 'dnf' : (run.getsRerun ? 'rerun' : 'none'))}")
+						a
+							div(class="runnumber", style="color:#{run.runGroup.color};")
+								span #{run.runNumber}
+							div.carnumber(style="right:30%")=run.axClass.name
+							div
+								h3 
+									div(class="list-split-50")
+										span.run-name #{run.driver.name + ' #' + run.driver.carNumber}
+										br
+										span #{run.driver.car.description}
+									div(class="list-split-49r")
+										div
+											span.run-rawtime RAW: #{run.rawTime == null ? '-' : run.rawTime.toFixed(3)}
+											if (run.cones > 0)
+												span.run-cones(style="color:red") +#{run.cones}
+										div
+											span.run-paxtime PAX: #{run.paxTime.toFixed(3)}
+								div(class="ui-li-desc")
+									div(style="float:left;width:50%;") #{run.axClass.name + ' (' + run.axClass.index + ')'}
+									div(style="float:left;width:49%;text-align:right;")
+										if (run.isDnf)
+											span DNF
+										else if (run.getsRerun)
+											span Rerun
+										else if (run.isOff)
+											span OFF
+
+							p(class="ui-li-count") #{run.driverRunNumber}
+			
+	div#dlg-editor(data-role="dialog")
+		div(data-role="header")
+			h1 Edit Run
+		div(data-role="content")
+			h3#editor-title Edit Run:
+			div(data-role="collapsible") 
+				h4 Change Driver
+				p Clicking on a participants row below will save the change.
+				ul(data-role="listview", data-filter="true", data-filter-reveal="true", data-filter-placeholder="Search name, # or class...")
+					
+					each p in participants
+						li 
+							a.parts(id="pid-#{p._id}")
+								div(class="carnumber small")=p.axClass.name + ' ' + p.driver.carNumber
+								h1=p.driver.name
+								p=p.driver.car.description
+				
+
+			fieldset(data-role="collapsible")
+				legend Edit Run
+				div(data-role="fieldcontain")
+					label(for="newtime") Time:
+					input#newtime(type="text")
+				div(data-role="fieldcontain")
+					label(for="newcones") Cones:
+					input#newcones(type="text")
+				fieldset(data-role="controlgroup", data-type="horizontal", data-mini="true")
+					legend Result:
+					input(type="radio", name="radio-pen", id="radio-pen-none", value="none")
+					label(for="radio-pen-none") None
+					input(type="radio", name="radio-pen", id="radio-pen-dnf", value="dnf")
+					label(for="radio-pen-dnf") DNF
+					input(type="radio", name="radio-pen", id="radio-pen-rerun", value="rerun")
+					label(for="radio-pen-rerun") RERUN
+					input(type="radio", name="radio-pen", id="radio-pen-off", value="off")
+					label(for="radio-pen-off") OFF
+				p 
+					button#btn-save(data-role="button",data-theme="b") Save Time / Cones
+			fieldset(data-role="collapsible")
+				legend Permanently Delete Selected Run 
+				button#btn-delete(data-role="button", data-theme="b") Delete This Run
+			div(style="padding-top:8px;margin-bottom:8px;") 
+				a(data-role="button", data-theme="a", data-rel="back") Cancel
+	script(src="/scripts/runs.js")
+
+
+
+							
+			

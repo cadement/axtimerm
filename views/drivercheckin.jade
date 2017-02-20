@@ -1,0 +1,117 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+		var selectedRunGroup = "#{defaultRunGroup}";
+		var participants = !{JSON.stringify(participants)};
+		var classRunGroups = !{JSON.stringify(event.classRunGroups)};
+block content
+	#page-drivercheckin(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Driver Check-in
+			a(href="#page-dchelp", data-rel="popup", data-icon="info", data-position-to="window") Help
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+
+			div(data-role="fieldcontain")
+				label(for="searchterm") Search:
+				input#searchterm(type="text")
+
+			div
+				ul#participants(data-role="listview")
+					each p in participants
+						li.li-parts(id="li-#{p._id}",data-theme="#{p.checkedIn ? 'b' : 'd'}",data-icon="#{p.checkedIn ? 'check':'dash'}", data-term="#{p.driver.name}")
+							a
+								h1.lblname=p.driver.name 
+								p 
+									strong=p.driver.car.description
+								p.ui-li-aside
+									strong(style="font-size:2.4em;")
+										span.lblclass=p.axClass.name 
+										span.lblnumber   ##{p.driver.carNumber}
+
+			#page-dchelp(data-role="popup")
+				p Simply tap / click on a participant to check them in. 
+	script(src="/scripts/drivercheckin.js")			
+					
+	#page-checkin(data-role="dialog")
+		div(data-role="header")
+			h1 Check-in
+			//a#btn-editnumcar(data-theme="b") Edit Car or #
+		div(data-role="content")
+			hgroup(class="bigtitle")
+				h1#drivername
+				h3#driverinfo
+			div.hideme#box-editnumcar
+				div(data-role="fieldcontain")
+					label(for="newcarnumber") New Car Number:
+					input#newcarnumber(type="text")
+				h3 New Car 
+				div(data-role="fieldcontain")
+					label(for="newcar-year") Year:
+					input#newcar-year(type="text")
+				div(data-role="fieldcontain")
+					label(for="newcar-make") Make:
+					input#newcar-make(type="text")
+				div(data-role="fieldcontain")
+					label(for="newcar-model") Model:
+					input#newcar-model(type="text")
+				div(data-role="fieldcontain")
+					label(for="newcar-color") Color:
+					input#newcar-color(type="text")
+
+
+
+			div#box-paxClass(data-role="fieldcontain")
+				label(for="drv-paxclass") PAX Class:
+				select#drv-paxclass
+					option(value="") None
+					each cls in paxClasses
+						option(value="#{cls.name}") #{cls.name}
+
+			div( data-role="fieldcontain")
+				label(for="drv-class") Class:
+				select#drv-class
+					each cls in classes
+						option(value="#{cls.name}") #{cls.name}
+
+			div(data-role="fieldcontain")
+				fieldset(data-role="controlgroup")
+					legend Run Group:
+					each rg in event.runGroups
+						input(type="radio", name="drv-rungroup", id="drv-rungroup-#{rg.name}", class="btn-rungroup #{rg.name == defaultRunGroup ? ' ui-btn-active' : ''}", value="#{rg.name}")
+						label(for="drv-rungroup-#{rg.name}")=rg.name + (rg.label ? (' (' + rg.label + ')') : '')
+							div(style="display:inline-block;width:20px;height:1em;background-color:#{rg.color};margin-left:8px;")
+
+			div(data-role="fieldcontain")
+				fieldset(data-role="controlgroup")
+					legend System Role:
+					div#drv-role-list
+						input(type="radio", name="drv-role", id="drv-role-None", value="None", class="custom", checked="checked")
+						label(for="drv-role-None") No Role, Just having fun
+						each role in event.workerRoles
+							input(type="radio", name="drv-role", id="drv-role-#{role.role.replace(' ','')}", value="#{role.role}", class="custom")
+							label(for="drv-role-#{role.role.replace(' ','')}") #{role.role}
+			div(class="ax-collapsible ui-grid-a rg-#{defaultRunGroup}")
+				- col = 'a';
+				each s in event.stations
+					div(class="ui-block-#{col}")
+						input(type="radio", name="drv-station", id="drv-station-#{s.name}", value="#{s.name}", class="custom")
+						label(for="drv-station-#{s.name}") #{s.name}
+						div(style="margin-left:8px;", id="chk-stat-#{s.name.replace(' ','').replace('#','')}")
+							each a in s.assigned
+								div(style="text-align:left;font-size:.8em;", class="checkin rgi-#{a.runGroup}") 
+									div(style="display:inline-block;width:20px;height:1em;background-color:#{a.runGroup};margin-right:8px;") 
+									span #{a.name}
+					- col = col == 'a' ? 'b' : 'a';
+
+			p
+				a#btn-dc-save(data-role="button", data-theme="b", data-icon="save") Save & Check-in
+				a#btn-dc-savelabel(data-role="button", data-theme="b", data-icon="printer") Save & Print Label
+
+				a(data-role="button", data-rel="back") Cancel
+	

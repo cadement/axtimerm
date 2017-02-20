@@ -1,0 +1,77 @@
+extend ../layout_bootstrap
+block head
+	link(rel="stylesheet", href="/css/event_registration.css")
+block content
+	nav(class="navbar navbar-inverse navbar-fixed-top", role="navigation")
+		div(class="container")
+			div(class="navbar-header")
+				button(type="button", class="navbar-toggle collapsed", data-toggle="collapse", data-target="#navbar", aria-expanded="false", aria-controls="navbar")
+					span.sr-only Toggle Navigation 
+					span.icon-bar
+					span.icon-bar
+					span.icon-bar
+				a.navbar-brand AXti.me RM
+			div#navbar.collapse.navbar-collapse
+				ul.nav.navbar-nav
+					li.dropdown.active
+						a.dropdown-toggle(data-toggle="dropdown")
+							| Event
+							span.caret
+						ul.dropdown-menu(role="menu")
+							a(href="/events/#{event._id}") 
+								i.fa.fa-apple
+								span Home
+					li 
+						a(href="/events/#{event._id}") Car Queuer
+					li 
+						a(href="/events/#{event._id}") Live Results
+	div(class="main container")
+		div#toolbar.btn-group.btn-group-lg
+			button.btn.btn-default
+				i.fa.fa-plus-circle
+				span Add Driver
+			.btn-group.btn-group-lg
+				button.btn.btn-default.dropdown-toggle(data-toggle="dropdown")
+					i.fa.fa-wrench
+					span Tools
+					span.caret
+				ul.dropdown-menu(role="menu")
+					li 
+						a 
+							i.fa.fa-globe
+							span Import Registration from MotorsportReg.com
+					li 
+						a 
+							i.fa.fa-file 
+							span Import Registration from a file
+					li 
+						a 
+							i.fa.fa-sitemap
+							span Assign Run Groups by Class
+			button.btn.btn-default
+				i.fa.fa-filter
+				span Filter List
+		h2 Participants (123)
+		.row
+			.col-xs-6
+				.regcard
+					.clsnum
+						.num #1147
+						.cls T2-SM
+						div(style="clear:both;")
+					.info 
+						.driver Christopher Trailer
+						.car Black 2010 Porsche Carrera
+					.status
+						div.outer
+							span Not Checked In
+						div.outer
+							span Not Paid
+
+	div#pkr-classes.pkr.container.hidden
+		div.row
+			each c in classes 
+				div.col-xs-2
+					div.pkr-class=c.name
+block scripts
+	script(type="text/javascript", src="/scripts/event_registration.js")

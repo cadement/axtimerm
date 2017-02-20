@@ -1,0 +1,1 @@
+$("#btn-delete").bind("click",function(){console.log("deleting"),$.ajax({url:"/api/event/"+eventId+"/run/"+runId,type:"DELETE",dataType:"json",success:function(e){e.success?console.log("deleted good"):console.log(e)}})});

@@ -1,0 +1,94 @@
+extend layout_1_3
+block head
+block content
+	#page-announcer(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1=part.driver.name
+		div(data-role="content")
+			h1=part.driver.name + ' #' + part.driver.carNumber + ' ' + part.axClass.name
+			p=part.driver.car.description
+			p Total Runs: #{runs.length}
+
+			.ui-grid-b
+				.ui-block-a(style="text-align:center") Overall
+					div(style="font-size:50px;font-weight:bold;")=rankOverall
+				.ui-block-b(style="text-align:center")=part.axClass.name
+					div(style="font-size:50px;font-weight:bold;")=rankClass
+				.ui-block-c(style="text-align:center") PAX
+					div(style="font-size:50px;font-weight:bold;")=rankPax 
+
+			ul(data-role="listview",data-inset="true",data-divider-theme="d")
+				li(data-role="divider") Legend
+				li(data-theme="b",data-icon="check")
+					a(href="#") Best Time
+				li(data-theme="a",data-icon="delete")
+					a(href="#") DNF
+				li(data-theme="e",data-icon="alert")
+					a(href="#") Rerun
+
+			ul(data-role="listview", data-inset="true",data-divider-theme="d")
+				li(data-role="divider") Runs
+				if runs.length == 0
+					li No Runs Yet
+				else
+					each r in runs 
+						if r.isDnf
+							li(data-theme="a", data-icon="delete")
+								h1='Run ' + r.driverRunNumber + ' - ' + r.totalTime
+								p Session: #{r.session}, Run Group: #{r.runGroup.name}
+								if (r.splitTimes.length > 0)
+									p="Splits: " + r.splitTimes.join(', ')
+								if r.cones > 0
+									span.ui-li-aside
+										strong Cones +#{r.cones}
+										each c in r.coneHits
+											div Station: #{c.station} +#{c.cones}
+						else if r.getsRerun
+							li(data-theme="e", data-icon="alert")
+								h1='Run ' + r.driverRunNumber + ' - ' + r.totalTime
+								p Session: #{r.session}, Run Group: #{r.runGroup.name}
+								if (r.splitTimes.length > 0)
+									p="Splits: " + r.splitTimes.join(', ')
+								if r.cones > 0
+									span.ui-li-aside
+										strong Cones +#{r.cones}
+										each c in r.coneHits
+											div Station: #{c.station} +#{c.cones}
+						else if r.isOff
+							li(data-theme="a", data-icon="delete")
+								h1='Run ' + r.driverRunNumber + ' - ' + r.totalTime
+								p Session: #{r.session}, Run Group: #{r.runGroup.name}
+								if (r.splitTimes.length > 0)
+									p="Splits: " + r.splitTimes.join(', ')
+								if r.cones > 0
+									span.ui-li-aside
+										strong Cones +#{r.cones}
+										each c in r.coneHits
+											div Station: #{c.station} +#{c.cones}
+						else if r.totalTime == part.bestTime
+							li(data-theme="b", data-icon="check")
+								h1='Run ' + r.driverRunNumber + ' - ' + r.totalTime
+								p Session: #{r.session}, Run Group: #{r.runGroup.name}
+								if (r.splitTimes.length > 0)
+									p="Splits: " + r.splitTimes.join(', ')
+								if r.cones > 0
+									span.ui-li-aside
+										strong Cones +#{r.cones}
+										each c in r.coneHits
+											div Station: #{c.station} +#{c.cones}
+						else 
+							li(data-icon="false")
+								h1='Run ' + r.driverRunNumber + ' - ' + r.totalTime.toFixed(3)
+								p Session: #{r.session}, Run Group: #{r.runGroup.name}
+								if (r.splitTimes.length > 0)
+									p="Splits: " + r.splitTimes.join(', ')
+								if r.cones > 0
+									span.ui-li-aside
+										strong Cones +#{r.cones}
+										each c in r.coneHits
+											div Station: #{c.station} +#{c.cones}
+
+		//script(src="/scripts/announcer.js")

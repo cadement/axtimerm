@@ -1,0 +1,66 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var club = '';
+block content
+	#page-backup(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 System Backup
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			form(action="/club/#{club.name}/settings", method="POST")
+				div(data-role="fieldcontain")
+					label(for="dbname") Database Name:
+					input(id="dbname", name="dbname", pattern="[a-zA-Z_]*", value="#{settings.database}")
+				div(style="margin-left:22%;margin-top:-10px;color:gray;font-size:.8em;") Default: AXtime_RM . You shouldn't change this unless you know what will happen.
+				div(data-role="fieldcontain")
+					label(for="httpPort") HTTP Port:
+					input(id="httpPort", name="httpPort", pattern="[0-9]*", value="#{settings.port}")
+				div(style="margin-left:22%;margin-top:-10px;color:gray;font-size:.8em;") Default: 80 .  If you can't use 80, then try 3000 or 8080.
+				h3 Timing Hardware
+				div(data-role="fieldcontain")
+					label(for="hardwareEnabled") Timing Hardware Enabled?
+					select(id="hardwareEnabled", name="hardwareEnabled", data-role="slider")
+						option(value="no", selected=!settings.hardware.enabled) No
+						option(value="yes", selected=settings.hardware.enabled) Yes
+				div(style="margin-left:22%;margin-top:-10px;color:gray;font-size:.8em;") Enable if you have timing hardware connected, like JA Circuits, RaceAmerica or FarmTek.
+				div(data-role="fieldcontain")
+					label(for="interfaceType") Interface Type:
+					select(name="interfaceType", id="interfaceType")
+						option(value="JaCircuitsNormal" selected=settings.hardware.interfaceType == "JaCircuitsNormal") Normal
+						option(value="JaCircuitsChrono" selected=settings.hardware.interfaceType == "JaCircuitsChrono") Chrono
+						option(value="TlinkDirect" selected=settings.hardware.interfaceType == "TlinkDirect") Tlink Direct (Chrono)
+						option(value="Debug" selected=settings.hardware.interfaceType == "Debug") DEBUG
+				div(style="margin-left:22%;margin-top:-10px;color:gray;font-size:.8em;") Normal is for RaceAmerica AC4 or FarmTek's (JaCircuitsNormal) or single time output.  Chrono is for FarmTek's (JaCircuitsChrono). Tlink Direct is for RaceAmerica no AC4. Debug is to output the data and send to AXti.me
+				div(data-role="fieldcontain")
+					label(for="comport") COM port:
+					input(id="comport", name="comport", value="#{settings.hardware.comPort}")
+				if ports.length > 0
+					div(style="margin-left:22%;margin-top:10px;margin-bottom:20px;") Ports currently available: 
+						each p in ports 
+							span=p.comName + ' , '
+				div(style="margin-left:22%;margin-top:-10px;color:gray;font-size:.8em;") You'll have to find the COM port being used for the timing hardware.  On Windows it will be something like COM2 or COM5.  OSX is usually /dev/cu.usbserial
+				div(data-role="fieldcontain")
+					label(for="splits") Splits:
+					select(name="splits", id="splits")
+						option(value="0" selected=settings.hardware.splitCount == 0) None
+						option(value="1" selected=settings.hardware.splitCount == 1) 1
+				div(style="margin-left:22%;margin-top:-10px;color:gray;font-size:.8em;") This is the number of split timer eyes you have on course.  We currently only support None or 1
+				div(data-role="fieldcontain")
+					label(for="displayHardware") Display Hardware:
+					select(name="displayHardware", id="displayHardware")
+						option(value="" selected=settings.hardware.displayHardware == "") None or Not Required
+						option(value="RA6X80" selected=settings.hardware.displayHardware == "RA6X80") RA6X60 - Race America (with AC4) or Tlink Direct
+				div(style="margin-left:22%;margin-top:-10px;color:gray;font-size:.8em;") Currently this is used for when you are connected to a RaceAmerica AC4 unit and use their timing display as well via their Y adapter.
+				div(data-role="fieldcontain")
+					label(for="cloudKey") Cloud Key:
+					input(id="cloudKey", name="cloudKey", value="#{settings.cloudKey}")
+				div(style="margin-left:22%;margin-top:-10px;color:gray;font-size:.8em;") Cloud Key is given to you by AXti.me.  This is required to use Online Backup/Restore and Online Live Results
+				div.ui-grid-a
+					div.ui-block-a
+						button(type="submit",name="go", id="go", data-theme="b") Save Settings
+					div.ui-block-b
+						a(href="/club/#{club.name}", data-theme="a", data-role="button") Cancel

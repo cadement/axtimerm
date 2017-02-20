@@ -1,0 +1,98 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/event/registration/#{event.id}", data-icon="arrow-l") Back
+			h1 Registration Import
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			if message == ''
+				div(class="ui-body-a") 
+					div(style="padding:16px") Export your registration information from MotorsportReg.com.  This will result in a .csv file.  Use that file to upload here.
+						p(style="color:red;") This will DELETE all existing registration entries for this event.
+
+						h3 Column Headers
+						p 
+							ul 
+								li Class	
+								li Number	
+								li First Name	
+								li Last Name	
+								li Car Model	
+								li Car Color	
+								li Registered	
+								li Paid	
+								li Amnt.	
+								li Group	
+								li Sponsor	
+								li Tire Brand	
+								li Method	
+								li OLR	
+								li Member	
+								li Expires
+								li Member #
+				h3 Upload MSR export
+				form(method="POST",  enctype="multipart/form-data", action="/event/registrationimport/#{event._id}")
+					div(class="fieldcontain")
+						label(for="type-comma") Comma Delimited (.csv)
+						input(type="radio", name="type", id="type-comma", value="comma")
+						label(for="type-tab") TAB Delimited (.tsv)
+						input(type="radio", name="type", id="type-tab", value="tab", checked="checked")
+					div(class="fieldcontain")
+						label(for="csvfile") Fil to Import: 
+						input#csvfile(type="file", name="csvfile")
+					input(type="submit", value="Upload and Import", data-theme="b")
+			else 
+				div(class="ui-body-a") 
+					div(style="padding:16px")=message
+
+			if errmsg != ''
+				div(class="ui-body-a") 
+					div(style="padding:16px")
+						h3 Errors
+						p=errmsg
+
+			if parts.length > 0
+				p 
+					strong Participants Imported: 
+					span #{parts.length}
+				- var col = 'a';
+				div(class="ax-collapsible ui-grid-b")
+					each d in parts
+						div(class="ui-block-#{col}")
+							div(class="ui-body ui-body-e", style="margin-right:4px;margin-bottom:4px;")
+								h3 #{d.driver.name}
+								p Car Number: #{d.driver.carNumber}
+								p Car: #{d.driver.car.description + ' (' + d.driver.car.color + ')'}
+								p Class: #{d.axClass.name}
+								p Paid: #{d.paid}
+						- col = col == 'a' ? 'b' : (col == 'b' ? 'c' : 'a');
+
+			if newClasses.length > 0
+				p(style="color:red;font-weight:bold;") The following classes were in the import file but are NOT in the system.  You must add these Club Home > Manage Seasons.  After you add the classes, you will need to update the participant back to the proper class.
+				p #{newClasses.join(', ')}
+					
+			
+					
+			if (data.count)
+				p 
+					strong Participants Imported: 
+					span #{data.count}
+				- var col = 'a';
+				div(class="ax-collapsible ui-grid-b")
+					each d in data.items
+						div(class="ui-block-#{col}")
+							div(class="ui-body ui-body-e", style="margin-right:4px;margin-bottom:4px;")
+								h3 #{d.first + ' ' + d.last}
+								p Car Number: #{d.carnumber}
+								p Car: #{d.car.year + ' ' + d.car.description + ' (' + d.car.color + ')'}
+								p Class: #{d.axclass}
+								p Paid: #{d.paid}
+						- col = col == 'a' ? 'b' : (col == 'b' ? 'c' : 'a');
+					
+								
+						

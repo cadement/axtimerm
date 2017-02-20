@@ -1,0 +1,24 @@
+extends layout
+block content
+	div#page-clubchooser(data-role="page")
+		div(data-role="header")
+			h1 AXti.me
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			h1 Choose Your Club
+			ul(data-role="listview")
+				each club in clubs
+					li
+						if session.auth && session.auth.clubname == club.name
+							a(href="/club/#{club.name}") 
+								h3 #{club.name}
+								p #{club.shortName}
+						else
+							a(href="/club/#{club.name}/login") 
+								h3 #{club.name}
+								p #{club.shortName}
+			div(style="margin-top:20px;text-align:center;") Version: #{version}
+			
+			script(src="/scripts/analytics.js")
+				

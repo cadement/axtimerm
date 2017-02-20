@@ -1,0 +1,182 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var clubname = "#{event.club.name}";
+		var clubid = "#{event.club.id}";
+		var eventId = "#{event._id}";
+block content
+	#page-newevent(data-role="page")
+		div(data-role="header")
+			a(href="/event/#{event._id}", data-icon="arrow-l") Back
+			h1 Edit Event
+			a(id="btn-explain", data-icon="info",data-theme="e") Explain
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+
+			div(class="formhelp hideme")
+				strong Date: 
+				span The date that the event will occur.
+			div(data-role="fieldcontain")
+				label(for="evt-date") Date:
+				input(type="date", name="evt-date", id="evt-date", value=date)
+
+			div(class="formhelp hideme")
+				strong Event #: 
+				span The sequential number of the event.  If this is a fun run or school, use whatever you want.
+			div(data-role="fieldcontain")
+				label(for="evt-num") Event #:
+				input(type="number", name="evt-num", id="evt-num", placeholder="Event #", value=event.eventNumber)
+
+			div(class="formhelp hideme")
+				strong Location: 
+				span Where is the event taking place.  Be as detailed as you want.
+			div(data-role="fieldcontain")
+				label(for="evt-location") Location:
+				input(type="text", name="evt-location", id="evt-location", placeholder="Location", value=event.location.name)
+
+			div(class="formhelp hideme")
+				strong Sessions: 
+				span How many sessions are you having? For example, for AM and PM, you are having 2 sessions.
+			div(data-role="fieldcontain")
+				label(for="evt-sessions") Sessions:
+				input(type="number", name="evt-sessions", id="evt-sessions", placeholder="# of Sessions", value=event.sessions, min="1", max="10")
+			div(class="formhelp hideme")
+				strong Cone Penalty: 
+				span For each cone hit, how many seconds to add to the raw time.
+			div(data-role="fieldcontain")
+				label(for="evt-sessions") Cone Penalty:
+				input(type="number", name="evt-conepenalty", id="evt-conepenalty", placeholder="Cone Penalty", value=event.conePenalty, min="0", max="10")
+			div(class="formhelp hideme")
+				strong Max Runs to Count: 
+				span This is the max number of runs to count for a driver.  Use 0 for unlimited.
+			div(data-role="fieldcontain")
+				label(for="evt-maxruns") Max Runs to Count:
+				input(type="number", name="evt-maxruns", id="evt-maxruns", placeholder="Max Runs", value=event.maxRunsPerDriver, min="0")
+			div(class="formhelp hideme")
+				strong Timer Splits: 
+				span How many split timers do you have setup on course?
+			div(data-role="fieldcontain")
+				label(for="evt-splits") Timer Splits: 
+				input(type="number", name="evt-splits", id="evt-splits", placeholder="# of Splits", value=event.numberOfSplits, min="0", max="3")
+			div(class="formhelp hideme")
+				strong Count For Points: 
+				span Will this event count towards Championship Series or year-end points?
+			div(data-role="fieldcontain")
+				label(for="evt-count") Count For Points:
+				select(name="evt-count", id="evt-count", data-role="slider")
+					if event.countForPoints
+						option(value="no") No
+						option(value="yes", selected="selected") Yes
+					else
+						option(value="no", selected="selected") No
+						option(value="yes") Yes
+			div(class="formhelp hideme")
+				strong Unique # per Class:
+				span Yes, to allow the same car number but only in a different classes.  No, to make car #'s completely unique. 
+			div(data-role="fieldcontain")
+				label(for="evt-uniquenum") Unique # per Class:
+				select(name="evt-uniquenum", id="evt-uniquenum", data-role="slider")
+					if event.uniqueNumberPerClass
+						option(value="no") No 
+						option(value="yes", selected="selected") Yes
+					else
+						option(value="no", selected="selected") No
+						option(value="yes") Yes
+			div(class="formhelp hideme")
+				strong Online Live Results: 
+				span This feature is not implemented yet.				
+			div(data-role="fieldcontain")
+				label(for="evt-upload") Online Live Results:
+				select(name="evt-upload", id="evt-upload", data-role="slider")
+					option(value="off", selected=event.uploadResults) Off
+					option(value="on", selected=event.uploadResults) On
+				span Must have an active Internet Connection
+						
+			p Run Groups:
+			p New to Run Groups is the ability to label them.  Use only a 
+				b single LETTER or NUMBER.
+			each rg in runGroups
+				div(data-role="fieldcontain")
+					div(style="width:200px;float:left;")
+						input(type="checkbox", id="evt-rg-#{rg.name}", name="evt-rg",data-inline="true",value=rg.name, checked=rg.selected)
+						label(for="evt-rg-#{rg.name}")=rg.name 
+							div(style="display:inline-block;width:20px;height:1em;background-color:#{rg.color};margin-left:8px;")
+					div(style="width:100px;float:left;margin:.5em 0;margin-left:12px;")
+						input(type="text",id="evt-rg-lbl-#{rg.name}",name="evt-rg-lbl-#{rg.name}", placeholder="Label", maxlength="1",value=rg.label || '')
+				
+
+
+
+			//- div(class="formhelp hideme")
+			//- 	strong Run Groups: 
+			//- 	span How many Run Groups per session will you have?  Check off each that apply.
+			//- div(data-role="fieldcontain")
+			//- 	fieldset(data-role="controlgroup")
+			//- 		legend Run Groups:
+			//- 		each rg in runGroups
+			//- 			if rg.selected
+			//- 				input(type="checkbox", name="evt-rg", id="evt-rg-#{rg.name}", class="custom", checked="checked", value=rg.name)
+			//- 			else
+			//- 				input(type="checkbox", name="evt-rg", id="evt-rg-#{rg.name}", class="custom", value=rg.name)
+			//- 			label(for="evt-rg-#{rg.name}") #{rg.name}
+			//- 				div(style="display:inline-block;width:20px;height:1em;background-color:#{rg.color};margin-left:8px;")
+							
+
+
+			div(class="formhelp hideme")
+				strong Worker Roles: 
+				span Mark which roles you want to separate and enter the password for each one. It is highly recommended you use different passwords for each role you use.
+			div(data-role="fieldcontain")
+				fieldset(class="ui-grid-a")
+					div(class="ui-block-a")
+						span Worker Roles:
+					div(class="ui-block-b")
+						span Role Password:
+					each role in roles
+						if role.name != "Club Admin"
+							div(class="ui-block-a")
+								if role.selected
+									input(type="checkbox", name="evt-roles", id="evt-wr-#{role.name.replace(' ','-')}", class="custom", checked="checked", value="#{role.name}")
+								else 
+									input(type="checkbox", name="evt-roles", id="evt-wr-#{role.name.replace(' ','-')}", class="custom", value="#{role.name}")
+								label(for="evt-wr-#{role.name.replace(' ','-')}") #{role.name}
+							div(class="ui-block-b", style="margin-top:8px")
+								input(type="text", name="evt-wr-pw-#{role.name.replace(' ','-')}", id="evt-wr-pw-#{role.name.replace(' ','-')}", value="#{role.password}")
+
+
+			div(class="formhelp hideme")
+				strong Worker Stations: 
+				span Check off all the stations you will be using.  Used during Driver and Worker Check-in	
+			div(data-role="fieldcontain")
+				fieldset
+					legend Worker Stations:
+					- var col = 'a';
+					div(class="ui-grid-b")
+						each s in stations
+							div(class="ui-block-#{col}")
+								if s.selected
+									input(type="checkbox", name="evt-stations", id="evt-st-#{s.name}", class="custom", checked="checked", value="#{s.name}")
+								else
+									input(type="checkbox", name="evt-stations", id="evt-st-#{s.name}", class="custom", value="#{s.name}")
+								label(for="evt-st-#{s.name}") #{s.name}
+							- col = col == 'a' ? 'b' : (col == 'b' ? 'c' : 'a');
+
+
+			p
+				a#evt-save(data-role="button", data-theme="b") Save Changes
+			p
+				a(href="/event/#{event._id}",data-role="button", data-theme="a") Cancel
+			p
+				a#btn-delete(href="#page-confirm",data-role="button", data-theme="a", data-rel="popup", data-position="window") DELETE EVENT
+
+			#page-confirm(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Confirm Delete
+				div(data-role="content")
+					p Are you sure you want to delete permanently delete this event?
+					div
+						a#btn-confirm(data-role="button", data-inline="true", data-rel="back", data-theme="c") Yes, Delete
+						a#btn-cancel(href="#",data-role="button", data-inline="true", data-rel="back", data-theme="b") Cancel
+
+		script(src="/scripts/editevent.js")

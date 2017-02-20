@@ -1,0 +1,27 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/event/#{event.id}", data-icon="arrow-l") Back
+			h1 MotorsportReg Import
+		div(data-role="content")
+			if (message != null)
+				p(style="color:red;") #{message}
+			h1 Choose Your Import Type
+			ul(data-role="listview")
+				li
+					a(href="/event/#{event.id}/importmsr")
+						h1 MotorsportReg.com
+						p Directly use your MSR account to import your registration.  Just one click and you're done.
+				li
+					a(href="/event/registrationimport/#{event.id}")
+						h1 CSV File
+						p Create a registration .csv file from somewhere else and import it.
+				//- li
+				//- 	a(href="/event/#{event.id}/importreg")
+				//- 		h1 New Import
+				//- 		p Create a registration .csv file from somewhere else and import it.
+

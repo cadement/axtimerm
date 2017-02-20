@@ -1,0 +1,23 @@
+extends layout_1_3
+block content
+	#page-eventtimes(data-role="page")
+		div(data-role="header")
+			a(href="/event/#{event._id}", data-icon="home") Event Home
+			h1 Raw Times
+
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/logo-100.png",alt="AutocrossResults.com logo")
+
+			p Below is a listing of all times data captured from the timing hardware. Some times may not be used as times could have been reported during breaks or session changes.  This is your backup times data for when you need it.
+
+			table
+				thead
+					tr
+						th Driver Time
+						th Timestamp
+				tbody
+					each t in times
+						tr
+							td=time.toFixed(3)
+							td=timestamp

@@ -1,0 +1,15 @@
+extend layout
+block head
+	script(type="text/javascript").
+		var clubname = "#{clubname}";
+block content
+	#page-registration(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{clubname}", data-icon="home") Club Home
+			h1 Delete Event
+		div(data-role="content")
+
+		p You have sucessfully permanently delete the event.
+
+		p
+			a(href="/club/#{clubname}" data-role="button") Club Home

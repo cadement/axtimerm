@@ -1,0 +1,21 @@
+extends layout
+block content
+	div#page-clubchooser(data-role="page")
+		div(data-role="header")
+			h1 AXti.me
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			if session.auth.role == 'Club Admin' || session.auth.role == 'Event Admin'
+				a(href="/event/registration/#{event._id}", data-theme="c", data-role="button") Driver Registration
+				a(href="/event/editevent/#{event._id}", data-theme="c", data-role="button") Change Event Setup
+			
+			a(href="/event/liveresults/#{event._id}", data-theme="b", data-role="button") View Live Results
+
+			if session.auth.role == 'Club Admin' || session.auth.role == 'Event Admin' || session.auth.role == 'Time Keeper'
+				a(href="/event/queue/#{event._id}", data-theme="e", data-role="button") Time Keeper
+			if session.auth.role == 'Club Admin' || session.auth.role == 'Event Admin' || session.auth.role == 'Time Keeper' || session.auth.role == 'Cone Counter'
+				a(href="/event/conecounter/#{event._id}", data-theme="e", data-role="button") Cone counter
+			if session.auth.role == 'Club Admin' || session.auth.role == 'Event Admin' || session.auth.role == 'Time Keeper' || session.auth.role == 'Car Queuer'
+				a(href="/event/carqueuer/#{event._id}", data-theme="e", data-role="button") Car Queuer
+				

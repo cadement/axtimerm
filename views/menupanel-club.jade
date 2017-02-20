@@ -1,0 +1,40 @@
+div#panelmenu(data-role="panel", data-theme="a")
+	ul(data-role="listview")
+		li 
+			a(href="/club/#{club.name}") Club Home
+		li
+			a(href="/club/#{club.name}/leaderboard") 
+				img.ui-li-icon(src="/css/images/trophy-2g.png")
+				| Leaderboards
+		if user && user.role == 'Club Admin'
+				h3  Club Admin
+				ul(data-role="listview")
+					li
+						a(href="/help/#{club.name}/faqs") 
+							img.ui-li-icon(src="/css/images/info-2g.png")
+							| FAQs / How Tos / Help
+					li
+						a(href="/club/#{club.name}/members") 
+							img.ui-li-icon(src="/css/images/group-2g.png")
+							| Members
+					li
+						a(href="/club/#{club.name}/manageseasons") 
+							img.ui-li-icon(src="/css/images/sun-2g.png")
+							| Manage Seasons
+					li
+						a(href="/club/#{club.name}/users") 
+							img.ui-li-icon(src="/css/images/group-2g.png")
+							| Manage Admin Users
+					li
+						a(href="/club/#{club.name}/importhome") 
+							img.ui-li-icon(src="/css/images/download-2g.png")
+							| Import Data
+					li
+						a(href="/club/#{club.name}/backup") 
+							img.ui-li-icon(src="/css/images/buoy-2g.png")
+							| Backup
+					li
+						a(href="/club/#{club.name}/restore") 
+							img.ui-li-icon(src="/css/images/buoy-2g.png")
+							| Restore
+		

@@ -1,0 +1,15 @@
+extends layout_1_3
+block content
+	#page-event(data-role="page")
+		div(data-role="header")
+			a(href="/event/#{event._id}", data-icon="arrow-l") Event Home
+			h1 Export Event
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			p Use this screen to export your event's data to a csv (comma separated values) file.  Open it in excel to do your own analysis.
+			p The file comes with the following columns: Driver, Car #, Car, Class, Best Time, Best Indexed Time, Rank - Class, Rank - Overall, Rank - Indexed, Run, 1, Run 2, etc.
+			p
+				a(href="/api/event/export/#{event._id}",data-icon="print",data-role="button") Export CSV
+				a(href="/api/event/export/#{event._id}?seprun=1",data-icon="arrow-r",data-role="button") Export CSV w/ Separate Penalty Column
+			

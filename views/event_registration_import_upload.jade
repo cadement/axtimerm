@@ -1,0 +1,60 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/event/registration/#{event.id}", data-icon="arrow-l") Back
+			h1 Registration Import
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			if message == ''
+				div(class="ui-body-a") 
+					div(style="padding:16px") Export your registration information from MotorsportReg.com.  This will result in a .csv file.  Use that file to upload here.
+						p(style="color:red;") This will DELETE all existing registration entries for this event.
+
+						h3 Column Headers
+						p 
+							ul 
+								li Class	
+								li Number	
+								li First Name	
+								li Last Name	
+								li Car Model	
+								li Car Color	
+								li Registered	
+								li Paid	
+								li Amnt.	
+								li Group	
+								li Sponsor	
+								li Tire Brand	
+								li Method	
+								li OLR	
+								li Member	
+								li Expires
+								li Member #
+				h3 Upload MSR export
+				form(method="POST",  enctype="multipart/form-data", action="/event/#{event._id}/importreg")
+					div(class="fieldcontain")
+						label(for="type-comma") Comma Delimited (.csv)
+						input(type="radio", name="type", id="type-comma", value="comma")
+						label(for="type-tab") TAB Delimited (.tsv)
+						input(type="radio", name="type", id="type-tab", value="tab", checked="checked")
+					div(class="fieldcontain")
+						label(for="csvfile") Fil to Import: 
+						input#csvfile(type="file", name="csvfile")
+					input(type="submit", value="Upload and Import", data-theme="b")
+			else 
+				div(class="ui-body-a") 
+					div(style="padding:16px")=message
+
+			if errmsg != ''
+				div(class="ui-body-a") 
+					div(style="padding:16px")
+						h3 Errors
+						p=errmsg
+
+								
+						

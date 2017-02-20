@@ -1,0 +1,375 @@
+
+var settings
+    , models
+    , utils = require('../utils');
+
+var starts = []
+    , onCourse = 0
+    , datalog = []
+    , splits=[];
+
+//PUBLIC
+var config ={
+        liveEventId: null
+        , conePenalty:-1
+        , timingHardware:'JaCircuitsNormal'
+        , displayHardware:null
+    }
+var sp;
+
+
+/***********************************************************************
+
+    HELPERS
+
+************************************************************************/
+
+
+function calcTime(s,f){
+    return (f > s ? (f - s) : (f + (1000000 - s))) / 1000;
+}
+
+
+
+
+
+/***********************************************************************
+
+    DISPLAY 
+
+************************************************************************/
+
+
+// time can be in 999.999 or 999999 format
+function sendTimeToDisplay(time) {
+    if (config.displayHardware !== null) {
+
+        if (config.displayHardware == 'RA6X80') {
+            var xtime = time.toFixed(3).toString().replace(/[,.]/gi, '');
+            sp.write(convertTimeToHexForRA6880Display(xtime), function(er,res){
+                if (er) console.log('ERROR sending time to ' + config.displayHardware + ': ' + er);
+            });
+        }
+    }
+}
+
+function convertTimeToHexForRA6880Display(time){
+    var xtime = time.toString().split('');
+    var output = [0x80];
+    var cnt = 0;
+    xtime = xtime.reverse();
+    for (var i=0;i<xtime.length;i++){
+        //output.push(time.toString().charCodeAt(i));
+        output.push(xtime[i].toString().charCodeAt(0));
+        cnt++;
+    }
+    for (var i=0;i<6-cnt;i++){
+        output.push(30);
+    }
+    output.push(13);
+    output.push(10);
+
+    console.log(output);
+    return output;
+}
+
+
+
+
+function parserJaCircuitsNormal() {
+    var data = []
+        , start = ''
+        , date = new Date()
+        , limit = 240
+        , msg = ''
+        , n = 0
+        , raw=[];
+    return function (emitter, buffer) {
+
+        for (var nn=0;nn<buffer.length;nn++){
+            var b = buffer[nn];
+            //console.log('recv: ' + b);
+            if (b == 128) {
+                data = [];
+                n = 0;
+                raw = [128];
+            }
+            else if (b == 13) {
+                var r = data.reverse();
+                var s = 3;
+                if (r.length == 5) { s = 2; }
+                var t = r.slice(0, s).join('') + '.' + r.slice(s).join('');
+                //emitter.emit("data", "time: " + t + ", raw: " + data.join(''));
+                emitter.emit('data', { time: parseFloat(t), timestamp: new Date().getTime(), output:data });
+            }
+            else if (b == 10){
+
+            }
+            else {
+                data.push(String.fromCharCode(b));
+                n++;
+            }
+        }
+        
+    };
+}
+
+function parserJaCircuitsChrono() {
+    var data = [];
+    var isStart = false
+        , isFinish = false
+        , isSplit1 = false
+        , isSplit2 = false
+        , splitNum = -1;
+
+    return function (emitter, buffer) {
+        for (var i = 0; i < buffer.length; i++) {
+            var b = buffer[i];
+            var a = String.fromCharCode(b);
+            datalog.push(b);
+//console.log(b)
+            if (a == 'A') {
+                //start code
+                data = [];
+                isStart = true;
+                onCourse++;
+            }
+            else if (a == 'B') {
+                //finish code
+                isFinish = true;
+                data = [];
+                onCourse--;
+            }
+            else if (a == 'C'){
+                //isSplit1 = true;
+                splitNum = 0;
+                data = [];
+            }
+            else if (a == 'D'){
+                //isSplit2 = true;
+                splitNum = 1;
+                data = [];
+            }
+            else if (b == 10) {
+                var code = data.join('');
+                
+                if (code == '000000'){
+                    //do reset finish
+                    emitter.emit('data', {type:'resetfinish'});
+                }
+                else if (isStart) {
+                    starts.push(data.join(''));
+                    emitter.emit('data', {type:'start',time: data.join('')});
+                } else if (isFinish) {
+                    var s = parseInt(starts.shift(),10);
+                    var f = parseInt(data.join(''),10);
+                    var t = calcTime(s,f);
+                    var tsplits = [];
+                    for (var i=0;i<settings.hardware.splitCount;i++){
+                        tsplits.push(splits[i].shift());
+                    }
+                    
+                    emitter.emit('data', {type:'finish', s: s ,f: f, time: t, splits:tsplits, timestamp:new Date().getTime()});
+                }
+                else if (splitNum > -1){
+                    var time = 0;
+                    try {
+                        var s = parseInt(starts[splits[splitNum].length],10);
+                        var f = parseInt(data.join(''),10);
+                        time = calcTime(s,f);
+                        splits[splitNum].push(time);
+                        emitter.emit('data', {type:'split1', time: time});
+                    }
+                    catch (er){
+                        console.log('ERROR during split ' + splitNum + ' data receive. ' + er);
+                    }
+                    
+                }
+                // else if (isSplit2){
+                //     var time = 0;
+                //     try {
+                //         var s = parseInt(starts[splits[1].length],10);
+                //         var f = parseInt(data.join(''),10);
+                //         time = calcTime(s,f);
+                //     }
+                //     catch (er){
+                //         console.log('ERROR during split2 data receive. ' + er);
+                //     }
+
+                //     splits[1].push(time);
+                //     emitter.emit('data', {type:'split2', time: time});
+                // }
+                
+                isStart = isFinish = false;
+                splitNum = -1;
+
+            }
+            else if (b == 13 || b==128){
+                //don't do anything with it
+            }
+            else if (a >= 0 && a <= 9) {
+                data.push(a);
+            }
+        }
+    }
+}
+/*****************************************************************
+
+    HANDLERS
+
+*****************************************************************/
+
+function handlerJaCircuitsChrono(data) {
+
+    if (data.type == 'start'){
+        //socket.emit('chrono', {start:0})
+        console.log('start: ' + onCourse + ' - ' + starts.length);
+    }
+    else if (data.type == 'finish'){
+        console.log(data)
+        console.log('onCourse = ' + onCourse);
+    }
+    else if (data.type == 'split1'){
+        console.log('split1')
+    }
+    else if (data.type == 'split2'){
+        console.log('split2')
+    }
+    else if (data.type == 'resetfinish'){
+        //do reset finish
+        console.log('reset finish')
+    }
+    else {
+        console.log('invalid data');
+    }
+}
+
+
+function handlerJaCircuitsNormal(data){
+
+    
+    console.log('recv: ' + data.time + ' @ ' + data.timestamp);
+    
+    //sendTimeToDisplay(data.time);
+
+    function add() {
+
+        if (data.output.join('') == '000000'){
+            doReset();
+        } 
+        else {
+
+            sendTimeToDisplay(data.time);
+            
+            // add time to db
+            var time = new models.times();
+            time.eventId = config.liveEventId;
+            time.start = null;
+            time.finish = null;
+            time.time = data.time;
+            time.timestamp = data.timestamp;
+            time.save(function (er) {
+                //lookup next run in queue
+                models.runs.findOne({ eventId: config.liveEventId, status: 'Q' }).sort({ 'runNumber': 1 }).exec(function (err, mrun) {
+                    if (mrun) {
+                        mrun.rawTime = data.time;
+                        mrun.totalTime = data.time > 0 ? (Math.round((data.time + (mrun.cones * config.conePenalty)) * 1000) / 1000) : 0;
+                        pax = data.time > 0 ? (Math.floor((data.time + (mrun.cones * config.conePenalty)) * mrun.axClass.index * 1000) / 1000) : 0;
+                        //console.log(pax);
+                        mrun.paxTime = pax;
+                        mrun.status = 'F';
+                        mrun.finishTimestamp = data.timestamp;
+                        mrun.save(function (errr) {
+                            //io.sockets.in(config.liveEventId + '-queue').emit('delq', mrun._id);
+                            //io.sockets.in(config.liveEventId + '-runs').emit('addr', mrun);
+                            //finishRun(config.liveEventId, mrun, false);
+                            time.runId = mrun._id;
+                            time.save();
+                            engine.finishRun(config.liveEventId, mrun, false);
+                        });
+                    }
+                });
+            }); //time.save
+        }
+    } //fx add()
+
+    function doReset(){
+        console.log('************ Reset finish was triggered. ****************')
+        models.runs.findOne({eventId: config.liveEventId, status:'F'}).sort({runNumber:-1}).exec(function(er, run){
+            if (er) console.log('ERROR finding last finished run during resetFinish. ' + er);
+            else if (run){
+                engine.resetFinish(config.liveEventId, run._id.toString());
+            }
+        })
+    }
+
+    if (config.liveEventId.length == 0 || config.conePenalty == -1) {
+        var dt = utils.date2int(new Date());
+        console.log('looking for live event or cone penalty for ' + dt);
+        //TODO make below accurate, ie. for club
+        models.events.findOne({ dateInt: dt }, function (er, ev) {
+            if (ev) {
+                settings.hardware.liveEventId = ev._id;
+                config.conePenalty = ev.conePenalty;
+                config.liveEventId = ev._id;
+                add();
+            } else {
+                console.log('NO LIVE EVENT found'.red);
+            }
+        });
+    } else {
+        add();
+    }
+}
+
+var spConfig = {
+    'JaCircuitsNormal': {
+        parser: { baudrate: 9600, parser: parserJaCircuitsNormal() }
+        , handler: handlerJaCircuitsNormal
+    }
+    , 'JaCircuitsChrono': {
+        parser: { baudrate: 9600, parser: parserJaCircuitsChrono() }
+        , handler: handlerJaCircuitsChrono
+    }
+}
+
+function start(){
+
+    if (settings.isLocal && settings.hardware.enabled) {
+        console.log('starting timing hardware integration...');
+        //timer = require('./timer.js')(io, models, { useStartStop: true, dataFormat: 'loop' });
+
+        var serialPort = require('serialport').SerialPort
+        sp = new serialPort(settings.hardware.comPort, spConfig[config.timingHardware].parser);
+
+        config.liveEventId = settings.hardware.liveEventId;
+        //var conePenalty = -1;
+        var i = 0;
+        sp.on("open", function () {
+            console.log(settings.hardware.comPort + ' open');
+            //sp.write(String.fromCharCode(128)+'99999\n')
+            sp.on('data', spConfig[config.timingHardware].handler);//sp.on(data
+        }); 
+    }
+    else {
+        console.log('isLocal:' + settings.isLocal);
+        console.log('hardware not configured, using manual entry mode.');
+    }
+}
+
+module.exports = function(_config){
+    //io = _config.io;
+    engine = _config.engine;
+    settings = _config.settings;
+    models = _config.models;
+    
+    config.timingHardware = settings.hardware.interfaceType;
+    if (settings.hardware.displayHardware == 'RA6X80')
+        config.displayHardware = settings.hardware.displayHardware;
+    for (var i=0;i<settings.hardware.splitCount;i++){
+        splits.push([]);
+        console.log('created split bucket ' + (i+1));
+    }
+    start();
+
+}

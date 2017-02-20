@@ -1,0 +1,98 @@
+extends layout
+block head
+	script(type="text/javascript").
+		var cid = '#{club._id}';
+		var clubname = '#{club.name}';
+block content
+	#page-event(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{club.name}/manageseasons", data-icon="arrow-l") Seasons
+			h1 New Season
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			
+			form(action="/club/#{club.name}/newseason",method="POST")
+				div(data-role="fieldcontain")
+					label(for="year") Season Year:
+					input(type="number", name="year", id="year",value="#{new Date().getFullYear()}",min="1973",max="#{new Date().getFullYear()+1}")
+				div(data-role="fieldcontain")
+					label(for="maxpax") Max Indexed Events:
+					input(type="number", name="maxpax", id="maxpax",value="6",min="3")
+				div(data-role="fieldcontain")
+					label(for="maxclass") Max Championship Events:
+					input(type="number", name="maxclass", id="maxclass",value="6",min="3")
+				div(data-role="fieldcontain")
+					label(for="conepenalty") Cone Penalty (seconds):
+					input(type="number", name="conepenalty", id="conepenalty",value="1",min="1")
+
+				h3 Classes
+				p
+					a(href="#dlg-addclass", data-rel="popup", data-role="button",data-theme="e") Add Class
+				div(class="ui-grid-d")#classlist
+					div(class="ui-block-a") Name
+					div(class="ui-block-b") Index
+					div(class="ui-block-c") Ladies Only
+					div(class="ui-block-d") Stock
+					div(class="ui-block-e") 
+				
+					
+				div(class="ui-grid-a")
+					div(class="ui-block-a")
+						h3 Class Points
+						table
+							thead
+								tr
+									th Position
+									th Points
+							tbody
+								- var pi = 1;
+								each p in cp
+									tr
+										td #{pi}
+										td 
+											input(id="cp-#{pi}", type="text",value="#{p}")
+									- pi++;
+					div(class="ui-block-b")
+						h3 Index Points
+						table
+							thead
+								tr
+									th Position
+									th Points
+							tbody
+								- pi = 1;
+								each p in pp
+									tr
+										td #{pi}
+										td 
+											input(id="pp-#{pi}", type="text",value="#{p}")
+									- pi++;
+
+				p
+					a#btn-save(data-role="button", data-theme="b") Create New Season
+		#dlg-addclass(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Add Class
+				div(data-role="content")
+					p Are you sure you want to delete permanently delete this driver?
+					div
+						form
+							div(data-role="fieldcontain")
+								input(type="text", name="addcls-name", id="addcls-name", placeholder="Name")
+							div(data-role="fieldcontain")
+								input(type="number", name="addcls-index", id="addcls-index", placeholder="Index", min=".1", max="1", step=".001")
+							div(data-role="fieldcontain")
+								label(for="addcls-ladies") Ladies Only?:
+									select#addcls-ladies(name="flip-2",data-role="slider")
+										option(value="no") No
+										option(value="yes") Yes
+							div(data-role="fieldcontain")
+								label(for="addcls-stock") Stock?:
+									select#addcls-stock(name="stock",data-role="slider")
+										option(value="no") No
+										option(value="yes") Yes
+
+						a#btn-addcls(data-role="button", data-inline="true", data-theme="b") Add Class
+						a#btn-cancel2(href="#",data-role="button", data-inline="true", data-rel="back", data-theme="a") Cancel
+		script(src="/scripts/newseason.js")

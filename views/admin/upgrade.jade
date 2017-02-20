@@ -1,0 +1,62 @@
+extend ../layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var clubname = "#{clubname}";
+block content
+	#page-upgrade(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{clubname}", data-icon="home") Club Home
+			h1 System Upgrade
+		div(data-role="content")
+			if message
+				p=message
+			.ui-grid-a
+				.ui-block-a
+					div(style="padding:12px;")
+						h3 Your current version is #{siteVersion}
+						h3 Want to upgrade your system?
+						p No problem.  Simply click the build on the right you want to upgrade to and we'll take care of the rest.
+						p Don't worry.  Not only do we make a backup of your data, but we also keep your current version.  So even if you have problems, you can quickly go back.
+						h3 About upgrading
+						ul 
+							li This process does NOT change your existing version 
+							li A separate version is installed, but the database is the same
+							li We backup your data before upgrading, just in case
+				.ui-block-b
+					h3 Available New Releases
+					#messages
+					p#checking Checking AXti.me for latest builds...
+					#buildsdiv(style="border-top:solid 1px silver")
+
+					
+	#dlg-finished(data-role="page", data-overlay-theme="a", data-theme="c")
+		div(data-role="header")
+			h1 Finished
+		div(data-role="content")
+			//- div(style="max-width:400px;")
+			h3 All Done!
+			p All you need to do is close Step 2 and then reopen it.
+			p#finished-msg
+	#dlg-confirm(data-role="page", data-overlay-theme="a", data-theme="c")
+		div(data-role="header")
+			h1 Confirm System Upgrade
+		div(data-role="content")
+			//- div(style="max-width:400px;")
+			h3 Before you upgrade...
+			p 
+				| You are upgrading to version 
+				span#version 
+
+			ul 
+				li No one else should be using the system.
+				li You must be connected to the Internet
+				li You must be willing to wait for a few minutes while this happens
+				li Close out any other open browser windows that are connected to AXti.me RM
+				li You must get really excited because you are getting some more awesome features
+			.ui-grid-a
+				.ui-block-a
+					a(data-role="button", data-rel="back") Cancel
+				.ui-block-b
+					a#btn-confirm(data-role="button",data-theme="b") Yes, I understand :-)
+	script(src="/scripts/admin_upgrade.js")

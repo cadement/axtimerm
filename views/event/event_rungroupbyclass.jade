@@ -1,0 +1,48 @@
+extend ../layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = "#{event._id.toString()}";
+		var runGroups = !{JSON.stringify(event.runGroups)};
+		var classes = !{JSON.stringify(season.classes)};
+		var paxClasses = !{JSON.stringify(season.paxClasses)};
+		var participants = !{JSON.stringify(participants)};
+		var classRunGroups = !{JSON.stringify(classRunGroups)};
+	style.
+		#classes {-moz-user-select:-moz-none,-moz-user-select:none,-o-user-select:none,-khtml-user-select:none,-webkit-user-select:none,-ms-user-select:none,user-select:none}
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/event/#{event._id.toString()}", data-icon="arrow-l") Home
+			h1 Assign Run Group by Class
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			div(style="width:200px;float:left;")
+				p First select a Run Group below
+				p Then, select each class you want assigned to the selected Run Group
+				p All classes must be assigned to a Run Group
+				h3 Run Groups
+				div#runGroups 
+					- var i = 0;
+					each rg in event.runGroups
+						div.rg-item(id="rg-#{i}", data-ix=i)=rg.name + (rg.label ? (' (' + rg.label + ')') : '')
+							span.num
+						- i++;
+				p Apply to Existing?
+				div(data-role="fieldcontain")
+					
+					select#doexisting(name="flip-2",data-role="slider")
+						option(value="no") No
+						option(value="yes") Yes
+				p "Yes" will will overwrite all existing registrations.
+				div
+					button#btn-doit(data-role="button",data-theme="b",disabled="disabled") Assign Run Groups
+			div(style="margin-left:220px")
+				div
+					p These settings are saved to the system now.  When a driver registers or goes through checkin, the system will automatcially select the run group based on the selected class.
+					p Multi-select!  Click the first class, press and hold the shift key, click the ending class.  
+				div#paxClasses
+					
+				div#classes 
+					
+		script(src="/scripts/event_rungroupbyclass.js", type="text/javascript")

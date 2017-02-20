@@ -1,0 +1,1 @@
+$("#page-techinspector").bind("pageinit",function(){$("input[name=evt-parts]").bind("change",function(e){var t=$(e.currentTarget),a=t.is(":checked"),n=t.val();$.ajax({url:"/api/techinspector/"+eventId,type:"PUT",data:{pid:n,istechd:a},dataType:"json",success:function(e){"success"!=e.status&&$("#errmsgtxt").text(e.message)}})})});

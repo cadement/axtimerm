@@ -1,0 +1,58 @@
+html
+head
+	title Test recalc
+body
+	h3 PAX
+	table
+		thead
+			tr
+				th(colspan="3") 
+				th(colspan="#{paxparts[0].points.length}") Events
+			tr
+				th Rank
+				th Driver
+				th Total
+				if paxparts.length > 0
+					each p in paxparts[0].points
+						th # #{p.eventNumber}
+				
+		tbody
+			each p in paxparts
+				tr
+					td #{p.rank}
+						if (p.rank < p.priorRank)
+							span #{' (+' + (p.priorRank - p.rank) + ')'}
+						else if (p.rank > p.priorRank)
+							span #{' (' + (p.priorRank - p.rank) + ')'}
+					td=p.driver.name
+					td=p.total
+					each pt in p.points
+						td=pt.points == 0 ? '' : pt.points
+
+	h3 Class
+	table
+		thead
+			tr
+				th Rank
+				th Prior Rank
+				th Driver
+				th Total
+				th Prior Total
+				if clsparts.length > 0
+					each p in clsparts[0].points
+						th Evt. #{p.eventNumber}
+		tbody
+			- var cls = '';
+			each p in clsparts
+				if cls != p.axClass.name
+					tr(style="background-color:silver")
+						td(colspan="12")=p.axClass.name
+					- cls = p.axClass.name;
+				tr
+					td=p.rank
+					td=p.priorRank
+					td=p.driver.name
+					td=p.total
+					td=p.priorTotal
+						each pt in p.points
+							td=pt.points == 0 ? '' : pt.points

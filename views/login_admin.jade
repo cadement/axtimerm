@@ -1,0 +1,28 @@
+extends layout
+block content
+	div#page-clubchooser(data-role="page")
+		div(data-role="header")
+			a(href="/", data-role="button",data-icon="arrow-l") Back
+			h1 Admin Login
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			if message.length > 0
+				p(style="color:red;") #{message}
+			div(class="ui-body-a ui-content")
+				div 
+					strong For Club Admins only. 
+				div If you have a role at an event, use the Role Login on the event's home page.
+			form(class="login-form", method="POST")
+				fieldset
+					div(data-role="fieldcontain")
+						label(for="username") Username:
+						input(type="text", name="username", id="username")
+						
+					div(data-role="fieldcontain")
+						label(for="e-password") Password:
+						input(type="password", name="password", id="e-password")
+					
+					input(type="hidden",name="type",value="admin")
+					p
+						input(type="submit",data-theme="b", value="Login")  

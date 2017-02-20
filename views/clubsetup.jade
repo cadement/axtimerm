@@ -1,0 +1,42 @@
+extends layout_1_3
+block content
+	div#page-clubchooser(data-role="page")
+		div(data-role="header")
+			h1 AXti.me Setup
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			h1 Setup your AXti.me RM system
+
+			if errorMessages != undefined && errorMessages.length > 0
+				div(style="padding:24px;color:red;")
+					each e in errorMessages
+						p=e
+			form(action="/initialsetup", method="POST")
+				div(data-role="fieldcontain")
+					label(for="club-name") Club Name:
+					input(type="text", name="name", id="club-name", value=data.name)
+			
+				div(data-role="fieldcontain")
+					label(for="club-abbr") Abbreviation:
+					input(type="text", name="abbr", id="club-abbr", value=data.abbr)
+
+				div(data-role="fieldcontain")
+						label(for="uniqueNumberPerClass") Unique Car # per Class:
+						select(id="uniqueNumberPerClass", name="uniqueNumberPerClass", data-role="slider")
+							option(value="no") No
+							option(value="yes", selected="selected") Yes
+							
+				div(data-role="fieldcontain")
+					label(for="club-pw") Admin Password:
+					input(type="text", name="pw", id="club-pw",value=data.gpw)
+
+				div(data-role="fieldcontain")
+					label(for="club-key") Cloud Key:
+					input(type="text", name="key", id="club-key",value=data.key)
+					div(style="color:gray;margin-left:22%;padding-top:10px") You should have received this as part of your welcome email.
+
+				div(style="padding-top:20px;")
+					input(type="submit", value="Save",data-theme="b")
+
+			

@@ -1,0 +1,82 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+		var selectedRunGroup = "#{defaultRunGroup}";
+		
+block content
+	#page-workercheckin(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Worker Check-in
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			div(class="ui-grid-a")
+				div(class="ui-block-a", style="width:68%;")
+					div(data-role="fieldcontain")
+						label(for="wc-rungroup") Run Group
+						div(data-role="controlgroup", data-type="horizontal", data-inline="true")
+							each rg in event.runGroups
+								a(id="btn-filter-#{rg.name}", class="btn-rungroup #{rg.name == defaultRunGroup ? ' ui-btn-active' : ''}", href="#", data-role="button")
+									div(style="display:inline-block;width:20px;height:1em;background-color:#{rg.color};margin-right:8px;") 
+									span=rg.name + (rg.label ? (' (' + rg.label + ')') : '')
+				div(class="ui-block-b", style="width:32%;")
+					div(data-role="fieldcontain")
+						label(for="wc-rungroup") Session
+						div(data-role="controlgroup", data-type="horizontal", data-inline="true")
+							- var i = 1;
+							while (i <= event.sessions)
+								a(id="btn-session-#{i}", class="btn-sessions #{i==1 ? 'ui-btn-active' : ''}", href="#", data-role="button")
+									span #{i}
+								- i++;
+			div(data-role="fieldcontain")
+				fieldset
+					legend Worker Stations:
+					- var col = 'a';
+					div(class="ax-collapsible ui-grid-b rg-#{defaultRunGroup}")
+						each s in event.stations
+							div(class="ui-block-#{col}")
+								a(href="#page-driverlist", data-station=s.name, data-role="button", class="workerstation", data-theme="e") 
+									strong #{s.name} 
+								each ch in s.checkins
+									div(id="ck-#{ch._id}",style="font-weight:normal", class="checkin rgi-#{ch.runGroup + ' ses-' + ch.session}")
+										a(data-role="button", data-mini="true", data-kid="#{ch._id}")
+											div(style="display:inline-block;width:20px;height:1em;background-color:#{ch.runGroup};margin-right:8px;")  
+											span(class="name") #{ch.session + ' - ' + ch.name}
+									
+							- col = col == 'a' ? 'b' : (col == 'b' ? 'c' : 'a');
+
+			#page-confirm(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Confirm Delete
+				div(data-role="content")
+					p Are you sure you want to delete permanently delete this worker checkin?
+					div
+						a#btn-confirm(data-role="button", data-inline="true", data-rel="back", data-theme="c") Yes, Delete
+						a#btn-cancel(href="#",data-role="button", data-inline="true", data-rel="back", data-theme="b") Cancel
+
+	#page-driverlist(data-role="dialog")
+		div(data-role="header")
+			h1 Select A Driver
+		div(data-role="content")
+			h1#dialog-title 
+			p
+				ul#currentcheckins(data-role="listview")
+					li(data-role="list-divider") Currently Checked In
+					li None
+			p
+				ul#driverlist(data-role="listview", data-filter="true")
+					each p in participants
+						li(data-pid="#{p._id}") 
+							a 
+								div(style="display:inline-block;width:20px;height:1em;background-color:#{p.runGroup.color};margin-right:8px;") 
+								span #{p.driver.name} - ##{p.driver.carNumber}
+
+			div(data-role="popup",id="errormessage",data-theme="e", data-overlay-theme="a", class="ui-content") 
+				a(href="#", data-rel="back", data-role="button", data-theme="e",data-icon="delete", data-iconpos="notext",class="ui-btn-right") Close
+				span#errmsgtxt 
+
+	script(src="/scripts/workercheckin.js")

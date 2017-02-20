@@ -1,0 +1,51 @@
+Release Notes 
+2.3.7
+- bug: removed class header from PAX leaderboard export
+- bug: fixed auto run group assignment when editing a registration
+- Registration view now refilters participants after adding/editing an entry
+- crashing bug: fixed when a socket tries reconnecting with invalid cookies
+- bug: fixed on TK when new reg is added via registration. you had to refresh TK to get new reg's available to add to Q
+- crashing bug (rare): ttl index error. fixed on startup a request is attempted before the session store connects to db
+
+2.3.6
+- Fixed when the Resync RM Live button is clicked in an event that did not have OLR enabled. Now you can click it to sync to RM Live regardless of OLR being enabled.
+- Enhancement to support iOS Car Queuer v2.0
+- Fixed registration update/change trying to send to OLR even when OLR is not enabled
+- Added chrono mode to queue stream
+- Fixed bug that allowed the same member, car # and class to be registered multiple times
+- Performance improvement for deleteQueue and deleteRun
+- Fixed CQ queue getting out of order after deleting a few queue items
+- Updated TlinkDirect mode to better handle error's received from TLink Z
+- Updated TlinkDirect mode to output raw data when settings.debug = true
+- Fixed Season Manager not selecting which Class Calc Method properly
+- Fixed Leaderboard displaying really long decimals for totals
+- Updated Worker Checkin participants to be sorted by name
+- Updated demo data to SCCA classes
+- Fixed late cone calls or run edits to recalc "time off" bests
+
+2.3.5 - 5/22/2015
+- Fixed crashing bug when Reset Finish is used from anywhere (hardware button or virtual timer)
+- Fixed missing data fields when recalcEvent is called
+- Fixed run marked as Off to display properly background in Live Results
+- Fixed run marked as Off to properly count towards "counted runs"
+
+2.3.4 - 5/18/2015
+- TlinkDirect mode, added ignoring invalid start triggers, like power cycles, etc. Anything that isn't a valid number
+
+2.3.3 - 5/13/2015
+- New - you can now press the FarmTek "Clear Time" hardware button and it will reset the start in Chrono mode
+- Time Keeper - you can now use the Num Pad keyboard keys to enter numbers and decimal point.  Also Delete key now clears the time
+- Virutal Timer - the reset button clears the hardware based fields as well.
+- Corrected typos
+
+2.3.2
+beta release of OLR
+allow timing hardware changes without the need to restart
+new build system
+
+2.3.1 
+sweeping performance improvements
+fixed a few screens that didn't have the new authorization integrated (missing buttons, etc.)
+
+2.0.6 - 1/12/2015
+- assign run groups by class enhancement

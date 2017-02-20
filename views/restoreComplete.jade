@@ -1,0 +1,23 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var club = '';
+block content
+	#page-backup(data-role="page")
+		div(data-role="header")
+			h1 Restore Status
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			
+			p Your restore has completed.  Below will display the results.  
+
+			if (message)
+				div.ui-body.ui-body-a(style="color:red;")=message
+			if (results)
+				each a in results.errors
+					p(style="color:red")=a.msg
+				if (results.errors.length == 0)
+					h3 Success!  Your data has been restored.
+			p
+				a(href="/",data-role="button",data-theme="b") Continue

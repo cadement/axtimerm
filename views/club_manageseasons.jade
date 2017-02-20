@@ -1,0 +1,23 @@
+extends layout_1_3
+block content
+	#page-event(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			//a(href="/club/#{club.name}", data-icon="home") Club Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Manage Seasons
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			p
+				These screens allow you to setup your seasons data.  Classes, indexes, points, etc.
+			p
+				a(href="/club/#{club.name}/newseason", data-role="button",data-theme="b") New Season
+				a(href="/club/#{club.name}/copyseason", data-role="button",data-theme="b") Copy Existing Season to New Season
+			h3 Manage A Season
+			ul(data-role="listview")
+				each season in seasons
+					li
+						a(href="/club/#{club.name}/season/#{season.seasonYear}") #{season.seasonYear}
+				if seasons.length == 0
+					li No Seasons, Create a Season Now

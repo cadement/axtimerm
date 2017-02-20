@@ -1,0 +1,27 @@
+extend layout_1_3
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{club.name}", data-icon="home") Club Home
+			h1 Import Past Events (CSV)
+		div(data-role="content")
+			if (message != null)
+				p(style="color:red;") #{message}
+			p File must be a CSV (comma separated) file.  The following columns must be present.
+			p You must already have a Season setup with the appropriate classes.
+			p Full Name, Car number, Class, Car 
+			form(method="POST",  enctype="multipart/form-data", action="/club/#{club.name}/importevent/csv")
+				div(data-role="fieldcontain")
+					label(for="date") Date:
+					input#date(type="date",name="date")
+				div(data-role="fieldcontain")
+					label(for="num") Event #
+					input#num(type="number",name="num")
+				div(data-role="fieldcontain")
+					label(for="location") Location:
+					input#location(type="text",name="location")
+				div(data-role="fieldcontain")
+					label(for="rggfile") CSV File: 
+					input#rggfile(type="file", name="csvfile")
+				input(type="submit", value="Upload and Import", data-theme="b")
+			

@@ -1,0 +1,91 @@
+extend ../layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+
+	script(type="text/javascript").
+		var data = !{JSON.stringify(data)};
+
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/event/registration/#{event.id}", data-icon="arrow-l") Back
+			h1 Registration Import
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			div 
+				p Your data has NOT been imported yet.
+				p You are trying to import #{stats.total} registrations with #{stats.fails} having issues.
+			a(href="#dlg-edit", data-rel="popup", data-role="button",data-theme="e") Edit
+			div.regimport
+				each d in data 
+					div(class="regcard")
+						if d.message.length > 0
+							div.msg(class=d.importStatus == false ? 'invalid' : '')=d.message
+						div.info
+							div.name=d.firstName + ' ' + d.lastName
+							div.clsnum=d.axClass + ' #' + d.carNumber
+							div.car=d.car.description
+
+
+
+			table(style="width:100%",class="regimport")
+				thead
+					tr
+						td 
+						td #
+						td Class
+						td Pax
+						td First
+						td Last
+						td Car
+						td Message
+						td status
+				tbody
+					- var i=0;
+					each d in data
+						tr(class=d.importStatus == 0 ? 'invalid' : '')
+							td
+								a(id="edit-#{i}",class="btn-edit") Edit
+							td=d.carNumber
+							td=d.axClass
+							td=d.paxClass
+							td=d.firstName
+							td=d.lastName
+							td=d.car.description
+							td=d.message
+							td=d.importStatus
+						- i++;
+			#dlg-edit(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Edit Registration Edit
+				div(data-role="content")
+					div
+						form
+							div(data-role="fieldcontain")
+								label(for="first-name") First Name:
+								input(type="text", name="first-name", id="first-name", placeholder="First Name")
+							div(data-role="fieldcontain")
+								label(for="last-name") Last Name:
+								input(type="text", name="last-name", id="last-name", placeholder="Last Name")
+							div(data-role="fieldcontain")
+								label(for="car-make") Car Number:
+								input(type="text", name="car-number", id="car-number", placeholder="Car Number")
+							div(data-role="fieldcontain")
+								label(for="car-make") Car Color:
+								input(type="text", name="car-color", id="car-color", placeholder="Car Color")
+							div(data-role="fieldcontain")
+								label(for="car-make") Car Make:
+								input(type="text", name="car-make", id="car-make", placeholder="Car Make")
+							div(data-role="fieldcontain")
+								label(for="car-model") Car Model:
+								input(type="text", name="car-model", id="car-model", placeholder="Car Model")
+							div(data-role="fieldcontain")
+								label(for="car-year") Car Year:
+								input(type="text", name="car-make", id="car-make", placeholder="Car Year")
+							
+
+						a#btn-addcls(data-role="button", data-inline="true", data-theme="b") Add Class
+						a#btn-cancel2(data-role="button", data-inline="true", data-rel="back", data-theme="a") Close
+		script(src="/scripts/event_importreg_confirm.js", type="text/javascript")

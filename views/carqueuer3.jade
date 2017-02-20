@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+html(lang="en")
+	head
+		title AXti.me RM - #{title}
+		meta(name='viewport',content='width=device-width,initial-scale=1,user-scalable=no')
+		link(href="/awesome/css/font-awesome.min.css", rel="stylesheet")
+		link(href="/css/carqueuer.css", rel="stylesheet")
+		script(src="/scripts/jquery-1.9.0.min.js")
+		script(src="/socket.io/socket.io.js")
+		script(type="text/javascript").
+			var eventId = "#{event.id}";
+			
+	body
+		div#header
+			a(href="/event/#{event._id}")
+				i.fa.fa-home
+			
+			div.title
+				span Car Queuer 
+		div#messages
+		//- div#eventinfo
+			//- div Max Runs: #{event.maxRunsPerDriver == 0 ? 'Unknown' : event.maxRunsPerDriver}
+		div#main
+			div
+				a#btn-show.btn.btn-primary.btn-margin.btn-block.btn-big
+					i.fa.fa-plus-square
+					span(style="padding-left:10px;") Add Driver to Queue
+			div
+				div#ins-0.q2-insert
+					i.fa.fa-check-square-o
+					span START LINE - Insert driver here
+				div#queueItems
+					div No cars queued yet.
+				div#ins-e.q2-insert
+					i.fa.fa-check-square-o
+					span LAST IN LINE - Insert driver here
+		div#addnum.hidden
+		div#addcar.hidden
+			div.header.clearfix
+				a#btn-search.btn.btn-primary.btn-inline.right 
+					| abc 
+				a#btn-close.btn.btn-primary.btn-inline.left 
+					i.fa.fa-times
+					span Close
+				span.title
+			div.panels.clearfix
+				div.panel
+					
+					//- div.rungroups
+					//- 	- var w = (1 / (event.runGroups.length + 1)) * 100;
+					//- 	each rg in event.runGroups 
+					//- 		div.rungroup(style="width:#{w}%;background-color:#{rg.color}")=rg.label || ''
+					//- 	div.rungroup(style="width:#{w}%;") All
+					div.alphapad.clearfix.hidden
+						div.header
+						each a in ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','_']
+							div.item(data-a=a)
+								.letter=a
+						div.item(data-a="-1")
+							.letter 
+								span del
+						div.item(data-a="-2")
+							.letter 
+								span clr
+					div.pad2.clearfix
+						div(data-num="1").pad2-num
+							.num
+								span 1
+						div(data-num="2").pad2-num
+							.num 2
+						div(data-num="3").pad2-num
+							.num 3
+						div(data-num="4").pad2-num
+							.num 4
+						div(data-num="5").pad2-num
+							.num 5
+						div(data-num="6").pad2-num
+							.num 6
+						div(data-num="7").pad2-num
+							.num 7
+						div(data-num="8").pad2-num
+							.num 8
+						div(data-num="9").pad2-num
+							.num 9
+						div(data-num="0").pad2-num
+							.num 0
+						div(data-num="").pad2-num
+							.num &nbsp;
+						div(data-num="X").pad2-num
+							.num X
+						
+				div.panel
+					div#results.row.clearfix
+						div.none No Results yet.  Start tapping the big numbers.
+					#unknown.hidden
+						a#btn-unknown.btn.btn-warning.btn-block.btn-big(style="margin:0 16px") Add Unknown / Missing Driver
+					
+		script(src="/scripts/carqueuer3.js")

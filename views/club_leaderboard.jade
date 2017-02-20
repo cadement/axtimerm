@@ -1,0 +1,21 @@
+extend layout_1_3
+block head
+block content
+	#page-conecounter(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			//a(href="/club/#{club.name}", data-icon="home") Club Home
+			h1 #{season} Leaderboard
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			h1 Choose an event for "as of" that event
+			ul(data-role="listview")
+				each ev in events
+					li 
+						a(href="/event/leaderboard/#{ev._id}")
+							h3=ev.name
+							p=ev.date
+							
+			

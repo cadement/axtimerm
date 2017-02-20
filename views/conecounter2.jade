@@ -1,0 +1,73 @@
+extend layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+		var advancedMode = #{event.coneCounterAdvancedMode.toString().toLowerCase()};
+		var stations = [#{courseStations.join(',')}];
+		
+block content
+	#page-conecounter(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Cone Counter
+			a(href="#page-cchelp", data-rel="popup", data-icon="info", data-position-to="window") Help
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content",style="padding:8px 0px")
+			#cc-container.group
+			div(style="margin-top:24px")
+				a(href="/event/conecounter-old/#{event.id}", data-role="button") Use the old Cone Counter screen
+			#page-cchelp(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Cone Counter Help
+				div(data-role="content")
+					div(style="max-width:400px;") 
+						p You are the Cone Counter, awesome!  Make sure you get the station number.  Wouldn't you like to know what station you hit that cone?
+						p The boxes on this screen contain all drivers in the Queue plus the 3 Last Runs.
+						p As a driver moves from the Queue to a finished Run, they do NOT move around (like on the original screen). 
+						p 
+							b To add multiple Cone Hits
+							|, you'll need to tap the Save button after each station's Cone Hits you enter, and then tap the driver again and repeat.
+	#dlg-cones(data-role="dialog")
+		div(data-role="header")
+			h1
+				Edit Enter Cones
+		div(data-role="content")
+			h3#lbl-driver Temporary Driver Name #9999
+			p To add multiple stations with cones, you'll need to add each one separately by clicking SAVE after each change.
+			//- p To change a Station's cone hits, click the station # first then click the cones.
+			p#pnl-stations
+			
+			h3 STATION:
+			.stations.group
+				div#cc-sta-0.cc-pad-btn.ui-btn.ui-shadow.ui-btn-up-c.ui-btn-active ??
+				each s in courseStations
+					div.cc-pad-btn.ui-btn.ui-shadow.ui-btn-up-c(id="cc-sta-#{s}")=s 
+
+			fieldset(data-role="controlgroup",data-type="horizontal", class="conecounter")
+				legend CONES HIT:
+				- for (var i=0;i<8;i++) {
+					input(type="radio",name="radio-cone", id="radio-cone-#{i}", value="#{i}")
+					label(for="radio-cone-#{i}")=i
+				- }
+			fieldset(data-role="controlgroup", data-type="horizontal", class="conecounter")
+				legend Result:
+				input(type="radio", name="radio-pen", id="radio-pen-none", value="none", checked="checked")
+				label(for="radio-pen-none") None
+				input(type="radio", name="radio-pen", id="radio-pen-dnf", value="dnf")
+				label(for="radio-pen-dnf") DNF
+				input(type="radio", name="radio-pen", id="radio-pen-rerun", value="rerun")
+				label(for="radio-pen-rerun") RERUN
+				input(type="radio", name="radio-pen", id="radio-pen-off", value="off")
+				label(for="radio-pen-off") OFF
+			div(style="padding-top:24px;")
+				.ui-grid-a
+					.ui-block-a
+						a#btn-savecones(data-role="button", data-rel="back", data-theme="b") Save 
+					.ui-block-b
+						a(data-role="button", data-rel="back", data-theme="a") Cancel
+	script(src="/scripts/conecounter2.js")
+
+

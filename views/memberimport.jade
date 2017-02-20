@@ -1,0 +1,62 @@
+extend layout_1_3
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{club.name}/members", data-icon="arrow-l") Back
+			h1 Member Import
+		div(data-role="content")
+			div(class="ui-body-a") 
+				div(style="padding:16px") Export your membership data from your other software. MSR or AxWare.  This will result in a .csv file.  Use that file to upload here.
+					p(style="color:red;") This will DELETE all existing member entries.
+					ul 
+						li Your file must contain field names in the first row
+						li Your file must be TAB delimited
+					p Supported column headers (field names)
+					ul 
+						li first name
+						li last name
+						li number
+						li class
+						li car make
+						li car model
+						li car year
+						li car color
+						li member
+						li mail
+						li address
+						li city
+						li state
+						li zip
+						li home
+						li work
+						li cell
+						li member #
+						li sponsor
+						li region
+						li email
+						li email #1
+						li email #2
+			h3 Upload CSV File
+			form(method="POST",  enctype="multipart/form-data", action="/club/#{club.name}/memberimport")
+				div(class="fieldcontain")
+					label(for="csvfile") CSV File: 
+					input#csvfile(type="file", name="csvfile")
+				input(type="submit", value="Upload and Import", data-theme="b")
+			if (newMembers.length > 0)
+				h1 Members Imported
+				p= newMembers.length + ' members imported.'
+				div
+					table
+						thead
+							tr
+								th Name
+								th Member #
+						tbody
+							each m in newMembers
+								tr
+									td=m.firstName + ' ' + m.lastName
+									td=m.clubMemberId
+
+					
+								
+						

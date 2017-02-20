@@ -1,0 +1,216 @@
+extends layout_1_3
+block head
+	script(type="text/javascript").
+		var cid = '#{club._id}';
+		var clubname = '#{club.name}';
+		
+block content
+	#page-event(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			//a(href="/club/#{club.name}/manageseasons", data-icon="arrow-l") Seasons
+			h1 Season #{season.seasonYear}
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			p You must click the save button at the bottom of the screen to save changes.
+			form(action="/club/#{club.name}/newseason",method="POST")
+				div(data-role="fieldcontain")
+					label(for="year") Season Year:
+					input(type="number", name="year", id="year",value="#{season.seasonYear}",min="1973",max="#{new Date().getFullYear()+1}")
+				div(data-role="fieldcontain")
+					label(for="eventsToQualify") Events to Qualify:
+					input(type="number", name="eventsToQualify", id="eventsToQualify",value="#{season.eventsToQualify}",min="0")
+				div(data-role="fieldcontain")
+					label(for="maxpax") Max Indexed Events:
+					input(type="number", name="maxpax", id="maxpax",value="#{season.paxMaxEvents}",min="2")
+				div(data-role="fieldcontain")
+					label(for="maxclass") Max Class Events:
+					input(type="number", name="maxclass", id="maxclass",value="#{season.classMaxEvents}",min="2")
+				div(data-role="fieldcontain")
+					label(for="conepenalty") Cone Penalty (seconds):
+					input(type="number", name="conepenalty", id="conepenalty",value="#{season.conePenalty}",min="1")
+				div(data-role="fieldcontain")
+					fieldset(data-role="controlgroup")
+						legend Class Points Calculation Method:
+						input(type="radio", name="classcalc", id="classcalc-0", value="0", checked=season.classPointsCalcMethod != 'besttimediffpct')
+						label(for="classcalc-0") Default, Class Points Table 
+
+						input(type="radio", name="classcalc", id="classcalc-1", value="1", checked=season.classPointsCalcMethod == 'besttimediffpct')
+						label(for="classcalc-1") Class Best Time / Driver's Best Time * 100 (Rounded to .000)
+				div(data-role="fieldcontain")
+					label(for="classMinPoints") Class Min Points 
+					input(type="number", name="classMinPoints", id="classMinPoints", value=season.minimumClassParticipationPoints, min="0")
+				div(data-role="fieldcontain")
+					label(for="paxMinPoints") Pax Min Points 
+					input(type="number", name="paxMinPoints", id="paxMinPoints", value=season.minimumPaxParticipationPoints, min="0")
+
+				h3 PAX Classes (Rollups)
+				p Don't have enough drivers in your classes.  Roll them up into PAX Classes.  These are competitive classes that base results on the individual's class index.
+				p 
+					a(href="#dlg-addpclass", data-rel="popup", data-role="button",data-theme="e") Add PAX Class
+				div(class="ui-grid-d", id="pclasslist")
+					div(class="ui-block-a") Name
+					div(class="ui-block-b") Category
+					div(class="ui-block-c") Description
+					div(class="ui-block-d") Ladies Only
+					div(class="ui-block-e") 
+					each c in season.paxClasses
+						div(class="ui-block-a paxclassname", style="padding-right:20px;",data-pcname="#{c.name}")
+							input(type="text",id="#{c.name}--pname", value="#{c.name}", style="margin-top:0px;")
+						div(class="ui-block-b", style="padding-right:20px;",data-pcname="#{c.name}")
+							input(type="text",id="#{c.name}--pcategory", value="#{c.category}", style="margin-top:0px;")
+						div(class="ui-block-c", style="padding-right:20px;",data-pcname="#{c.name}")
+							input(type="text",id="#{c.name}--pdescription", value="#{c.description}", style="margin-top:0px;")
+						div(class="ui-block-d",data-pcname="#{c.name}")
+							select(id="#{c.name}--pladies",name="nn", data-role="slider", data-ladies="#{c.isLadies}")
+								if c.isLadies
+									option(value="no") No
+									option(value="yes", selected="selected") Yes
+								else
+									option(value="no", selected="selected") No
+									option(value="yes") Yes
+						div(class="ui-block-e",data-pcname="#{c.name}")
+							a(class="btn-pclassremove", data-pcname="#{c.name}",style="cursor:pointer",data-role="button",data-theme="e") Remove
+						
+
+
+				h3 Classes
+				.ui-grid-b
+					.ui-block-a
+						a(href="#dlg-addclass", data-rel="popup", data-role="button",data-theme="e") Add Class
+					.ui-block-b
+						a(href="/club/#{club.name}/classimport_axware", data-role="button", data-theme="b") AXware Import
+					.ui-block-c
+						a(href="#dlg-prefill", data-rel="popup", data-role="button", data-theme="b") Standard
+
+				p Changing class data is NOT retrocative.  This only applies moving forward (driver checkins, new imports, etc)
+
+				div(class="ui-grid-d", id="classlist")
+					div(class="ui-block-a") Name
+					div(class="ui-block-b") Index
+					div(class="ui-block-c") Ladies Only
+					div(class="ui-block-d") Stock
+					div(class="ui-block-e") 
+					each c in season.classes
+						div(class="ui-block-a ui-btn-inner axclassname", style="font-weight:bold;",data-cname="#{c.name}")=c.name
+						div(class="ui-block-b", style="padding-right:20px;",data-cname="#{c.name}")
+							input(type="text",id="#{c.name}--index",size="5", value="#{c.index}", style="margin-top:0px;")
+						div(class="ui-block-c",data-cname="#{c.name}")
+							select(id="#{c.name}--ladies",name="nn", data-role="slider", data-ladies="#{c.isLadies}")
+								if c.isLadies
+									option(value="no") No
+									option(value="yes", selected="selected") Yes
+								else
+									option(value="no", selected="selected") No
+									option(value="yes") Yes
+						div(class="ui-block-d",data-cname="#{c.name}")
+							select(id="#{c.name}--stock",name="a", data-role="slider")
+								if c.isStock
+									option(value="no") No
+									option(value="yes", selected="selected") Yes
+								else
+									option(value="no", selected="selected") No
+									option(value="yes") Yes
+						div(class="ui-block-e",data-cname="#{c.name}")
+							a(class="btn-classremove", data-cname="#{c.name}",style="cursor:pointer",data-role="button",data-theme="e") Remove
+						
+
+				div(class="ui-grid-a")
+					div(class="ui-block-a")
+						h3 Class Points
+						table
+							thead
+								tr
+									th Position
+									th Points
+							tbody
+								- var pi = 0;
+								- var cpl = season.classPoints.length;
+								- for (var pi = 0;pi<10;pi++){
+									tr
+										td #{pi+1}
+										td 
+											input(id="cp-#{pi+1}", type="text",value="#{pi < cpl ? season.classPoints[pi].points : ''}")
+								- }
+					div(class="ui-block-b")
+						h3 Index Points
+						table
+							thead
+								tr
+									th Position
+									th Points
+							tbody
+								- cpl = season.paxPoints.length;
+								- for (var pi = 0;pi<30;pi++){
+									tr
+										td #{pi+1}
+										td 
+											input(id="pp-#{pi+1}", type="text",value="#{pi < cpl ? season.paxPoints[pi].points : ''}")
+								- }
+
+				p
+					a#btn-save(data-role="button", data-theme="b") Save Season
+		#dlg-prefill(data-role="popup",data-theme="d")
+			ul(data-role="listview",data-theme="d",data-inset="true")
+				li(data-role="divider",data-theme="e") Standard Classes
+				li(data-role="divider") This will take a few seconds
+				li 
+					a(class="btn-fill", data-set="scca-2013") SCCA 2013
+				li 
+					a(class="btn-fill", data-set="scca-2013-l") SCCA 2013 w/ Ladies
+				li 
+					a(class="btn-fill", data-set="scca-2012") SCCA 2012
+				li 
+					a(class="btn-fill", data-set="scca-2012-l") SCCA 2012 w/ Ladies
+				li 
+					a(class="btn-fill", data-set="pcaggr-2013") PCA GGR 2013
+
+		#dlg-addclass(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Add Class
+				div(data-role="content")
+					
+					div
+						form
+							div(data-role="fieldcontain")
+								input(type="text", name="addcls-name", id="addcls-name", placeholder="Name")
+							div(data-role="fieldcontain")
+								input(type="number", name="addcls-index", id="addcls-index", placeholder="Index", min=".1", max="1", step=".001")
+							div(data-role="fieldcontain")
+								label(for="addcls-ladies") Ladies Only?:
+									select#addcls-ladies(name="flip-2",data-role="slider")
+										option(value="no") No
+										option(value="yes") Yes
+							div(data-role="fieldcontain")
+								label(for="addcls-stock") Stock?:
+									select#addcls-stock(name="stock",data-role="slider")
+										option(value="no") No
+										option(value="yes") Yes
+
+						a#btn-addcls(data-role="button", data-inline="true", data-theme="b") Add Class
+						a#btn-cancel2(data-role="button", data-inline="true", data-rel="back", data-theme="a") Close
+		#dlg-addpclass(data-role="popup", data-overlay-theme="a", data-theme="c",style="min-width:300px;")
+				div(data-role="header")
+					h1 Add PAX Class
+				div(data-role="content")
+					div
+						form
+							div(data-role="fieldcontain")
+								input(type="text", name="addpcls-name", id="addpcls-name", placeholder="Name")
+							div(data-role="fieldcontain")
+								input(type="text", name="addpcls-category", id="addpcls-category", placeholder="Category")
+							div(data-role="fieldcontain")
+								input(type="text", name="addpcls-description", id="addpcls-description", placeholder="Description")
+							div(data-role="fieldcontain")
+								label(for="addpcls-ladies") Ladies Only?:
+									select#addpcls-ladies(name="flip-2",data-role="slider")
+										option(value="no") No
+										option(value="yes") Yes
+							
+
+						a#btn-addpcls(data-role="button", data-inline="true", data-theme="b") Add Class
+						a#btn-cancel3(data-role="button", data-inline="true", data-rel="back", data-theme="a") Close
+
+		script(src="/scripts/editseason.js")

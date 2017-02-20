@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Starter Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+    var eventId = "550e1896a3088b7a34f9d5b8";
+var conesAdvancedMode = true;
+var sessionId = 'oMKJwmeildUQfvQ28JAlUcwD6sHF4c1F';</script>
+    <style>
+    .box {
+      padding:12px 8px;
+      border: 1px #fff solid;
+      border-bottom:1px #eeeeee solid;
+      position:relative;
+    }
+
+    .box:hover {
+      background-color: #fcf8e3;
+      border-color: #faebcc;
+      cursor:pointer;
+      color: #8a6d3b;
+    }
+
+    .cones {
+      color:red;
+    }
+    .ax-time, .ax-classnum {
+      font-size:30px;
+      line-height:30px;
+    }
+    .ax-time {
+      
+    }
+    .ax-rg {
+      position:absolute;
+      width:24px;
+      text-align:center;
+      height:50px;
+      background-color:green;
+      color:white;
+      line-height:30px;
+    }
+    .ax-nonrg {
+      margin-left:30px;
+    }
+    </style>
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container" style="padding-top:60px;">
+
+
+
+      <div class="row">
+        <div class="col-md-6">
+          
+        </div>
+        <div class="col-md-6" id="runs">
+          <div class="box">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="ax-rg">A</div>
+                <div class="ax-nonrg">
+                  <div class="ax-time">45.333 <span class="cones">+1</span></div>
+                  <div>Run #1</div>
+                </div>
+              </div>
+              <div class="col-md-6 text-right">
+                <div class="ax-classnum">AX07 #1197</div>
+                <div>2010 Porsche 911 S</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="box">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="ax-rg">A</div>
+                <div class="ax-nonrg">
+                  <div class="ax-time">45.333 <span class="cones">+1</span></div>
+                  <div>Run #1</div>
+                </div>
+              </div>
+              <div class="col-md-6 text-right">
+                <div class="ax-classnum">AX07 #1197</div>
+                <div>2010 Porsche 911 S</div>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+
+      </div>
+
+
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <script>
+      var socket = io.connect('http://' + window.location.host);
+socket.emit('join', { stream: 'queue', eventId: eventId });
+
+
+socket.on('reconnecting', function () {
+    $('<div class="msg-reconnect ui-loading ui-loader ui-loader-verbose ui-overlay-shadow ui-body-b ui-corner-all"><span class="ui-icon ui-icon-loading"></span><h1>Reconnecting</h1></div>')
+        .css({
+            'display': 'block', 'opacity': 0.96, 'margin-left': '0', 'margin-top': '0'
+            , 'top': 100
+            , 'left': $(window).width() / 2 - 100
+        }).appendTo($.mobile.pageContainer)
+        .delay(100);
+});
+socket.on('connect', function () { $('.msg-reconnect').fadeOut(400, function () { $(this).remove(); }); });
+socket.on('reconnect', function () { $('.msg-reconnect').fadeOut(400, function () { $(this).remove(); }); socket.emit('join', { stream: 'queue', eventId: eventId }); });
+
+socket.on('reconnect_failed', function () { $('.msg-reconnect').fadeOut(400, function () { $(this).remove(); }); });
+socket.on('initr', function (data) {
+    var el = $('#runs').empty();
+    runs = data;
+    if (data.length > 0) {
+        var html = [];
+        for (var i = 0; i < data.length; i++) {
+            var r = data[i];
+            
+            html.push('<div class="box"><div class="row"><div class="col-md-6"><div class="ax-rg">A</div><div class="ax-nonrg"><div class="ax-time">' + r.rawTime + ' <span class="cones">+1</span></div><div>Run #'+ r.driverRunNumber + '</div></div></div><div class="col-md-6 text-right"><div class="ax-classnum">' + r.axClass.name +' #' + r.driver.carNumber + '</div><div>' + r.driver.car.description + '</div></div></div></div>')
+
+
+
+        }
+        el.append(html.join(''));
+    } else {
+        $('#runs').append('<li id="run-none"><h3>None</h3></li>');
+    }
+    $('#runs').listview('refresh');
+});
+
+    </script>
+
+  </body>
+</html>

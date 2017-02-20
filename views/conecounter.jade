@@ -1,0 +1,72 @@
+extend layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+		var advancedMode = #{event.coneCounterAdvancedMode.toString().toLowerCase()};
+		var stations = [#{courseStations.join(',')}];
+		
+block content
+	#page-conecounter(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Cone Counter
+			a(href="#page-cchelp", data-rel="popup", data-icon="info", data-position-to="window") Help
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			div.splitscreen
+				div.ss-queue
+					h2 In Queue
+					ul#queuelist(data-role="listview", data-theme="a")
+						li Loading...
+				div.ss-runs
+					h2 Recent Runs
+					ul#runlist(data-role="listview")
+						li Loading...
+				div.clearfix
+			#page-cchelp(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Cone Counter Help
+				div(data-role="content")
+					div(style="max-width:400px;") You are a cone counter, awesome!  Make sure you get the station number.  Wouldn't you like to know what station you hit that cone?
+	#dlg-cones(data-role="dialog")
+		div(data-role="header")
+			h1
+				Edit Enter Cones
+		div(data-role="content")
+			h3#lbl-driver Temporary Driver Name #9999
+			p#pnl-stations
+			fieldset(data-role="controlgroup",data-type="horizontal", class="conecounter")
+				legend Station:
+				input(type="radio",name="radio-station", id="radio-station-na", value="na", checked="checked")
+				label(for="radio-station-na") n/a
+
+				each s in courseStations
+					input(type="radio", name="radio-station", id="radio-choice-h-#{s}", value="#{s}")
+					label(for="radio-choice-h-#{s}")=s
+			fieldset(data-role="controlgroup",data-type="horizontal", class="conecounter")
+				legend Cones Hit:
+				- for (var i=0;i<8;i++) {
+					input(type="radio",name="radio-cone", id="radio-cone-#{i}", value="#{i}")
+					label(for="radio-cone-#{i}")=i
+				- }
+			fieldset(data-role="controlgroup", data-type="horizontal", class="conecounter")
+				legend Result:
+				input(type="radio", name="radio-pen", id="radio-pen-none", value="none", checked="checked")
+				label(for="radio-pen-none") None
+				input(type="radio", name="radio-pen", id="radio-pen-dnf", value="dnf")
+				label(for="radio-pen-dnf") DNF
+				input(type="radio", name="radio-pen", id="radio-pen-rerun", value="rerun")
+				label(for="radio-pen-rerun") RERUN
+				input(type="radio", name="radio-pen", id="radio-pen-off", value="off")
+				label(for="radio-pen-off") OFF
+			div(style="padding-top:24px;")
+				.ui-grid-a
+					.ui-block-a
+						a#btn-savecones(data-role="button", data-rel="back", data-theme="b") Save 
+					.ui-block-b
+						a(data-role="button", data-rel="back", data-theme="a") Cancel
+	script(src="/scripts/conecounter.js")

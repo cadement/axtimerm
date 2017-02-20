@@ -1,0 +1,79 @@
+extend layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+block content
+	#page-announcer(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Chrono
+		div(data-role="content", style="background-color:gray")
+			div.chrono-container#timer-0
+				.chrono-pen.hidden RERUN
+				div.chrono-cones.hidden +1
+				.chrono-split.hidden
+				.chrono-time 00.000
+				.chrono-lbl 
+					.chrono-num #0000 FUN
+					.chrono-name No One
+			div.chrono-container#timer-1
+				.chrono-pen.hidden RERUN
+				div.chrono-cones.hidden +1
+				.chrono-split.hidden
+				.chrono-time 00.000
+				.chrono-lbl 
+					.chrono-num #0000 FUN
+					.chrono-name No One
+			div.chrono-container#timer-2
+				.chrono-pen.hidden RERUN
+				div.chrono-cones.hidden +1
+				.chrono-split.hidden
+				.chrono-time 00.000
+				.chrono-lbl 
+					.chrono-num #0000 FUN
+					.chrono-name No One
+			div.chrono-container#timer-3
+				.chrono-pen.hidden RERUN
+				div.chrono-cones.hidden +1
+				.chrono-split.hidden
+				.chrono-time 00.000
+				.chrono-lbl 
+					.chrono-num #0000 FUN
+					.chrono-name No One
+			div.chrono-runs
+				div.run
+					div.time 99.999
+					div.driver #1197 XM
+					div.car 2010 Porsche 911S Black
+					div.clear
+				div.run
+					div.time 99.999
+					div.driver #1197 XM
+					div.car 2010 Porsche 911S Black
+					div.clear
+				div.run
+					div.time 99.999
+					div.driver #1197 XM
+					div.car 2010 Porsche 911S Black
+					div.clear
+
+				div.run
+					div.time 99.999
+					div.driver #1197 XM
+					div.car 2010 Porsche 911S Black
+					div.clear
+				div.run
+					div.time 99.999
+					div.driver #1197 XM
+					div.car 2010 Porsche 911S Black
+					div.clear
+				div.run
+					div.time 99.999
+					div.driver #1197 XM
+					div.car 2010 Porsche 911S Black
+					div.clear
+
+		script(src="/scripts/eventChrono.js")

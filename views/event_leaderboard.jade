@@ -1,0 +1,128 @@
+extend layout_1_3
+block head
+block content
+	#page-conecounter(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event._id}", data-icon="arrow-l") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Leaderboard
+			//a(href="/club/#{event.club.name}", data-icon="home") Club Home
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			h1=event.name
+			div.ui-grid-a
+				div.ui-block-a
+					if season != null
+						p="Events To Qualify: " + season.eventsToQualify
+						p="Maximum Counted Events: " + season.classMaxEvents
+				div.ui-block-b
+					a(href="#export-menu",data-role="button",data-theme="b",data-rel="popup",data-icon="forward") Print or Export
+					div#export-menu(data-role="popup",data-theme="none")
+						div(data-role="collapsible-set",style="margin:0; width:300px;", data-theme="a", data-content-theme="c", data-collapsed-icon="arrow-r", data-expanded-icon="arrow-d")
+							div(data-role="collapsible",data-inset="false")
+								h2 Class Standings
+								ul(data-role="listview")
+									li 
+										a(href="/event/leaderboard/#{event._id}/export/class/html") Printer Friendly (.html)
+									li 
+										a(href="/event/leaderboard/#{event._id}/export/class/csv") Comma Delimited File (.csv)
+									li 
+										a(href="/event/leaderboard/#{event._id}/export/class/tsv") Tabbed Delimited File (.tsv)
+							div(data-role="collapsible",data-inset="false")
+								h2 PAX Standings
+								ul(data-role="listview")
+									li 
+										a(href="/event/leaderboard/#{event._id}/export/pax/html") Printer Friendly (.html)
+									li 
+										a(href="/event/leaderboard/#{event._id}/export/pax/csv") Comma Delimited File (.csv)
+									li 
+										a(href="/event/leaderboard/#{event._id}/export/pax/tsv") Tabbed Delimited File (.tsv)	
+			div(data-role="controlgroup",data-type="horizontal",data-mini="true")
+				each ev in events
+					a(href="/event/leaderboard/#{ev._id}",data-role="button",data-theme="#{ev._id.toString() == event._id.toString() ? 'e' : 'b'}") #{ev.date}
+				
+			div(data-role="collapsible",data-collapsed="false",data-theme="b")
+				h4 Class Standings
+				if cls.length > 0
+					table(width="100%",class="leaderboard")
+						thead
+							tr
+								th(colspan="2") 
+								th(colspan="2") Points
+								th(colspan="#{event.eventNumber}") Events
+							tr
+								th Rank
+								th(align="left") Driver
+								th Total
+								th w. Drops
+								-for (var i=1;i<=event.eventNumber;i++){
+									th 
+										strong=i
+								-}
+						tbody
+							- var c = '';
+							each p in cls
+								if c != p.axClass
+									tr(style="background-color:silver")
+										td(colspan="#{event.eventNumber + 4}",style="font-weight:bold;padding:3px;text-align:center;")=p.axClass
+									- c = p.axClass;
+								tr
+									td(align="center") #{p.rank}
+										if (p.rank < p.priorRank)
+											span(style="color:green;") #{' (+' + (p.priorRank - p.rank) + ')'}
+										else if (p.rank > p.priorRank && p.priorRank !=0)
+											span(style="color:red;") #{' (' + (p.priorRank - p.rank) + ')'}
+									td(style="border-right:1px solid silver")=p.driver
+									td(align="center",style="border-right:1px solid silver")=p.total
+									td(align="center",style="border-right:1px solid silver")=p.totalwDrops
+									//each pt in p.points
+									- for (var i=1;i<=event.eventNumber;i++) {
+										- var pts = p['event'+i];
+										td(align="center",style="border-right:1px solid silver")=pts == -1 ? '-' : pts
+									- }
+				else
+					p No Leaderboard has been generated
+			
+			div(data-role="collapsible",data-theme="b")
+				h3 PAX Standings
+				if pax.length > 0
+					table(width="100%",class="leaderboard")
+						thead
+							tr
+								th(colspan="3") 
+								th(colspan="2") Points
+								th(colspan="#{pax[0].points.length}") Events
+							tr
+								th Rank
+								th Prev Rank
+								th(align="left") Driver
+								th Total
+								th w. Drops
+								if pax.length > 0
+									-for (var i=1;i<=event.eventNumber;i++){
+										th 
+											strong=i
+									-}
+				
+						tbody
+							each p in pax
+								if p.rank > 0
+									tr
+										td(align="center") #{p.rank}
+											if (p.rank < p.priorRank)
+												span(style="color:green;") #{' (+' + (p.priorRank - p.rank) + ')'}
+											else if (p.rank > p.priorRank && p.priorRank !=0)
+												span(style="color:red;") #{' (' + (p.priorRank - p.rank) + ')'}
+										td(align="center")=p.priorRank==0?'-':p.priorRank
+										td(style="border-right:1px solid silver")=p.driver
+										td(align="center",style="border-right:1px solid silver")=p.total
+										td(align="center",style="border-right:1px solid silver")=p.totalwDrops
+										- for (var i=1;i<=event.eventNumber;i++) {
+											- var pts = p['event'+i];
+											td(align="center",style="border-right:1px solid silver")=pts == -1 ? '-' : pts
+										- }
+				else
+					p No Leaderboard has been generated
+			

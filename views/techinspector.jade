@@ -1,0 +1,31 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+block content
+	#page-techinspector(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Tech Inspector
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			div(data-role="fieldcontain")
+				fieldset
+					legend Participants:
+					- var col = 'a';
+					div(class="ax-collapsible ui-grid-b")
+						each s in participants
+							div(class="ui-block-#{col}")
+								if s.isTechd
+									input(type="checkbox", name="evt-parts", id="evt-p-#{s._id}", class="custom", checked="checked", value="#{s._id}")
+								else
+									input(type="checkbox", name="evt-parts", id="evt-p-#{s._id}", class="custom", value="#{s._id}")
+								label(for="evt-p-#{s._id}") #{s.driver.carNumber + ' - ' + s.driver.name} <br/> <span style="font-size:.7em;">#{s.driver.car.description}</span>
+							- col = col == 'a' ? 'b' : (col == 'b' ? 'c' : 'a');
+			div(data-role="popup",id="errormessage",data-theme="e", data-overlay-theme="a", class="ui-content") 
+				a(href="#", data-rel="back", data-role="button", data-theme="e",data-icon="delete", data-iconpos="notext",class="ui-btn-right") Close
+				span#errmsgtxt 
+	script(src="/scripts/techinspector.js")

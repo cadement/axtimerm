@@ -1,0 +1,26 @@
+extend layout_1_3
+block head
+block content
+	#page-announcer(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Raw Times
+		div(data-role="content")
+			.ui-body.ui-body-b This is a complete listing of all time data received from the timing hardware.  This is simply a log of times, meant for backup purposes in case someone deletes a run or you just need to verify.  This log can include times captured during session breaks or change overs.  This is simply all raw data to give you peace of mind that we aren't messing up times :-)
+			ul(data-role="listview", style="margin-top:15px;")
+				-function c(ts){var a=new Date(ts), h=a.getHours(),hf=(h>12?h-12:h),m=a.getMinutes(),s=a.getSeconds();m=m<10?('0'+m):m;s=s<10?('0'+s) : s;return hf+':' + m + ':' + s + ' ' + (h>12 ? 'PM' : 'AM') }
+				each time in times
+					li
+						if time.runId.length == 0
+							h3 #{time.time}
+							p #{c(time.timestamp)}
+							p.ui-li-aside(style="font-size:1.2em;") NOT USED for a run.
+						else
+							a(href="/run/#{time.runId}") 
+								h3 #{time.time}
+								p #{c(time.timestamp)}
+							
+
+							

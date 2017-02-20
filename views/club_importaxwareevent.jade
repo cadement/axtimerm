@@ -1,0 +1,26 @@
+extend layout_1_3
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{clubname}", data-icon="home") Club Home
+			h1 Import Past AxWare Events
+		div(data-role="content")
+			if (message != null)
+				p(style="color:red;") #{message}
+			p Only upload the AxWare .rgg file for the event. 
+			p Temporarily disabled 
+			form(method="POST",  enctype="multipart/form-data", action="/club/#{clubname}/import")
+				div(data-role="fieldcontain")
+					label(for="date") Date:
+					input#date(type="date",name="date")
+				div(data-role="fieldcontain")
+					label(for="num") Event #
+					input#num(type="number",name="num")
+				div(data-role="fieldcontain")
+					label(for="location") Location:
+					input#location(type="text",name="location")
+				div(data-role="fieldcontain")
+					label(for="rggfile") AxWare .RGG File: 
+					input#rggfile(type="file", name="rggfile")
+				input(type="submit", value="Upload and Import", data-theme="b")
+			

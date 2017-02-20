@@ -1,0 +1,14 @@
+html
+	head
+		link(href="/css/print-participant-label.css", rel="stylesheet")
+	body
+		.label.address
+			.name=participant.driver.name
+			.axclass=participant.axClass.name + ' ' + participant.driver.carNumber
+			.event=club.shortName + ' ' + event.dateInt
+
+		div#close
+			button(onclick="window.close()") Close Window
+		script.
+			window.print();
+			

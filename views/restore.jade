@@ -1,0 +1,29 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		var club = '';
+block content
+	#page-backup(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Restore Data from Backup
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			
+			if (message)
+				div.ui-body.ui-body-a(style="color:red;")=message
+
+			p If you click on a file below, your restore will begin WITHOUT confirmation!  Click wisely.
+			h2=source == 'local' ? 'Backups On Your Computer' : 'Backups On AXti.me Cloud Servers'
+
+			if files.length == 0
+				p No backups were found.
+			ul(data-role="listview")
+				each f in files
+					li
+						if (source == 'local')
+							a(href="/club/#{club.name}/restore/local/#{f.fileName}")=f.backupDate + ' - ' + f.fileName
+						else if (source == 'cloud')
+							a(href="/club/#{club.name}/restore/cloud/#{clubKey}/#{f.fileName}")=f.backupDate + ' - ' + f.fileName

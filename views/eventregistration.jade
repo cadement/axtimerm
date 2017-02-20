@@ -1,0 +1,230 @@
+extend layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var clubname = "#{event.club.name}";
+		var eventId = "#{event.id}";
+		var classRunGroups = !{JSON.stringify(event.classRunGroups)};
+	style.
+		@media (max-width:480px) {
+			#public ul.ui-grid-c li
+				, #admin1 ul.ui-grid-c li
+				, #eventroles ul.ui-grid-d li {width:50% !important;}
+
+		}
+		@media all and (max-width:800px){
+			#page-newdriver .ui-block-a, 
+				#page-newdriver .ui-block-b {
+					width:100%;
+					float:none;
+				}
+		}
+		#page-newdriver .ui-dialog-contain {margin-top:20px !important;max-width:92.5% !important;}
+block content
+	#page-registration(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Registration
+			a(href="#page-cchelp", data-rel="popup", data-icon="info", data-position-to="window") Help
+			div(class="ui-bar ui-bar-e")
+				h3 #{event.name} #{event.date}
+		div(data-role="content")
+			div(class="ui-grid-b")
+				div(class="ui-block-a")
+					a(href="#page-adddriver", data-rel="dialog", data-role="button", data-icon="search", data-theme="b") Lookup
+				div(class="ui-block-b")
+					a(id="btn-shownewdriver",href="#page-newdriver", data-rel="dialog", data-role="button", data-icon="plus", data-theme="b") New
+				div(class="ui-block-c")
+					a(href="/event/#{event.id}/registrationimport", data-role="button", data-icon="forward",data-theme="e") Import
+					//a(href="/event/registrationimport/#{event.id}", data-role="button", data-icon="forward",data-theme="e") Import (MSR)
+			if user && ['Club Admin','Event Admin'].indexOf(user.role) > -1 
+				div 
+					a(href="/event/#{event._id}/rungroupbyclass", data-role="button", data-theme="b") Assign Run Groups by Class
+			h1 Participants
+				span#lbl-count
+			div
+				//- div(class="ui-grid-a")
+				//- 	div(class="ui-block-a")
+				div
+					label Sort By
+						div(data-role="controlgroup", data-type="horizontal", data-inline="true", data-mini="true")
+							a#btn-sort-car(href="#", data-role="button") Car #
+							a#btn-sort-name(href="#", data-role="button") Name
+							a#btn-sort-group(href="#", data-role="button") Run Group
+					//- div(class="ui-block-b")
+					//- 	label Run Group:
+					//- 	div(data-role="controlgroup", data-type="horizontal", data-inline="true", data-mini="true")
+					//- 		each rg in event.runGroups
+					//- 			a(id="btn-filter-#{rg.name}", class="filter-rungroup", href="#", data-role="button")
+					//- 				div(style="display:inline-block;width:20px;height:1em;background-color:#{rg.color};margin-right:8px;") 
+					//- 				span #{rg.name}
+					//- 		a(id="btn-filter-", class="filter-rungroup", href="#", data-role="button", data-icon="delete", data-iconpos="notext") 
+					//- 			span
+
+				div 
+					label Filters:
+					div(data-role="controlgroup", data-type="horizontal", data-inline="true", data-mini="true")
+						a(id="btn-filter-checkin", class="search-filter", href="#", data-role="button")
+							span Checked In
+						a(id="btn-filter-notcheckin", class="search-filter", href="#", data-role="button")
+							span Not Checked In 
+						a(id="btn-filter-paid", class="search-filter", href="#", data-role="button")
+							span Paid
+						a(id="btn-filter-notpaid", class="search-filter", href="#", data-role="button")
+							span Not Paid
+						a(id="btn-filter-techd", class="search-filter", href="#", data-role="button")
+							span Techd
+						a(id="btn-filter-nottechd", class="search-filter", href="#", data-role="button")
+							span Not Techd
+						each rg in event.runGroups
+							a(id="btn-filter-rg-#{rg.name}", class="search-filter", href="#", data-role="button")
+								div(style="display:inline-block;width:20px;height:1em;background-color:#{rg.color};margin-right:8px;") 
+								span=rg.name + (rg.label && rg.label.length > 0 ? (' (' + rg.label + ')') : '')
+						a(id="btn-filter-clear", class="search-filter", href="#", data-role="button", data-icon="delete", data-iconpos="notext") 
+							span
+			div#part-search(style="margin-top:16px;")
+				ul#reg-partlist(data-role="listview", data-filter="true")
+					li(class="ax-loading") Loading...
+			#page-cchelp(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Registration Help
+				div(data-role="content")
+					div(style="max-width:400px;") Manage all your driver registrations here.
+			#page-confirm1(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Confirm Delete
+				div(data-role="content")
+					p Are you sure you want to delete permanently delete this driver?
+					div
+						a#btn-confirm(data-role="button", data-inline="true", data-theme="c") Yes, Delete
+						a#btn-cancel2(href="#",data-role="button", data-inline="true", data-rel="back", data-theme="b") Cancel
+
+	#page-adddriver(data-role="dialog")
+		div(data-role="header")
+			h1 Member Lookup
+		div(data-role="content")
+			ul#reg-driverlist(data-role="listview", data-filter="true")
+				li(class="ax-loading") Loading...
+					
+								
+	#page-newdriver(data-role="dialog")
+		div(data-role="header")
+			h1#lbl-driveredit Create New Driver
+		div(data-role="content")
+			div.ui-grid-a
+				div.ui-block-a
+					input(type="hidden", id="partid",value="")
+					input(type="hidden", id="drv-memberId", value="")
+					div(data-role="fieldcontain")
+						label(for="drv-fname") First Name:
+						input(type="text", name="drv-fname", id="drv-fname", placeholder="First Name")
+
+					div(data-role="fieldcontain")
+						label(for="drv-lname") Last Name:
+						input(type="text", name="drv-lname", id="drv-lname", placeholder="Last Name")
+					div(data-role="fieldcontain",class="newmem")
+						label(for="drv-memnum") Member Number/ID:
+						input(type="text", name="drv-memnum", id="drv-memnum", placeholder="Club Member Number or ID")
+					div(data-role="fieldcontain",class="newmem")
+						label(for="drv-email") Email:
+						input(type="email", name="drv-email", id="drv-email", placeholder="Email Address")
+					div(data-role="fieldcontain")
+						label(for="drv-carnum") Car Number:
+						input(type="text", name="drv-carnum", id="drv-carnum", placeholder="Car Number")
+					div#box-cars(data-role="fieldcontain")
+						label(for="drv-cars") Cars:
+						select#drv-cars
+							
+					div(data-role="fieldcontain")
+						label(for="drv-carnum") Car Year:
+						input(type="text", name="drv-caryear", id="drv-caryear", placeholder="Car Year")
+					div(data-role="fieldcontain")
+						label(for="drv-carmake") Car Make:
+						input(type="text", name="drv-carmake", id="drv-carmake", placeholder="Car Make")
+					div(data-role="fieldcontain")
+						label(for="drv-carmodel") Car Model:
+						input(type="text", name="drv-carmodel", id="drv-carmodel", placeholder="Car Model")
+					div(data-role="fieldcontain")
+						label(for="drv-carnum") Car Color:
+						input(type="text", name="drv-carcolor", id="drv-carcolor", placeholder="Car Color")
+					//- div(data-role="fieldcontain",class="newmem")
+					//- 	label(for="drv-ismember") Is a Member?:
+					//- 	select#drv-ismember(name="flip-3",data-role="slider")
+					//- 		option(value="nope") Nope
+					//- 		option(value="yep") Yep
+					
+				div.ui-block-b(style="padding-left:20px;")
+					div(data-role="fieldcontain")
+						label(for="drv-paxclass") PAX Class:
+						select#drv-paxclass
+							option(value="") None
+							each cls in paxClasses
+								option(value="#{cls.name}") #{cls.name}
+
+					div( data-role="fieldcontain")
+						label(for="drv-class") Class:
+						select#drv-class
+							option(value="") SELECT CLASS
+							each cls in classes
+								option(value="#{cls.name}") #{cls.name}
+
+					div(data-role="fieldcontain")
+						fieldset(data-role="controlgroup")
+							legend Run Groups:
+							each rg in event.runGroups
+								input(type="radio", name="drv-rungroup", id="drv-rungroup-#{rg.name}", class="custom", value="#{rg.name}")
+								label(for="drv-rungroup-#{rg.name}")=rg.name + (rg.label != '' ? (' (' + rg.label + ')') : '')
+									div(style="display:inline-block;width:20px;height:1em;background-color:#{rg.color};margin-left:8px;")
+
+					div(data-role="fieldcontain")
+						fieldset(data-role="controlgroup")
+							legend System Role:
+							div#drv-role-list
+								input(type="radio", name="drv-role", id="drv-role-None", value="None", class="custom", checked="checked")
+								label(for="drv-role-None") No Role, Just having fun
+								each role in event.workerRoles
+									input(type="radio", name="drv-role", id="drv-role-#{role.role}", value="#{role.role}", class="custom")
+									label(for="drv-role-#{role.role}") #{role.role}
+					div(data-role="fieldcontain")
+						label(for="drv-paid") Paid?:
+						select#drv-paid(name="flip-2",data-role="slider")
+							option(value="nope") Nope
+							option(value="yep") Yep
+					div(data-role="fieldcontain")
+						label(for="drv-checkin") Check In?:
+						select#drv-checkin(name="flip-2",data-role="slider")
+							option(value="nope") Nope
+							option(value="yep") Yep
+					div(data-role="fieldcontain")
+						fieldset(data-role="controlgroup")
+							legend Rookie?
+							input(type="checkbox", name="drv-rookie", id="drv-rookie", class="custom", value="yes")
+							label(for="drv-rookie") Driver is a Rookie
+					div(data-role="fieldcontain")
+						fieldset(data-role="controlgroup")
+							legend Retroactive?
+							input(type="checkbox", name="drv-applyexistingruns", id="drv-applyexistingruns", class="custom", value="yes")
+							label(for="drv-applyexistingruns") Apply to existing runs
+				div.ui-block-a
+					a#drv-btn-save( data-role="button",data-theme="b") Create Driver
+					a#drv-btn-savelabel(data-role="button", data-theme="b") Save and Print Label
+				div.ui-block-b
+					a(href="#page-newdriver", data-rel="back", data-role="button",data-theme="a") Cancel
+					a(href="#page-confirm", data-rel="popup", data-role="button",data-theme="a") DELETE
+			#page-confirm(data-role="popup", data-overlay-theme="a", data-theme="c")
+				div(data-role="header")
+					h1 Confirm Delete
+				div(data-role="content")
+					p Are you sure you want to delete permanently delete this driver?
+					div
+						a#btn-delete(data-role="button", data-inline="true", data-theme="c") Yes, Delete
+						a#btn-cancel2(href="#",data-role="button", data-inline="true", data-rel="back", data-theme="b") Cancel
+	#popup-msg(data-role="dialog", data-overlay-theme="a", data-theme="c")
+		div(data-role="header")
+			h1 Error Saving Info
+		div(data-role="content")
+			div#error-msg(style="max-width:400px;") Error
+
+	script(src="/scripts/eventregistration.js")

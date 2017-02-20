@@ -1,0 +1,47 @@
+extend layout_1_3
+block head
+	script(type="text/javascript").
+		
+		var memberId = "#{member._id.toString()}";
+block content
+	#page-membermerge(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{club.name}/member/#{member._id}", data-icon="arrow-l") Back
+			h1 Member Merge
+		div(data-role="content")
+			p Use this screen to consolidate member entries.  Select the member entries on the right that you want to replace with the member data on the left.
+			p Warning!  The member entries on the right will be deleted, leaving only the member entry on the left remaining.  All event/participant data for entries on the right will then be associated with the member on the left.  THIS CANNOT BE UNDONE.
+			.ui-grid-a
+				.ui-block-a
+					div(style="padding:20px;")
+						h1=member.firstName + ' ' + member.lastName
+						p This is the member entry that you are keeping and will replace the others.
+						div(data-role="fieldcontain")
+							label(for="firstName") First Name:
+							input(id="firstName", name="firstName", value="#{member.firstName}", disabled="disabled")
+						div(data-role="fieldcontain")
+							label(for="lastName") Last Name:
+							input(id="lastName", name="lastName", value="#{member.lastName}", disabled="disabled")
+						div(data-role="fieldcontain")
+							label(for="clubMemberId") Member #:
+							input(id="clubMemberId", name="clubMemberId", value="#{member.clubMemberId}", disabled="disabled")
+
+						div(data-role="fieldcontain")
+							label(for="currentEmail") Current Email:
+							input(type="email", id="currentEmail", name="currentEmail", value="#{member.currentEmail}", disabled="disabled")
+						div(data-role="fieldcontain")
+							label(for="msrId") MSR ID:
+							input(id="msrId", name="msrId", value="#{member.msrId}", disabled="disabled")
+						button(id="btn-save", data-role="button",data-theme="b") Replace Entries on Right With This One
+				.ui-block-b
+					h1 Members to replace
+					ul(data-role="listview")
+						each m in members
+							if m._id.toString() != member._id.toString()
+								li
+									.checkBoxLeft
+										input(type="checkbox", name="chk-#{m._id}", id="chk-#{m._id}", class="hidden-checkbox")
+									div(style="margin: 0 0 0 20px;")
+										h3=m.lastName + ', ' + m.firstName
+										p=m.clubMemberId
+		script(src="/scripts/member_merge.js", type="text/javascript")

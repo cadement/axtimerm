@@ -1,0 +1,27 @@
+extend layout_1_3
+block head
+block content
+	#page-conecounter(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			//a(href="/club/#{club.name}", data-icon="home") Club Home
+			h1 Import Data
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			h1 Select what you would like to import:
+			ul(data-role="listview")
+				li 
+					a(href="/club/#{club.name}/import") Import Past Event from AXware RGG file
+				li
+					a(href="/club/#{club.name}/importevent/csv") Import Past Event from CSV file
+				li
+					a(href="/club/#{club.name}/msrimport") Import Members from MotorsportReg.com
+				li
+					a(href="/club/#{club.name}/memberimport") Import Members from text file
+				li
+					a(href="/club/#{club.name}/classimport_axware") Import Class Definitions from AXware
+
+							
+			

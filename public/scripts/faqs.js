@@ -1,0 +1,1 @@
+$(function(){$("#toc a").bind("click",function(t){var i=$($(this).attr("href")).get(0).offsetTop;return $.mobile.silentScroll(i),!1}),$("a.top").bind("click",function(t){var i=$("#toc").get(0).offsetTop;return $.mobile.silentScroll(i),!1}),$("a.ilink").bind("click",function(t){var i=$($(this).attr("href")).get(0).offsetTop;return $.mobile.silentScroll(i),!1})});

@@ -1,0 +1,55 @@
+extend layout_1_3
+block content
+	#page-memberedit(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{club.name}/members", data-icon="arrow-l") Members
+			h1=title
+		div(data-role="content")
+			if (message)
+					div.ui-body.ui-body-a(style="color:red;")=message
+			form(action="/club/#{club.name}/member/new", method="POST")
+
+				div(data-role="fieldcontain")
+					label(for="firstName") First Name:
+					input(id="firstName", name="firstName", value="")
+				div(data-role="fieldcontain")
+					label(for="lastName") Last Name:
+					input(id="lastName", name="lastName", value="")
+				//- div(data-role="fieldcontain")
+				//- 	label(for="isMember") Is Member?:
+				//- 	select(id="isMember", name="isMember", data-role="slider")
+				//- 		option(value="no", selected="selected") No
+				//- 		option(value="yes") Yes
+
+				div(data-role="fieldcontain")
+					label(for="clubMemberId") Member #:
+					input(id="clubMemberId", name="clubMemberId", value="")
+
+				div(data-role="fieldcontain")
+					label(for="currentEmail") Email:
+					input(type="email", id="currentEmail", name="currentEmail", value="")
+				div(data-role="fieldcontain")
+					label(for="dedicatedNumber") Dedicated #:
+					input(id="dedicatedNumber", name="dedicatedNumber", value="")
+				div(data-role="fieldcontain")
+					label(for="lastAxClass") Dedicated Class:
+					input(id="lastAxClass", name="lastAxClass", value="")
+				div(data-role="fieldcontain")
+					label(for="lastAxClass") Dedicated PAX Class:
+					input(id="lastAxClass", name="lastPaxClass", value="")
+				div(data-role="fieldcontain")
+					label(for="region") Club Region:
+					input(id="region", name="region", value="")
+				div(data-role="fieldcontain")
+					label(for="mailNewsLetter") Mail Newsletter?:
+					select(id="mailNewsLetter", name="mailNewsLetter", data-role="slider")
+						option(value="no") No
+						option(value="yes", selected="selected") Yes
+						
+				div(data-role="fieldcontain")
+					label(for="emailNewsLetter") Email Newsletter?:
+					select(id="emailNewsLetter", name="emailNewsLetter", data-role="slider")
+						option(value="no") No
+						option(value="yes", selected="selected") Yes
+				div
+					input#btn-save(type="submit", data-role="button", data-theme="b", value="Create Member")

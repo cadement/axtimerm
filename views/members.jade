@@ -1,0 +1,52 @@
+extend layout_1_3
+block content
+	#page-members(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Members
+			if (user && user.role == 'Club Admin')
+				a(href="#importMenu", data-rel="popup", data-icon="forward") Import
+
+		div(data-role="content")
+			if (user && ['Club Admin','Event Admin'].indexOf(user.role) > -1)
+				p
+					a(href="/club/#{club.name}/newmember", data-role="button", data-theme="b", data-icon="plus") New Member
+
+			if (user && user.role == 'Club Admin')
+				p 
+					a(href="/api/#{club.name}/members/export", data-role="button", data-theme="b", data-icon="arrow-r") Export
+			
+			p You have #{members.length} member entries.
+
+			ul(data-role="listview",data-filter="true",data-autodividers="true",data-divider-theme="e")
+				each m in members 
+					li
+						if (user && user.role == 'Club Admin')
+							a(href="/club/#{club.name}/member/#{m.id}")
+								p
+									div.ui-grid-b
+										div.ui-block-a=m.lastName.toUpperCase().trim() + ', ' + m.firstName
+										div.ui-block-b=(m.lastPaxClass ? (m.lastPaxClass + '-') : '') + (m.lastAxClass || '') + (m.dedicatedNumber ? (' #' + m.dedicatedNumber) : '')
+										div.ui-block-c='Events: ' + m.totalEvents + ', Runs: ' + m.totalRuns
+								p(style="margin-top:4px") Member #:
+									span=m.clubMemberId
+
+						else
+							a
+								p
+									div.ui-grid-b
+										div.ui-block-a=m.lastName.toUpperCase().trim() + ', ' + m.firstName
+										div.ui-block-b=(m.lastPaxClass ? (m.lastPaxClass + '-') : '') + (m.lastAxClass || '') + (m.dedicatedNumber ? (' #' + m.dedicatedNumber) : '')
+										div.ui-block-c='Events: ' + m.totalEvents + ', Runs: ' + m.totalRuns
+								p(style="margin-top:4px") Member #:
+									span=m.clubMemberId
+							
+			if (user && user.role == 'Club Admin')
+				div(data-role="popup", id="importMenu", data-theme="b")
+					ul(data-role="listview", data-inset="true", style="min-width:210px")
+						li(data-role="divider", data-theme="a") Import Menu 
+						li
+							a(href="/club/#{club.name}/memberimport") Import CSV file
+						li
+							a(href="/club/#{club.name}/msrimport") MotorsportReg Import 

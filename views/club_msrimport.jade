@@ -1,0 +1,35 @@
+extend layout_1_3
+block head
+	script.
+		var clubname = "#{clubname}";
+block content
+	#page-announcer(data-role="page")
+		div(data-role="header")
+			a(href="/club/#{clubname}", data-icon="arrow-l") Club Home
+			h1 Import Members from MotorsportReg.com
+		div(data-role="content")
+			if (message != null)
+				p(style="color:red;") #{message}
+			div.ui-body.ui-body-a 
+				p This screen will import ALL members that are registered with MotorsportReg.com. 
+			div(data-role="fieldcontain")
+				label(for="msrusername") MSR Username:
+				input(type="text", id="msrusername",value="#{club.msrUsername == null ? '' : club.msrUsername}")
+
+			div(data-role="fieldcontain")
+				label(for="msrpassword") MSR Password:
+				input(type="password", id="msrpassword")
+
+			div#box-orgid(data-role="fieldcontain")
+				label(for="msrorgid") MSR Organization ID
+				input(type="text", id="msrorgid",placeholder="XXXXXXXX-XXXX-XXXX-XXXXXXXXXXXXXXXX", value="#{club.msrOrganizationId == null ? '' : club.msrOrganizationId}")
+
+			p
+				a#btn-start( data-role="button",data-theme="b") Begin Import from MotorsportReg
+
+			h3 New Members Imported
+			ul#imported(data-role="listview")
+				li None Yet
+
+	script(src="/scripts/clubimportmsr.js")
+			

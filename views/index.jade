@@ -1,0 +1,48 @@
+extends layout
+block content
+	h1= title
+	h2=sessionid
+	table
+		tr
+			th Run
+			th Name
+			th Number
+			th In Queue?
+			th Time
+			th Raw Time
+			th Cones
+			th class
+			th ID
+		each run in runs
+			tr
+				td #{run.runNumber}
+				td #{run.driver.name}
+				td #{run.carNumber}
+				td #{run.isCompleted}
+				td #{run.totalTime}
+				td #{run.rawTime}
+				td #{run.cones}
+				td #{run.axClass.index}
+				td #{run._id}
+
+	p
+		a(href="EventRegistration.html") Registration
+
+	h2 Add Run
+	form(action="/addRun",method="post")
+		div(style="margin:20px")
+			label Driver Name:
+			input(name="item[drivername]", type="textbox")
+		input(type="textbox", name="item[carnumber]", value="1197")
+		br
+		input(type="textbox", name="item[iscompleted]", value="false")
+		br
+		input(type="textbox", name="item[rawtime]", value="54.234")
+		br
+		input(type="textbox", name="item[cones]", value="3")
+		br
+		input(type="textbox", name="item[pax]", value="0.943")
+		br
+		input(type="textbox", name="item[eventid]", value="3001")
+		br
+		input(type="submit", value="Add Run")

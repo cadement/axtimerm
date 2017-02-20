@@ -1,0 +1,134 @@
+extend layout_1_3
+block head
+	script 
+		var eventId = '#{run.eventId}', runId = '#{run._id}';
+block content
+	#page-announcer(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Run
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			table
+				tr
+					td(style="background-color:silver")
+						strong Run #: 
+					td
+						span #{run.runNumber}
+				tr
+					td(style="background-color:silver")
+						strong Driver Run #: 
+					td
+						span #{run.driverRunNumber}
+				tr
+					td(style="background-color:silver")
+						strong Run Group: 
+					td
+						span #{run.runGroup.name}
+				tr
+					td(style="background-color:silver")
+						strong Driver: 
+					td
+						span #{run.driver.name}
+				tr
+					td(style="background-color:silver")
+						strong Class: 
+					td
+						span #{run.axClass.name}
+				tr
+					td(style="background-color:silver")
+						strong Car #: 
+					td
+						span #{run.driver.carNumber}
+				tr
+					td(style="background-color:silver")
+						strong Car: 
+					td
+						span #{run.driver.car.description}
+				tr
+					td(style="background-color:silver")
+						strong Raw Time: 
+					td
+						span #{run.rawTime}
+				tr
+					td(style="background-color:silver")
+						strong Total Cones: 
+					td
+						span #{run.cones}
+						if run.coneHits.length > 0
+							each h in run.coneHits 
+								p 
+									strong Cone Hit: 
+									span Station - #{h.station}, Cones: #{h.cones}
+				tr
+					td(style="background-color:silver")
+						strong Total Time: 
+					td
+						span #{run.totalTime}
+				tr
+					td(style="background-color:silver")
+						strong PAX Time: 
+					td
+						span #{run.paxTime}
+				tr
+					td(style="background-color:silver")
+						strong Penalty:
+					td
+						if run.isDnf
+							strong DNF 
+						else if run.isOff
+							strong OFF 
+						else if run.getsRerun
+							strong RERUN
+				tr
+					td(style="background-color:silver")
+						strong Session: 
+					td
+						span #{run.session}
+				tr
+					td(style="background-color:silver")
+						strong Run Group: 
+					td
+						span #{run.runGroup.name}
+			if user && ['Club Admin','Event Admin','Time Keeper'].indexOf(user.role) > -1
+				p 
+					a(href="#dlg-edit", data-rel="popup", data-role="button", data-theme="b",data-position-to="window") Change Driver / Participant
+				p 
+					a(href="#dlg-changetime", data-rel="popup", data-role="button", data-theme="b",data-position-to="window") Change Time
+				p
+					a(id="btn-delete", data-role="button") Delete Run
+
+			script(src="/scripts/run.js")
+
+		#dlg-edit(data-role="popup",style="min-width:400px;",data-overlay-theme="a")
+			div(data-role="header")
+				h1 Change Driver
+			div(data-role="content")
+				div(style="margin-bottom:8px;") Assign this run to a different driver
+				div(style="padding-top:8px;margin-bottom:8px;") 
+					ul(data-role="listview", data-filter="true", data-filter-reveal="true", data-filter-placeholder="Search name, # or class...")
+						each p in participants
+							li 
+								a
+									div(class="carnumber small")=p.axClass.name + ' ' + p.driver.carNumber
+									h1=p.driver.name
+									p=p.driver.car.description
+				div(style="padding-top:8px;margin-bottom:8px;") 
+					a(data-role="button", data-theme="a", data-rel="back") Cancel
+		#dlg-changetime(data-role="popup",style="min-width:400px;",data-overlay-theme="a")
+			div(data-role="header")
+				h1 Change Time / Cones
+			div(data-role="content")
+				div(style="margin-bottom:8px;") Change the Time of this Run
+				div(style="padding-top:8px;margin-bottom:8px;") 
+					div(data-role="fieldcontain")
+						label(for="newtime") Time:
+						input#newtime(type="text")
+					div(data-role="fieldcontain")
+						label(for="newtime") Cones:
+						input#newcones(type="text")
+				div(style="padding-top:8px;margin-bottom:8px;") 
+					a(data-role="button", data-theme="a", data-rel="back") Cancel

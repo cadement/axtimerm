@@ -1,0 +1,68 @@
+extend layout_1_3
+block head
+block content
+	#page-conecounter(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			a(href="#panelmenu", data-icon="bars") Menu
+			//a(href="/club/#{club.name}", data-icon="home") Club Home
+			h1 Recalc Leaderboard
+		div(data-role="content")
+			h3 Championship Series
+				table(width="100%")
+					thead
+						tr
+							th(colspan="3") 
+							th(colspan="#{clsparts[0].points.length}") Events
+						tr
+							th Rank
+							th Driver
+							th Total
+							if clsparts.length > 0
+								each p in clsparts[0].points
+									th 
+										strong #{p.eventNumber}
+					tbody
+						- var cls = '';
+						each p in clsparts
+							if cls != p.axClass.name.split('-')[0]
+								tr(style="background-color:silver")
+									td(colspan="12")=p.axClass.name.split('-')[0]
+								- cls = p.axClass.name.split('-')[0];
+							tr
+								td(align="center") #{p.rank}
+									if (p.rank < p.priorRank)
+										span #{' (+' + (p.priorRank - p.rank) + ')'}
+									else if (p.rank > p.priorRank)
+										span #{' (' + (p.priorRank - p.rank) + ')'}
+								td(style="border-right:1px solid silver")=p.driver.name
+								td(align="center",style="border-right:1px solid silver")=p.total
+								each pt in p.points
+									td(align="center",style="border-right:1px solid silver")=pt.points == 0 ? '' : pt.points
+			h3 PAX Standings
+				table(width="100%")
+					thead
+						tr
+							th(colspan="3") 
+							th(colspan="#{paxparts[0].points.length}") Events
+						tr
+							th Rank
+							th Driver
+							th Total
+							if paxparts.length > 0
+								each p in paxparts[0].points
+									th # #{p.eventNumber}
+				
+					tbody
+						each p in paxparts
+							tr
+								td #{p.rank}
+									if (p.rank < p.priorRank)
+										span(style="color:green;") #{' (+' + (p.priorRank - p.rank) + ')'}
+									else if (p.rank > p.priorRank)
+										span(style="color:red;") #{' (' + (p.priorRank - p.rank) + ')'}
+								td(style="border-right:1px solid silver")=p.driver.name
+								td(align="center",style="border-right:1px solid silver")=p.total
+								each pt in p.points
+									td(align="center",style="border-right:1px solid silver")=pt.points == 0 ? '' : pt.points
+			

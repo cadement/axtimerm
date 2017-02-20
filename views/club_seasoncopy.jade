@@ -1,0 +1,25 @@
+extends layout_1_3
+block content
+	#page-event(data-role="page")
+		include menupanel-club
+		div(data-role="header")
+			//a(href="/club/#{club.name}", data-icon="home") Club Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Copy Season
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+			p Getting ready for next season is easy.  Just copy an existing season into a new season.  
+			if message != ''
+				div.ui-body-a
+					div(style="padding:20px;color:yellow;")=message
+
+			form(action="/club/#{club.name}/copyseason", method="POST")
+				.fieldcontain
+					label(for="newseason") New Season's Year:
+					input(type="text",id="newseason", name="newseason")
+				p Click the season's button to copy that season
+
+				p 
+					each season in seasons 
+						input(type="submit", value="#{season.seasonYear}", name="seasontocopy", data-role="button", data-theme="b")

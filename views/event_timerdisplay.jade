@@ -1,0 +1,19 @@
+extend layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+block content
+	#page-chrono(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 Chrono
+			a#btn-theme(data-theme="b") Change Theme
+		div(data-role="content", style="padding:0")
+			div#chrono-timers.dark
+
+
+		script(src="/scripts/timerdisplay.js")
+

@@ -1,0 +1,46 @@
+extend layout_1_3
+block head
+	script(src="/socket.io/socket.io.js")
+	script(type="text/javascript").
+		var eventId = "#{event.id}";
+block content
+	#page-announcer(data-role="page")
+		include menupanel-event
+		div(data-role="header")
+			//a(href="/event/#{event.id}", data-icon="home") Event Home
+			a(href="#panelmenu", data-icon="bars") Menu
+			h1 On Course
+			//- div(class="ui-bar ui-bar-e")
+			//- 	h3 #{event.name} #{event.date}
+		div(data-role="content")
+			.oc-oncourse 
+				h2 On Course
+				table.oncourse
+					thead
+						tr
+							th.alignRight Time
+							th.alignRight Splits
+							th(style="text-align:center") Cones
+							th(style="width:24px;")
+							th Driver
+							th Class Car # 
+							th Car
+					tbody
+				h2 Most Recent Finishes
+				table.recentruns
+					thead
+						tr 
+							th.alignRight Time
+							th.alignRight Splits
+							th(style="text-align:center") Cones
+							th(style="width:24px;")
+							th Driver
+							th Class Car # 
+							th Car
+					tbody
+			.oc-queue
+				.ui-body.ui-body-e
+					h2 At the Start Line
+					#queue
+
+	script(src="/scripts/eventOncourse.js")		

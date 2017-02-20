@@ -1,0 +1,1 @@
+$(document).bind("mobileinit",function(){$.mobile.ajaxEnabled=!1,$.mobile.defaultDialogTransition="none",$.mobile.defaultPageTransition="none"});

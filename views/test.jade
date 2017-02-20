@@ -1,0 +1,101 @@
+extend layout
+block head
+	script(type="text/javascript").
+		
+block content
+	#page-newevent(data-role="page")
+		div(data-role="header")
+			h1 test
+		div(data-role="content")
+			div(class="logo-horiz")
+				img(src="/css/images/axtime-logo-horizontal.png",alt="AXti.me logo")
+
+			
+			div(data-role="navbar",class="custom-icons")
+				ul
+					li
+						a(href="#",class="big-results",data-icon="custom",data-role="button",data-theme="b") Results
+					li
+						a(href="#",class="big-runs",data-icon="custom",data-role="button",data-theme="b") All Runs
+					li
+						a(href="#",class="big-announcer",data-icon="custom",data-role="button",data-theme="b") Announcer
+
+			h3 Event Administration
+			div(data-role="navbar",class="custom-icons")
+				ul
+					li
+						a(href="#",class="big-registration",data-icon="custom",data-role="button") Registration
+					li
+						a(href="#",class="big-drivercheckin",data-icon="custom",data-role="button") Driver Checkin
+					li
+						a(href="#",class="big-eventsetup",data-icon="custom",data-role="button") Event Setup
+			
+			h3 Event Roles
+			div(data-role="navbar",class="custom-icons")
+				ul
+					li
+						a(href="#",class="big-timekeeper",data-icon="custom",data-role="button",data-theme="e") Time Keeper
+					li
+						a(href="#",class="big-conecounter",data-icon="custom",data-role="button",data-theme="e") Cone Counter
+					li
+						a(href="#",class="big-carqueuer",data-icon="custom",data-role="button",data-theme="e") Car Queuer
+					li
+						a(href="#",class="big-workercheckin",data-icon="custom",data-role="button",data-theme="e") Worker Checkin
+					li
+						a(href="#",class="big-techinspector",data-icon="custom",data-role="button",data-theme="e") Tech Inspector
+			
+			p
+				a(data-theme="c",href="#",data-role="button",data-inline="true")
+					img(src="/css/images/idcard-2g2.png")
+					br
+					span Registration
+				a(data-theme="c",href="#",data-role="button",data-inline="true")
+					img(src="/css/images/gears-2g.png")
+					br
+					span Event Setup
+					
+				a(data-theme="c",href="#",data-role="button",data-inline="true")
+					img(src="/css/images/check-2g.png")
+					br
+					span Driver Checkin
+
+				a(data-theme="e",href="#",data-role="button",data-inline="true")
+					img(src="/css/images/sketchbook-2g.png")
+					br
+					span Cone Counter
+
+				a(data-theme="b",href="#",data-role="button",data-inline="true", class="button-icon")
+					img(src="/css/images/flags-2w2.png")
+					br
+					span Results
+				
+				a(data-theme="e",href="#",data-role="button",data-inline="true")
+					img(src="/css/images/loopback-2g.png")
+					br
+					span Car Queuer
+					
+				a(data-theme="e",href="#",data-role="button",data-inline="true")
+					img(src="/css/images/stopwatch-2g2.png")
+					br
+					span Time Keeper
+					
+				a(data-theme="e",href="#",data-role="button",data-inline="true")
+					img(src="/css/images/wrench-2g2.png")
+					br
+					span Tech Inspector
+					
+				a(data-theme="e",href="#",data-role="button",data-inline="true")
+					img(src="/css/images/stopwatch-2w.png")
+					br
+					span Worker Checkin
+					
+				a(data-theme="e",href="#",data-role="button",data-inline="true")
+					img(src="/css/images/bullhorn-2g.png")
+					br
+					span Announcer
+				
+				a(data-theme="e",href="#",data-role="button",data-inline="true")
+					img(src="/css/images/stopwatch-2w.png")
+					br
+					span Driver Checkin
+
